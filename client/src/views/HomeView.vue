@@ -2,7 +2,6 @@
 </script>
 
 <template>
-  <main>
-    home
+  <main class="overview-page">
   </main>
 </template>

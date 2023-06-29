@@ -15,25 +15,25 @@ const router = createRouter({
           component: () => import("../views/HomeView.vue"),
         },
       ],
-      beforeEnter(to, from, next) {
-        if (Cookie.get("token")) {
-          next();
-        } else {
-          window.location.href = "/auth";
-        }
-      },
+      // beforeEnter(to, from, next) {
+      //   if (Cookie.get("token")) {
+      //     next();
+      //   } else {
+      //     window.location.href = "/auth";
+      //   }
+      // },
     },
     {
       name: "auth",
       path: "/auth",
       component: () => import("../layouts/AuthLayout.vue"),
-      beforeEnter(to, from, next) {
-        if (!Cookie.get("token")) {
-          next();
-        } else {
-          window.location.href = "/";
-        }
-      },
+      // beforeEnter(to, from, next) {
+      //   if (!Cookie.get("token")) {
+      //     next();
+      //   } else {
+      //     window.location.href = "/";
+      //   }
+      // },
     },
   ],
 });
