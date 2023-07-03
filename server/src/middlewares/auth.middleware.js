@@ -49,4 +49,23 @@ const checkPassword = async (req, res, next) => {
   }
 };
 
-module.exports = { checkFields, checkPassword };
+const checkUserAvailibility = async (req, res, next) => {
+  try {
+    const { username } = req.body;
+
+    const existUser = await prisma.user.findUnique({ where: { username } });
+
+    if (!existUser) {
+      return res.status(404).json({
+        status: "user is not found",
+        msg: "There is no user in this username, check it again!",
+      });
+    }
+
+    return next();
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+module.exports = { checkFields, checkPassword, checkUserAvailibility };
