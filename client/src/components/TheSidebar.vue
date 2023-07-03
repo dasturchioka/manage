@@ -11,7 +11,7 @@ import DashboardLightIcon from "@/components/icons/DashboardLight.vue";
 import UserIcon from "@/components/icons/User.vue";
 import LogoutIcon from "@/components/icons/Logout.vue";
 
-const dashboards = [];
+const dashboards: Array<any> = [];
 </script>
 
 <template>

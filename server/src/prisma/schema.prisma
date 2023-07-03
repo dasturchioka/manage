@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Dashboard {
+  id     String   @id @unique @default(cuid())
+  name   String
+  tasks  Tasks?
+  User   User?    @relation(fields: [userId], references: [id])
+  userId String?
+  Status Status[]
+}
+
+model User {
+  id         String      @id @unique @default(cuid())
+  username   String      @unique
+  password   String
+  dashboards Dashboard[]
+}
+
+model Tasks {
+  id          String    @id @unique @default(cuid())
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  tasks       Task[]
+  dashboardId String    @unique
+}
+
+model Status {
+  id          String    @id @unique @default(cuid())
+  name        String
+  color       String
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  dashboardId String
+  Task        Task[]
+}
+
+model Task {
+  id          String  @id @unique @default(cuid())
+  name        String
+  description String
+  status      Status  @relation(fields: [statusId], references: [id])
+  subtasks    Json[]
+  priority    String
+  Tasks       Tasks?  @relation(fields: [tasksId], references: [id])
+  tasksId     String?
+  statusId    String
+}
