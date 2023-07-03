@@ -7,10 +7,24 @@ const checkFields = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
-    if (username.length < 3 && password.length < 8) {
+    if (!username && !password || !username || !password) {
       return res.status(400).json({
         status: "bad fields",
-        msg: "Username and password must be at least 3 and 8 respectively!",
+        msg: "Username and password must be written!",
+      });
+    }
+
+    if (username.length < 3) {
+      return res.status(400).json({
+        status: "bad fields",
+        msg: "Username must be at least 3",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        status: "bad fields",
+        msg: "Password must be at least 8",
       });
     }
 
