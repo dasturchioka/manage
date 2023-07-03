@@ -13,6 +13,6 @@ const { register, login } = require("../controllers/auth.controller");
 
 router.post("/register", checkFields, register);
 
-router.post("/login", checkFields, checkPassword, checkUserAvailibility, login);
+router.post("/login", checkUserAvailibility, checkPassword, login);
 
 module.exports = router;

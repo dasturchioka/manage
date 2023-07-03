@@ -1,7 +1,7 @@
 require("dotenv").config();
-const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require("bcrypt");
 
 const { generateToken } = require("../utils/manageToken");
 
@@ -9,8 +9,10 @@ const register = async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    const hashedPass = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
-      data: { username, password },
+      data: { username, password: hashedPass },
     });
 
     const token = await generateToken(user);
@@ -38,7 +40,7 @@ const login = async (req, res) => {
 
     return res.json({
       status: "ok",
-      msg: "You successfully signed up. Here you go!",
+      msg: "You successfully logged in. Here you go!",
       user,
       token,
     });
@@ -47,4 +49,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = {register, login}
+module.exports = { register, login };
