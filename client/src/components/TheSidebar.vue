@@ -16,7 +16,7 @@ const dashboards: Array<any> = [];
 
 <template>
   <aside
-    class="sidebar-navigation bg-dark-secondary fixed h-screen left-0 top-0 w-[250px]"
+    class="sidebar-navigation bg-dark-secondary w-[250px]"
   >
     <div class="side-top w-[70px] my-8 ml-5">
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
