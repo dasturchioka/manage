@@ -38,7 +38,7 @@ const dashboards: Array<any> = [];
         <h3 class="title mx-4 text-xl font-bold">Dashboards</h3>
         <div v-if="!dashboards.length" class="not-found mx-4 mt-6 space-y-2">
           <p class="text-sm opacity-60">You don't have dashboards yet</p>
-          <AppButton :purpleBg="false"> CREATE! </AppButton>
+          <AppButton  :purpleBg="false"> CREATE! </AppButton>
         </div>
         <ul v-else class="dashboards mt-4 max-h-[570px] overflow-y-scroll">
           <AppLink path="/random">

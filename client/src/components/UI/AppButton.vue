@@ -13,7 +13,7 @@ defineProps({
 
 <template>
   <button
-    class="font-bold rounded px-4 py-2"
+    class="font-bold rounded px-4 py-2 disabled:text-gray-400 disabled:cursor-not-allowed"
     :class="{ 'bg-purple text-white': purpleBg, 'text-purple bg-white': !purpleBg}"
     @click="action"
   >

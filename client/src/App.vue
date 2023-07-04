@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
+import { useLoading } from "./stores/loading";
+import TheLoading from "@/components/TheLoading.vue";
+
+const loading = useLoading()
 </script>
 
 <template>
   <div class="wrapper bg-black">
+    <TheLoading v-if="loading.loading" />
     <RouterView />
   </div>
 </template>
