@@ -1,10 +1,12 @@
 require("dotenv").config();
 const router = require("express").Router();
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const {
+  checkAccess,
+  checkSelfAccess,
+} = require("../middlewares/accessibility.middleware");
+const { getSelf } = require("../controllers/user.controller");
 
 // get self
-router.get('/:id')
+router.get("/:id", checkAccess, checkSelfAccess, getSelf);
 
-
-module.exports = router
+module.exports = router;

@@ -1,17 +1,25 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { verifyToken } = require("../utils/manageToken");
 
 const getSelf = async (req, res) => {
   try {
-    const token = req.headers["Authorization"]?.split(" ")[1];
     const { id } = req.params;
 
-    const verifiedToken = await verifyToken(token, process.env.JWT_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: id } });
 
-    if (!verifiedToken) {
-      return res.status();
+    if (!user) {
+      return res.status(404).json({
+        msg: "User is not found",
+        status: "not found",
+        code: 404,
+      });
     }
-  } catch (error) {}
+
+    return res.json({ user, msg: "User is found", status: "ok" });
+  } catch (error) {
+    return res.status(500).json({ error, msg: error.message });
+  }
 };
+
+module.exports = { getSelf };
