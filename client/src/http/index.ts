@@ -5,6 +5,7 @@ import axios, {
 import { CONSTANTS } from "../constants";
 import { useLoading } from "@/stores/loading";
 import { useToast } from "vue-toastification";
+import Cookies from "js-cookie";
 
 const toast = useToast();
 
@@ -14,6 +15,9 @@ export const authInstance = axios.create({
 
 export const userInstance = axios.create({
   baseURL: String(CONSTANTS.USER_URL),
+  headers: {
+    Authorization: `Bearer ${Cookies.get('token')}`
+  }
 });
 
 const interceptor = {

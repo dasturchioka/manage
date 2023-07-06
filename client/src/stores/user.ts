@@ -49,15 +49,6 @@ export const useUser = defineStore("user", () => {
 
       const res = await userInstance.get(`/${parsedUser.id}`);
 
-      if (!res) {
-        Cookies.remove("token");
-        Cookies.remove("user");
-
-        window.location.href = "/auth";
-
-        return;
-      }
-
       const data = res.data;
 
       if (data.token) {

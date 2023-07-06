@@ -56,7 +56,7 @@ const checkSelfAccess = async (req, res, next) => {
 
     const existUser = await prisma.user.findUnique({
       where: {
-        id: verifiedToken.user.id,
+        id: verifiedToken.id,
       },
     });
 
