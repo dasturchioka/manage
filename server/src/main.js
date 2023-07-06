@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/user", require("./routes/user.routes"));
 
 app.get("/api", (req, res) => {
   return res.json({ msg: "Hello my friend!" });

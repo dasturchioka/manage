@@ -1,6 +1,14 @@
 <script lang="ts" setup>
+import { reactive } from "vue";
+
 import Logo from "../assets/icons/logo.svg";
 import AppButton from "../components/UI/AppButton.vue";
+
+import { useAuth, type User } from "@/stores/auth";
+
+const auth = useAuth();
+
+const user = reactive<User>({ username: "", password: "" });
 </script>
 
 <template>
@@ -11,12 +19,13 @@ import AppButton from "../components/UI/AppButton.vue";
       <p class="text-xl opacity-50">Welcome to</p>
       <img :src="Logo" alt="logo" />
     </div>
-    <form class="form w-[500px] bg-dark-secondary rounded-md sm:p-6 p-5">
+    <div class="form w-[500px] bg-dark-secondary rounded-md sm:p-6 p-5">
       <h1 class="title text-2xl font-bold mb-8">Authentication</h1>
       <div class="form-groups space-y-5">
         <div class="group flex flex-col space-y-2">
           <label for="username">Username</label>
           <input
+            v-model="user.username"
             type="text"
             id="username"
             placeholder="dasturchioka"
@@ -26,6 +35,7 @@ import AppButton from "../components/UI/AppButton.vue";
         <div class="group flex flex-col space-y-2">
           <label for="password">Password</label>
           <input
+            v-model="user.password"
             type="password"
             id="password"
             placeholder="*******"
@@ -34,12 +44,17 @@ import AppButton from "../components/UI/AppButton.vue";
         </div>
       </div>
       <div class="buttons grid grid-cols-2 gap-5 mt-6">
-        <AppButton type="button" :purpleBg="false"> REGISTER </AppButton>
+        <AppButton @click="auth.register(user)" type="button" :purpleBg="false">
+          REGISTER
+        </AppButton>
         <AppButton type="button" :purpleBg="true"> LOGIN </AppButton>
       </div>
-    </form>
+    </div>
     <footer class="footer font-semibold text-sm opacity-50">
-      powered by <a target="_blank" href="https://dasturchioka.uz"><span class="text-purple">@</span>dasturchioka</a>
+      powered by
+      <a target="_blank" href="https://dasturchioka.uz"
+        ><span class="text-purple">@</span>dasturchioka</a
+      >
     </footer>
   </div>
 </template>

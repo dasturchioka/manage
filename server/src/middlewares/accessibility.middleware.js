@@ -2,31 +2,76 @@ require("dotenv").config();
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
+const { verifyToken } = require("../utils/manageToken");
 const prisma = new PrismaClient();
 
-const checkFields = async (req, res, next) => {
+const checkAccess = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
-
-    if (username.length < 3 && password.length < 8) {
-      return res.status(400).json({
-        status: "bad fields",
-        msg: "Username and password must be at least 3 and 8 respectively!",
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(403).json({
+        msg: "You don't have permission to operate that",
+        status: `Access denied`,
+        code: 403,
       });
     }
 
-    const existUser = await prisma.user.findUnique({ where: { username } });
+    const verifiedToken = await verifyToken(token, process.env.JWT_SECRET);
 
-    if (existUser) {
-      return res.status(400).json({
-        status: "username is unavailable",
-        msg: "Username is already taken, choose another one!",
+    if (!verifiedToken) {
+      return res.status(403).json({
+        msg: "You don't have permission to operate that",
+        status: `Access denied`,
+        code: 403,
       });
     }
 
     return next();
   } catch (error) {
-    return res.status(500).json(error);
+    return next(error);
+  }
+};
+
+const checkSelfAccess = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(403).json({
+        msg: "You don't have permission to operate that",
+        status: `Access denied`,
+        code: 403,
+      });
+    }
+
+    const verifiedToken = await verifyToken(token, process.env.JWT_SECRET);
+
+    if (!verifiedToken) {
+      return res.status(403).json({
+        msg: "You don't have permission to operate that",
+        status: `Access denied`,
+        code: 403,
+      });
+    }
+
+    const existUser = await prisma.user.findUnique({
+      where: {
+        id: verifiedToken.user.id,
+      },
+    });
+
+    if (existCabinet.id !== id) {
+      return res.status(403).json({
+        code: 403,
+        status: "Access denied",
+        message: "Sizga bu operatsiyani bajarishga huquq berilmagan!",
+      });
+    }
+
+    req.cabinet = existCabinet;
+    return next();
+  } catch (error) {
+    return next(error);
   }
 };
 
