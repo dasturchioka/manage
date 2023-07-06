@@ -44,12 +44,12 @@ const interceptor = {
   },
 };
 
-globalInstance.interceptors.request.use(
+userInstance.interceptors.request.use(
   interceptor.request,
   interceptor.errorRequest
 );
 
-globalInstance.interceptors.response.use(
+userInstance.interceptors.response.use(
   interceptor.response,
   interceptor.errorResponse
 );

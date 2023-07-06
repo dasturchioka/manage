@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 const toast = useToast();
 
 export const useAuth = defineStore("auth", () => {
+  const userStore = useUser();
+
   async function register(payload: User) {
     try {
       if (!payload.username.length) {
@@ -26,9 +28,19 @@ export const useAuth = defineStore("auth", () => {
       if (data.token) {
         Cookies.set("token", data.token);
         Cookies.set("user", JSON.stringify(data.user));
+        await userStore.setUser(data.user);
+        await userStore.setToken(data.token);
+
+        window.location.href = "/";
+
+        return;
+      } else {
+        toast("Something went wrong in auth store");
+        return;
       }
     } catch (error) {
       console.log(error);
+      toast('Something went wrong in auth store')
     }
   }
 
