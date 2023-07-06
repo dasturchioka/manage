@@ -9,7 +9,35 @@ export interface User {
 }
 
 export const useUser = defineStore("user", () => {
-  const user = reactive<User>({ username: "", password: "" });
+  const userDetails = reactive({
+    user: { username: "", password: "" } as User,
+    token: "",
+  });
 
-  
+  async function setUser(payload: User) {
+    if (Cookies.get("user")) {
+      Cookies.remove("user");
+      Cookies.set("user", JSON.stringify(payload));
+      userDetails.user = payload;
+    } else {
+      Cookies.set("user", JSON.stringify(payload));
+      userDetails.user = payload;
+    }
+  }
+
+  async function setToken(token: string) {
+    if (Cookies.get("token")) {
+      Cookies.remove("token");
+      Cookies.set("token", token);
+      userDetails.token = token;
+    } else {
+      Cookies.set("token", token);
+      userDetails.token = token;
+    }
+  }
+
+  return {
+    setUser,
+    setToken,
+  };
 });

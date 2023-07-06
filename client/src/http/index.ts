@@ -9,13 +9,12 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 
 export const authInstance = axios.create({
-  baseURL: CONSTANTS.AUTH_URL,
+  baseURL: String(CONSTANTS.AUTH_URL),
 });
 
 export const userInstance = axios.create({
-  baseURL: CONSTANTS.SERVER_BASE,
+  baseURL: String(CONSTANTS.USER_URL),
 });
-
 
 const interceptor = {
   request: function (config: InternalAxiosRequestConfig) {

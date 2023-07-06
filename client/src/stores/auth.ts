@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 
 const toast = useToast();
 
-export const useAuth = defineStore("auth", () => {  
+export const useAuth = defineStore("auth", () => {
   async function register(payload: User) {
     try {
       if (!payload.username.length) {
