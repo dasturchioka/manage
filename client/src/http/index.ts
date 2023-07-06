@@ -1,4 +1,7 @@
-import axios from "axios";
+import axios, {
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
 import { CONSTANTS } from "../constants";
 import { useLoading } from "@/stores/loading";
 import { useToast } from "vue-toastification";
@@ -13,58 +16,50 @@ export const authInstance = axios.create({
   baseURL: CONSTANTS.AUTH_URL,
 });
 
-globalInstance.interceptors.request.use(
-  function (config) {
+const interceptor = {
+  request: function (config: InternalAxiosRequestConfig) {
     const loading = useLoading();
     loading.setLoading(true);
     return config;
   },
-  function (error) {
+
+  response: function (config: AxiosResponse) {
+    const loading = useLoading();
+    loading.setLoading(false);
+    return config;
+  },
+
+  errorRequest: function (error: any) {
     const loading = useLoading();
     loading.setLoading(false);
     console.log(error);
     toast("Error while requesting to the server", { type: "error" });
-  }
+  },
+
+  errorResponse: function (error: any) {
+    const loading = useLoading();
+    loading.setLoading(false);
+    console.log(error);
+    toast(error.response.data.msg, { type: "error" });
+  },
+};
+
+globalInstance.interceptors.request.use(
+  interceptor.request,
+  interceptor.errorRequest
 );
 
 globalInstance.interceptors.response.use(
-  function (config) {
-    const loading = useLoading();
-    loading.setLoading(false);
-    return config;
-  },
-  function (error) {
-    const loading = useLoading();
-    loading.setLoading(false);
-    console.log(error);
-    toast(error.response.data.msg, { type: "error" });
-  }
+  interceptor.response,
+  interceptor.errorResponse
 );
 
 authInstance.interceptors.request.use(
-  function (config) {
-    const loading = useLoading();
-    loading.setLoading(true);
-    return config;
-  },
-  function (error) {
-    const loading = useLoading();
-    loading.setLoading(false);
-    console.log(error);
-    toast('Error while requesting the data', { type: "error" });
-  }
+  interceptor.request,
+  interceptor.errorRequest
 );
 
 authInstance.interceptors.response.use(
-  function (config) {
-    const loading = useLoading();
-    loading.setLoading(false);
-    return config;
-  },
-  function (error) {
-    const loading = useLoading();
-    loading.setLoading(false);
-    console.log(error);
-    toast(error.response.data.msg, { type: "error" });
-  }
+  interceptor.response,
+  interceptor.errorResponse
 );
