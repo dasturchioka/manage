@@ -60,19 +60,19 @@ const checkSelfAccess = async (req, res, next) => {
       },
     });
 
-    if (existCabinet.id !== id) {
+    if (existUser.id !== id) {
       return res.status(403).json({
         code: 403,
         status: "Access denied",
-        message: "Sizga bu operatsiyani bajarishga huquq berilmagan!",
+        msg: "You don't have permission to operate that",
       });
     }
 
-    req.cabinet = existCabinet;
+    req.user = existUser;
     return next();
   } catch (error) {
     return next(error);
   }
 };
 
-module.exports = { checkFields };
+module.exports = { checkAccess, checkSelfAccess };
