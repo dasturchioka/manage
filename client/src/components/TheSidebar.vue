@@ -13,14 +13,23 @@ import LogoutIcon from "@/components/icons/Logout.vue";
 
 import { useDashboard } from "@/stores/dashboard";
 
-const dashboardStore = useDashboard()
+import { defineAsyncComponent, ref } from "vue";
 
+const TheCreateDashboard = defineAsyncComponent(() => {
+  return import("./TheCreateDashboard.vue");
+});
+
+const dashboardStore = useDashboard();
+
+const showCreateComponent = ref(false);
+
+const handleShow = () => {
+  showCreateComponent.value = !showCreateComponent.value;
+};
 </script>
 
 <template>
-  <aside
-    class="sidebar-navigation bg-dark-secondary w-[250px]"
-  >
+  <aside class="sidebar-navigation bg-dark-secondary w-[250px]">
     <div class="side-top w-[70px] my-8 ml-5">
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
     </div>
@@ -39,9 +48,13 @@ const dashboardStore = useDashboard()
       </AppLink>
       <div class="side-dashboards mt-6">
         <h3 class="title mx-4 text-xl font-bold">Dashboards</h3>
-        <div v-if="!dashboardStore.dashboards.list.length" class="not-found mx-4 mt-6 space-y-2">
+        <div
+          v-if="!dashboardStore.dashboards.list.length"
+          class="not-found mx-4 mt-6 space-y-2"
+        >
           <p class="text-sm opacity-60">You don't have dashboards yet</p>
-          <AppButton  :purpleBg="false"> CREATE! </AppButton>
+          <AppButton class="mb-4" @click="handleShow" :purpleBg="false"> CREATE! </AppButton>
+          <TheCreateDashboard v-if="showCreateComponent" />
         </div>
         <ul v-else class="dashboards mt-4 max-h-[570px] overflow-y-scroll">
           <AppLink path="/random">
@@ -50,7 +63,9 @@ const dashboardStore = useDashboard()
           </AppLink>
         </ul>
       </div>
-      <div class="side-user fixed flex items-center justify-between bottom-0 bg-dark-lighter w-[250px] p-4">
+      <div
+        class="side-user fixed flex items-center justify-between bottom-0 bg-dark-lighter w-[250px] p-4"
+      >
         <div class="profile flex items-center">
           <UserIcon class="mr-2" />
           dasturchioka

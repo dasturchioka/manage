@@ -5,11 +5,11 @@ import Logo from "../assets/icons/logo.svg";
 import AppButton from "../components/UI/AppButton.vue";
 
 import { useAuth } from "@/stores/auth";
-import { type User } from "@/stores/user";
+import { type User } from "@/interfaces/User";
 
 const auth = useAuth();
 
-const user = reactive<User>({ username: "", password: "" });
+const user = reactive<User>({ username: "", password: "", dashboards: [] });
 </script>
 
 <template>
@@ -48,7 +48,9 @@ const user = reactive<User>({ username: "", password: "" });
         <AppButton @click="auth.register(user)" type="button" :purpleBg="false">
           REGISTER
         </AppButton>
-        <AppButton @click="auth.login(user)" type="button" :purpleBg="true"> LOGIN </AppButton>
+        <AppButton @click="auth.login(user)" type="button" :purpleBg="true">
+          LOGIN
+        </AppButton>
       </div>
     </div>
     <footer class="footer font-semibold text-sm opacity-50">

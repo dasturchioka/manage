@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { type Dashboard } from "@/interfaces/Dashboard";
-import { reactive } from "vue";
+import { nextTick, reactive } from "vue";
 import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
 import { useUser } from "./user";
@@ -52,7 +52,7 @@ export const useDashboard = defineStore("dashboard", () => {
         return;
       }
 
-      const res = await dashboardInstance.get(
+      const res = await dashboardInstance.post(
         `/create/user-id/${userStore.userDetails.user.id}`
       );
 
@@ -63,6 +63,9 @@ export const useDashboard = defineStore("dashboard", () => {
       if (data.dashboards) {
         await pushDashboard(data.dashboard);
         toast(data.msg);
+        nextTick(async () => {
+          await getAllDashboards();
+        });
         return;
       }
 
@@ -79,6 +82,6 @@ export const useDashboard = defineStore("dashboard", () => {
     pushDashboard,
     getAllDashboards,
     createDashboard,
-    dashboards
+    dashboards,
   };
 });
