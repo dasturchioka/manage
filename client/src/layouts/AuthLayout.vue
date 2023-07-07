@@ -4,7 +4,8 @@ import { reactive } from "vue";
 import Logo from "../assets/icons/logo.svg";
 import AppButton from "../components/UI/AppButton.vue";
 
-import { useAuth, type User } from "@/stores/auth";
+import { useAuth } from "@/stores/auth";
+import { type User } from "@/stores/user";
 
 const auth = useAuth();
 
