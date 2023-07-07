@@ -35,10 +35,11 @@ export const useAuth = defineStore("auth", () => {
         window.location.href = "/";
 
         return;
-      } else {
-        toast("Something went wrong in auth store");
-        return;
       }
+
+      toast("Something went wrong in auth store");
+      return;
+      
     } catch (error) {
       console.log(error);
       toast("Something went wrong in auth store");

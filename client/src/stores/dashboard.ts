@@ -10,9 +10,17 @@ export const useDashboard = defineStore("dashboard", () => {
   const toast = useToast();
   const userStore = useUser();
 
-  const dashboard = reactive({
-    details: {} as Dashboard,
+  const dashboards = reactive({
+    list: [] as Dashboard[],
   });
+
+  async function pushDashboard(payload: Dashboard) {
+    dashboards.list.push(payload);
+  }
+
+  async function setDashboards(payload: Dashboard[]) {
+    dashboards.list = payload;
+  }
 
   async function getAllDashboards() {
     try {
@@ -20,13 +28,26 @@ export const useDashboard = defineStore("dashboard", () => {
         `/all/user-id/${userStore.userDetails.user.id}`
       );
 
-      if (!res) return
+      if (!res) return;
 
-      const data = await res.data
+      const data = await res.data;
 
       if (data.dashboards) {
-        
+        await setDashboards(data.dashboards);
+        return;
       }
-    } catch (error) {}
+
+      toast("Something went wrong in dashboard store");
+      return;
+    } catch (error) {
+      console.log(error);
+      toast("Something went wrong in dashboard store");
+    }
   }
+
+  return {
+    setDashboards,
+    pushDashboard,
+    getAllDashboards,
+  };
 });
