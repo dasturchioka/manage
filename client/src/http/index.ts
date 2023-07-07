@@ -16,15 +16,15 @@ export const authInstance = axios.create({
 export const userInstance = axios.create({
   baseURL: String(CONSTANTS.USER_URL),
   headers: {
-    Authorization: `Bearer ${Cookies.get('token')}`
-  }
+    Authorization: `Bearer ${Cookies.get("token")}`,
+  },
 });
 
 export const dashboardInstance = axios.create({
-  baseURL: String(CONSTANTS.USER_URL),
+  baseURL: String(CONSTANTS.DASHBOARD_URL),
   headers: {
-    Authorization: `Bearer ${Cookies.get('token')}`
-  }
+    Authorization: `Bearer ${Cookies.get("token")}`,
+  },
 });
 
 const interceptor = {
@@ -82,5 +82,16 @@ dashboardInstance.interceptors.request.use(
 
 dashboardInstance.interceptors.response.use(
   interceptor.response,
-  interceptor.errorResponse
+  function (error: any) {
+    const loading = useLoading();
+    loading.setLoading(false);
+    if (
+      error.response.data.status !== "not found" &&
+      !error.config.url.includes("/all/user-id")
+    ) {
+      toast(error.response.data.msg, { type: "error" });
+    } else {
+      return;
+    }
+  }
 );

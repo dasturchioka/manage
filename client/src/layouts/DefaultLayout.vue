@@ -2,12 +2,15 @@
 import { RouterView } from "vue-router";
 import TheSidebar from "@/components/TheSidebar.vue";
 import { useUser } from "@/stores/user";
+import { useDashboard } from "@/stores/dashboard";
 import { onMounted } from "vue";
 
 const userStore = useUser();
+const dashboardStore = useDashboard()
 
 onMounted(async () => {
   await userStore.getUser();
+  await dashboardStore.getAllDashboards()
 });
 </script>
 

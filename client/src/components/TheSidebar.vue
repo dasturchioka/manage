@@ -11,7 +11,10 @@ import DashboardLightIcon from "@/components/icons/DashboardLight.vue";
 import UserIcon from "@/components/icons/User.vue";
 import LogoutIcon from "@/components/icons/Logout.vue";
 
-const dashboards: Array<any> = [];
+import { useDashboard } from "@/stores/dashboard";
+
+const dashboardStore = useDashboard()
+
 </script>
 
 <template>
@@ -36,7 +39,7 @@ const dashboards: Array<any> = [];
       </AppLink>
       <div class="side-dashboards mt-6">
         <h3 class="title mx-4 text-xl font-bold">Dashboards</h3>
-        <div v-if="!dashboards.length" class="not-found mx-4 mt-6 space-y-2">
+        <div v-if="!dashboardStore.dashboards.list.length" class="not-found mx-4 mt-6 space-y-2">
           <p class="text-sm opacity-60">You don't have dashboards yet</p>
           <AppButton  :purpleBg="false"> CREATE! </AppButton>
         </div>
