@@ -1,13 +1,17 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
+const { verifyToken } = require("../utils/manageToken");
 const prisma = new PrismaClient();
 
 const createDashboard = async (req, res) => {
   try {
     const { name } = req.body;
+
+    const { id: userId } = req.params;
+
     const newDashboard = await prisma.dashboard.create({
       data: {
-        userId: req.params.id,
+        userId,
         name,
       },
     });
@@ -18,6 +22,29 @@ const createDashboard = async (req, res) => {
       status: "ok",
     });
   } catch (error) {
-    return res.status(500).json({error, error: error.message})
+    return res.status(500).json({ error, error: error.message });
   }
 };
+
+const getAllDashboards = async (req, res) => {
+  try {
+    const { id: userId } = req.params;
+
+    const dashboards = await prisma.dashboard.findMany({
+      where: { userId },
+    });
+
+    if (!dashboards.length) {
+      return res.status(404).json({
+        msg: "You don't have any dashboards yet",
+        status: "not found",
+      });
+    }
+
+    return res.json({ dashboards, msg: "Dashboards here" });
+  } catch (error) {
+    return res.status(500).json({ error, error: error.message });
+  }
+};
+
+module.exports = { createDashboard, getAllDashboards };
