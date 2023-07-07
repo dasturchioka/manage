@@ -48,7 +48,7 @@ const user = reactive<User>({ username: "", password: "" });
         <AppButton @click="auth.register(user)" type="button" :purpleBg="false">
           REGISTER
         </AppButton>
-        <AppButton type="button" :purpleBg="true"> LOGIN </AppButton>
+        <AppButton @click="auth.login(user)" type="button" :purpleBg="true"> LOGIN </AppButton>
       </div>
     </div>
     <footer class="footer font-semibold text-sm opacity-50">
