@@ -20,6 +20,13 @@ export const userInstance = axios.create({
   }
 });
 
+export const dashboardInstance = axios.create({
+  baseURL: String(CONSTANTS.USER_URL),
+  headers: {
+    Authorization: `Bearer ${Cookies.get('token')}`
+  }
+});
+
 const interceptor = {
   request: function (config: InternalAxiosRequestConfig) {
     const loading = useLoading();
@@ -64,6 +71,16 @@ authInstance.interceptors.request.use(
 );
 
 authInstance.interceptors.response.use(
+  interceptor.response,
+  interceptor.errorResponse
+);
+
+dashboardInstance.interceptors.request.use(
+  interceptor.request,
+  interceptor.errorRequest
+);
+
+dashboardInstance.interceptors.response.use(
   interceptor.response,
   interceptor.errorResponse
 );

@@ -16,7 +16,6 @@ model Dashboard {
   tasks  Tasks?
   User   User?    @relation(fields: [userId], references: [id])
   userId String?
-  Status Status[]
 }
 
 model User {
@@ -33,23 +32,13 @@ model Tasks {
   dashboardId String    @unique
 }
 
-model Status {
-  id          String    @id @unique @default(cuid())
-  name        String
-  color       String
-  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
-  dashboardId String
-  Task        Task[]
-}
-
 model Task {
   id          String  @id @unique @default(cuid())
   name        String
   description String
-  status      Status  @relation(fields: [statusId], references: [id])
+  status      String
   subtasks    Json[]
   priority    String
   Tasks       Tasks?  @relation(fields: [tasksId], references: [id])
   tasksId     String?
-  statusId    String
 }

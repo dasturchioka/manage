@@ -3,18 +3,13 @@ import { reactive } from "vue";
 import Cookies from "js-cookie";
 import { userInstance } from "@/http";
 import { useToast } from "vue-toastification";
+import { type User } from "@/interfaces/User";
 
 const toast = useToast();
 
-export interface User {
-  username: String;
-  password: String;
-  [key: string]: any;
-}
-
 export const useUser = defineStore("user", () => {
   const userDetails = reactive({
-    user: { username: "", password: "" } as User,
+    user: { username: "", password: "", dashboards: [] } as User,
     token: "",
   });
 
@@ -69,7 +64,7 @@ export const useUser = defineStore("user", () => {
       }
     } catch (error) {
       console.log(error);
-      toast('Something went wrong in user store')
+      toast("Something went wrong in user store");
     }
   }
 

@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { authInstance } from "@/http";
 import { useToast } from "vue-toastification";
-import { useUser, type User } from "./user";
+import { type User } from "../interfaces/User";
+import { useUser } from "./user";
 import Cookies from "js-cookie";
 
 const toast = useToast();
