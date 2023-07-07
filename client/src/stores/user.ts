@@ -72,5 +72,6 @@ export const useUser = defineStore("user", () => {
     setUser,
     setToken,
     getUser,
+    userDetails
   };
 });
