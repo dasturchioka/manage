@@ -63,7 +63,7 @@ const handleShow = () => {
           </AppButton>
           <TheCreateDashboard v-if="showCreateComponent" />
         </div>
-        <ul v-else class="dashboards mt-4 max-h-[570px] overflow-y-scroll">
+        <ul v-else class="dashboards mt-4 max-h-[570px] overflow-y-scroll relative">
           <AppLink
             class="hover-show-child relative"
             v-for="(dashboard, index) in dashboardStore.dashboards.list"
@@ -79,6 +79,12 @@ const handleShow = () => {
               <TrashIcon class="link-icon" />
             </button>
           </AppLink>
+          <hr class="opacity-10 mt-2" />
+          <AppButton @click="handleShow" class="text-sm opacity-50 mt-4" :linkAlike="true">
+            <span class="text-2xl mr-2">&plus;</span>
+            Create more
+          </AppButton>
+          <TheCreateDashboard class="mt-4" v-if="showCreateComponent" />
         </ul>
       </div>
       <div
