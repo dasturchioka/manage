@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useDashboard } from "@/stores/dashboard";
-import { type Dashboard } from "@/interfaces/Dashboard";
 import AppButton from "./UI/AppButton.vue";
 import { ref } from "vue";
 

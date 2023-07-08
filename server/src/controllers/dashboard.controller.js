@@ -9,6 +9,8 @@ const createDashboard = async (req, res) => {
 
     const { id: userId } = req.params;
 
+    console.log(name, userId);
+
     const newDashboard = await prisma.dashboard.create({
       data: {
         userId,

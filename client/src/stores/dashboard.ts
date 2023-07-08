@@ -34,11 +34,10 @@ export const useDashboard = defineStore("dashboard", () => {
 
       if (data.dashboards) {
         await setDashboards(data.dashboards);
+      } else {
+        toast("Something went wrong in dashboard store");
         return;
       }
-
-      toast("Something went wrong in dashboard store");
-      return;
     } catch (error) {
       console.log(error);
       toast("Something went wrong in dashboard store");
@@ -53,7 +52,8 @@ export const useDashboard = defineStore("dashboard", () => {
       }
 
       const res = await dashboardInstance.post(
-        `/create/user-id/${userStore.userDetails.user.id}`
+        `/create/user-id/${userStore.userDetails.user.id}`,
+        { name }
       );
 
       if (!res) return;
@@ -66,11 +66,10 @@ export const useDashboard = defineStore("dashboard", () => {
         nextTick(async () => {
           await getAllDashboards();
         });
+      } else {
+        toast("Something went wrong in dashboard store");
         return;
       }
-
-      toast("Something went wrong in dashboard store");
-      return;
     } catch (error) {
       console.log(error);
       toast("Something went wrong in dashboard store");

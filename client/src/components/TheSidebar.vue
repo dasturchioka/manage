@@ -1,10 +1,13 @@
 <script lang="ts" setup>
+import { useSlicedLetter } from "@/composables/useSlicedLetter";
+
 import Logo from "@/assets/icons/logo.svg";
 
 import AppLink from "./UI/AppLink.vue";
 import AppButton from "./UI/AppButton.vue";
 
 import HomeIcon from "@/components/icons/Home.vue";
+import TrashIcon from "./icons/Trash.vue";
 import BellIcon from "@/components/icons/Bell.vue";
 import SettingsIcon from "@/components/icons/Settings.vue";
 import DashboardLightIcon from "@/components/icons/DashboardLight.vue";
@@ -18,6 +21,8 @@ import { defineAsyncComponent, ref } from "vue";
 const TheCreateDashboard = defineAsyncComponent(() => {
   return import("./TheCreateDashboard.vue");
 });
+
+const { sliceLetter } = useSlicedLetter();
 
 const dashboardStore = useDashboard();
 
@@ -53,13 +58,26 @@ const handleShow = () => {
           class="not-found mx-4 mt-6 space-y-2"
         >
           <p class="text-sm opacity-60">You don't have dashboards yet</p>
-          <AppButton class="mb-4" @click="handleShow" :purpleBg="false"> CREATE! </AppButton>
+          <AppButton class="mb-4" @click="handleShow" :purpleBg="false">
+            CREATE!
+          </AppButton>
           <TheCreateDashboard v-if="showCreateComponent" />
         </div>
         <ul v-else class="dashboards mt-4 max-h-[570px] overflow-y-scroll">
-          <AppLink path="/random">
+          <AppLink
+            class="hover-show-child relative"
+            v-for="(dashboard, index) in dashboardStore.dashboards.list"
+            :key="index"
+            :path="`/dashboard/${dashboard.id}`"
+          >
             <DashboardLightIcon class="mr-2" />
-            Frontend
+            {{ sliceLetter(17, String(dashboard.name)) }}
+            <button
+              type="button"
+              class="absolute right-2 hover:bg-dark-secondary p-2 rounded"
+            >
+              <TrashIcon class="link-icon" />
+            </button>
           </AppLink>
         </ul>
       </div>
@@ -79,6 +97,15 @@ const handleShow = () => {
 </template>
 
 <style scoped>
+.hover-show-child button {
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.hover-show-child:hover button {
+  opacity: 1;
+}
+
 .dashboards {
   scrollbar-width: auto;
   scrollbar-color: #fff;
