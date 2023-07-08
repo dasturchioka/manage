@@ -15,7 +15,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="default-layout flex text-white min-h-screen font-main">
+  <div class="default-layout flex text-white min-h-screen font-main overflow-y-hidden">
     <TheSidebar />
     <RouterView />
   </div>

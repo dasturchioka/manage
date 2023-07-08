@@ -4,11 +4,22 @@ import AppButton from "./UI/AppButton.vue";
 import { ref } from "vue";
 
 const dashboardStore = useDashboard();
-const dashboardName = ref("")
+const dashboardName = ref("");
+
+const emit = defineEmits(["dashboardCreated"]);
+
+const createDashboard = async () => {
+  await dashboardStore.createDashboard(dashboardName.value);
+  emit("dashboardCreated");
+  dashboardName.value = ""
+};
 </script>
 
 <template>
-  <form @submit.prevent="dashboardStore.createDashboard(dashboardName)" class="create-dashboard bg-dark rounded p-4">
+  <form
+    @submit.prevent="createDashboard"
+    class="create-dashboard bg-dark rounded p-4"
+  >
     <div class="form-group mb-4 space-y-1">
       <label for="name">Dashboard's name:</label>
       <input

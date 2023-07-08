@@ -60,13 +60,11 @@ export const useDashboard = defineStore("dashboard", () => {
 
       const data = await res.data;
 
-      if (data.dashboards) {
+      if (data.dashboard) {
         await pushDashboard(data.dashboard);
         toast(data.msg);
-        nextTick(async () => {
-          await getAllDashboards();
-        });
-      } else {
+        await getAllDashboards();
+      } else {        
         toast("Something went wrong in dashboard store");
         return;
       }

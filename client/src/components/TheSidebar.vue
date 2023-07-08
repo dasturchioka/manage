@@ -63,7 +63,7 @@ const handleShow = () => {
           </AppButton>
           <TheCreateDashboard v-if="showCreateComponent" />
         </div>
-        <ul v-else class="dashboards mt-4 max-h-[570px] overflow-y-scroll relative">
+        <ul v-else class="dashboards mt-4 max-h-[370px] overflow-y-scroll">
           <AppLink
             class="hover-show-child relative"
             v-for="(dashboard, index) in dashboardStore.dashboards.list"
@@ -79,13 +79,21 @@ const handleShow = () => {
               <TrashIcon class="link-icon" />
             </button>
           </AppLink>
-          <hr class="opacity-10 mt-2" />
-          <AppButton @click="handleShow" class="text-sm opacity-50 mt-4" :linkAlike="true">
-            <span class="text-2xl mr-2">&plus;</span>
-            Create more
-          </AppButton>
-          <TheCreateDashboard class="mt-4" v-if="showCreateComponent" />
         </ul>
+        <hr class="opacity-10 mt-2" />
+        <AppButton
+          @click="handleShow"
+          class="text-sm opacity-50 mt-4"
+          :linkAlike="true"
+        >
+          <span class="text-2xl mr-2">{{
+            !showCreateComponent ? `&plus;` : `&minus;`
+          }}</span>
+          Create more
+        </AppButton>
+        <transition name="fade" mode="out-in">
+          <TheCreateDashboard @dashboardCreated="handleShow" class="mt-4" v-if="showCreateComponent" />
+        </transition>
       </div>
       <div
         class="side-user fixed flex items-center justify-between bottom-0 bg-dark-lighter w-[250px] p-4"
@@ -103,6 +111,15 @@ const handleShow = () => {
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .hover-show-child button {
   opacity: 0;
   transition: all 0.5s ease;
