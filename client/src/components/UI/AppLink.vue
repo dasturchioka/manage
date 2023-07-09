@@ -19,7 +19,7 @@ defineProps({
 </template>
 
 <style scoped>
-.router-link-active,
+  
 .router-link-exact-active {
   @apply bg-purple;
 }

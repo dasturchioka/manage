@@ -11,8 +11,6 @@ import TrashIcon from "./icons/Trash.vue";
 import BellIcon from "@/components/icons/Bell.vue";
 import SettingsIcon from "@/components/icons/Settings.vue";
 import DashboardLightIcon from "@/components/icons/DashboardLight.vue";
-import UserIcon from "@/components/icons/User.vue";
-import LogoutIcon from "@/components/icons/Logout.vue";
 
 import { useDashboard } from "@/stores/dashboard";
 
@@ -34,7 +32,8 @@ const handleShow = () => {
 </script>
 
 <template>
-  <aside class="sidebar-navigation bg-dark-secondary w-[250px]">
+  <aside class="sidebar-navigation bg-dark-secondary w-[270px]">
+   
     <div class="side-top w-[70px] my-8 ml-5">
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
     </div>
@@ -65,7 +64,7 @@ const handleShow = () => {
             <TheCreateDashboard v-if="showCreateComponent" />
           </transition>
         </div>
-        <ul v-else class="dashboards mt-4 max-h-[370px] overflow-y-scroll">
+        <ul v-else class="custom-scroll mt-4 max-h-[370px] overflow-y-scroll">
           <AppLink
             class="hover-show-child relative"
             v-for="(dashboard, index) in dashboardStore.dashboards.list"
@@ -109,17 +108,6 @@ const handleShow = () => {
           </transition>
         </div>
       </div>
-      <div
-        class="side-user fixed flex items-center justify-between bottom-0 bg-dark-lighter w-[250px] p-4"
-      >
-        <div class="profile flex items-center">
-          <UserIcon class="mr-2" />
-          dasturchioka
-        </div>
-        <button type="button">
-          <LogoutIcon />
-        </button>
-      </div>
     </div>
   </aside>
 </template>
@@ -141,20 +129,5 @@ const handleShow = () => {
 
 .hover-show-child:hover button {
   opacity: 1;
-}
-
-.dashboards {
-  scrollbar-width: auto;
-  scrollbar-color: #fff;
-}
-
-/* Chrome, Edge, and Safari */
-.dashboards::-webkit-scrollbar {
-  width: 4px;
-}
-
-.dashboards::-webkit-scrollbar-thumb {
-  background-color: #fff;
-  border-radius: 10px;
 }
 </style>
