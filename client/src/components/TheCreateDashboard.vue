@@ -18,7 +18,7 @@ const createDashboard = async () => {
 <template>
   <form
     @submit.prevent="createDashboard"
-    class="create-dashboard bg-dark rounded p-4"
+    class="create-dashboard bg-dark rounded p-4 w-full"
   >
     <div class="form-group mb-4 space-y-1">
       <label for="name">Dashboard's name:</label>
