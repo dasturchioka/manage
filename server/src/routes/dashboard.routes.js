@@ -3,6 +3,7 @@ const router = require("express").Router();
 const {
   getAllDashboards,
   createDashboard,
+  deleteDashboard,
 } = require("../controllers/dashboard.controller");
 const {
   checkAccess,
@@ -15,6 +16,12 @@ router.post(
   checkAccess,
   checkSelfAccess,
   createDashboard
+);
+router.delete(
+  "/delete/user-id/:id",
+  checkAccess,
+  checkSelfAccess,
+  deleteDashboard
 );
 
 module.exports = router;

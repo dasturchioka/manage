@@ -49,4 +49,16 @@ const getAllDashboards = async (req, res) => {
   }
 };
 
-module.exports = { createDashboard, getAllDashboards };
+const deleteDashboard = async (req, res) => {
+  try {
+    const { id: dashboardId } = req.body;
+
+    const deleted = await prisma.dashboard.delete({
+      where: { id: dashboardId },
+    });
+
+    return res.json({ status: "ok", msg: "Dashboard deleted" });
+  } catch (error) {}
+};
+
+module.exports = { createDashboard, getAllDashboards, deleteDashboard };
