@@ -61,7 +61,9 @@ const handleShow = () => {
           <AppButton class="mb-4" @click="handleShow" :purpleBg="false">
             CREATE!
           </AppButton>
-          <TheCreateDashboard v-if="showCreateComponent" />
+          <transition name="fade" mode="out-in">
+            <TheCreateDashboard v-if="showCreateComponent" />
+          </transition>
         </div>
         <ul v-else class="dashboards mt-4 max-h-[370px] overflow-y-scroll">
           <AppLink
@@ -73,6 +75,9 @@ const handleShow = () => {
             <DashboardLightIcon class="mr-2" />
             {{ sliceLetter(17, String(dashboard.name)) }}
             <button
+              @click.prevent="
+                dashboardStore.deleteDashboard(dashboard.id as String)
+              "
               type="button"
               class="absolute right-2 hover:bg-dark-secondary p-2 rounded"
             >
@@ -80,20 +85,29 @@ const handleShow = () => {
             </button>
           </AppLink>
         </ul>
-        <hr class="opacity-10 mt-2" />
-        <AppButton
-          @click="handleShow"
-          class="text-sm opacity-50 mt-4"
-          :linkAlike="true"
+        <hr class="opacity-10 mt-4" />
+        <div
+          v-if="dashboardStore.dashboards.list.length"
+          class="show-create-component-alternative"
         >
-          <span class="text-2xl mr-2">{{
-            !showCreateComponent ? `&plus;` : `&minus;`
-          }}</span>
-          Create more
-        </AppButton>
-        <transition name="fade" mode="out-in">
-          <TheCreateDashboard @dashboardCreated="handleShow" class="mt-4" v-if="showCreateComponent" />
-        </transition>
+          <AppButton
+            @click="handleShow"
+            class="text-sm opacity-50 mt-4"
+            :linkAlike="true"
+          >
+            <span class="text-2xl mr-2">{{
+              !showCreateComponent ? `&plus;` : `&minus;`
+            }}</span>
+            Create more
+          </AppButton>
+          <transition name="fade" mode="out-in">
+            <TheCreateDashboard
+              @dashboardCreated="handleShow"
+              class="mt-4"
+              v-if="showCreateComponent"
+            />
+          </transition>
+        </div>
       </div>
       <div
         class="side-user fixed flex items-center justify-between bottom-0 bg-dark-lighter w-[250px] p-4"

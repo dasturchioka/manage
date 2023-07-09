@@ -14,6 +14,11 @@ const router = createRouter({
           path: "",
           component: () => import("../views/HomeView.vue"),
         },
+        {
+          name: "default-dashboard",
+          path: "dashboard/:id",
+          component: () => import("../views/DashboardView.vue"),
+        },
       ],
       beforeEnter(to, from, next) {
         if (Cookie.get("token")) {

@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
 import { type Dashboard } from "@/interfaces/Dashboard";
-import { nextTick, reactive } from "vue";
+import { reactive } from "vue";
 import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
 import { useUser } from "./user";
-import Cookies from "js-cookie";
+import { useRouter, useRoute } from "vue-router";
 
 export const useDashboard = defineStore("dashboard", () => {
+  const router = useRouter();
+  const route = useRoute();
   const toast = useToast();
   const userStore = useUser();
 
@@ -64,7 +66,44 @@ export const useDashboard = defineStore("dashboard", () => {
         await pushDashboard(data.dashboard);
         toast(data.msg);
         await getAllDashboards();
-      } else {        
+        router.push(`/dashboard/${data.dashboard.id}`);
+      } else {
+        toast("Something went wrong in dashboard store");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Something went wrong in dashboard store");
+    }
+  }
+
+  async function deleteDashboard(payload: String) {
+    try {
+      if (!payload.length) {
+        toast("ID must be filled!");
+        return;
+      }
+
+      const res = await dashboardInstance.delete(
+        `/delete/user-id/${userStore.userDetails.user.id}`,
+        { data: { id: payload } }
+      );
+
+      if (!res) return;
+
+      const data = await res.data;
+
+      if (data.status === "ok") {
+        toast(data.msg);
+        if (route.params.id === payload) {
+          router.push("/");
+        }
+        if (dashboards.list.length === 1) {
+          dashboards.list = [];
+          return;
+        }
+        await getAllDashboards();
+      } else {
         toast("Something went wrong in dashboard store");
         return;
       }
@@ -80,5 +119,6 @@ export const useDashboard = defineStore("dashboard", () => {
     getAllDashboards,
     createDashboard,
     dashboards,
+    deleteDashboard,
   };
 });

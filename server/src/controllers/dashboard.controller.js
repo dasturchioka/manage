@@ -51,6 +51,7 @@ const getAllDashboards = async (req, res) => {
 
 const deleteDashboard = async (req, res) => {
   try {
+    console.log(req.body);
     const { id: dashboardId } = req.body;
 
     const deleted = await prisma.dashboard.delete({
