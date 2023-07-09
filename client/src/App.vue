@@ -7,7 +7,7 @@ const loading = useLoading()
 </script>
 
 <template>
-  <div class="wrapper bg-black overflow-y-hidden max-h-screen">
+  <div class="wrapper bg-black">
     <TheLoading v-if="loading.loading" />
     <RouterView />
   </div>
