@@ -48,8 +48,6 @@ export const useModal = defineStore("modal", () => {
     info.value.actionType = "";
     info.value.show = false;
 
-    console.log("call that mf");
-
     if (info.value.fn) {
       await info.value.fn(info.value.args);
 
@@ -63,8 +61,6 @@ export const useModal = defineStore("modal", () => {
 
       return;
     }
-
-    return;
   }
 
   return {
