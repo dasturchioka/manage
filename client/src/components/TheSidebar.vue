@@ -13,6 +13,7 @@ import SettingsIcon from "@/components/icons/Settings.vue";
 import DashboardLightIcon from "@/components/icons/DashboardLight.vue";
 
 import { useDashboard } from "@/stores/dashboard";
+import { useModal } from "@/stores/modal";
 
 import { defineAsyncComponent, ref } from "vue";
 
@@ -23,6 +24,7 @@ const TheCreateDashboard = defineAsyncComponent(() => {
 const { sliceLetter } = useSlicedLetter();
 
 const dashboardStore = useDashboard();
+const modal = useModal();
 
 const showCreateComponent = ref(false);
 
@@ -33,7 +35,6 @@ const handleShow = () => {
 
 <template>
   <aside class="sidebar-navigation bg-dark-secondary w-[270px]">
-   
     <div class="side-top w-[70px] my-8 ml-5">
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
     </div>
@@ -75,7 +76,12 @@ const handleShow = () => {
             {{ sliceLetter(17, String(dashboard.name)) }}
             <button
               @click.prevent="
-                dashboardStore.deleteDashboard(dashboard.id as String)
+                modal.askTwice({
+                  actionType: `deletingDashboard`,
+                  fn: dashboardStore.deleteDashboard,
+                  show: true,
+                  args: dashboard.id,
+                })
               "
               type="button"
               class="absolute right-2 hover:bg-dark-secondary p-2 rounded"

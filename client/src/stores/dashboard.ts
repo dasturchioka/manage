@@ -1,16 +1,18 @@
 import { defineStore } from "pinia";
 import { type Dashboard } from "@/interfaces/Dashboard";
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
 import { useUser } from "./user";
 import { useRouter, useRoute } from "vue-router";
+import { useModal } from "./modal";
 
 export const useDashboard = defineStore("dashboard", () => {
   const router = useRouter();
   const route = useRoute();
   const toast = useToast();
   const userStore = useUser();
+  const modalStore = useModal();
 
   const dashboards = reactive({
     list: [] as Dashboard[],
@@ -87,7 +89,7 @@ export const useDashboard = defineStore("dashboard", () => {
       const res = await dashboardInstance.delete(
         `/delete/user-id/${userStore.userDetails.user.id}`,
         { data: { id: payload } }
-      );  
+      );
 
       if (!res) return;
 
@@ -112,7 +114,6 @@ export const useDashboard = defineStore("dashboard", () => {
       toast("Something went wrong in dashboard store");
     }
   }
-
   return {
     setDashboards,
     pushDashboard,
