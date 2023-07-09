@@ -87,7 +87,7 @@ export const useDashboard = defineStore("dashboard", () => {
       const res = await dashboardInstance.delete(
         `/delete/user-id/${userStore.userDetails.user.id}`,
         { data: { id: payload } }
-      );
+      );  
 
       if (!res) return;
 
