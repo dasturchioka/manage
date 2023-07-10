@@ -6,8 +6,8 @@ const dashboardStore = useDashboard();
 </script>
 
 <template>
-  <main class="overview-page sm:px-4 px-2 space-y-6 w-full">
-    <div class="titles my-8">
+  <main class="overview-page sm:px-4 px-2 space-y-6 w-full pb-12">
+    <div class="titles sm:my-8 mb-5 mt-3">
       <h1 class="title text-3xl font-bold">Overview</h1>
       <p class="text-lg opacity-60 mt-2">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit ex

@@ -27,7 +27,9 @@ onClickOutside(outsideClickTarget, () => {
 </script>
 
 <template>
-  <div class="list-of-tasks bg-dark-secondary sm:p-6 p-4 rounded">
+  <div
+    class="list-of-tasks bg-dark-secondary sm:p-6 p-4 rounded w-full relative overflow-x-scroll custom-scroll-h"
+  >
     <h1
       class="flex items-center text-2xl font-bold sm:mb-6 mb-4 first-letter:uppercase"
     >
@@ -77,9 +79,9 @@ onClickOutside(outsideClickTarget, () => {
         </tbody>
       </table>
     </div>
-    <form v-else class="not-found">
+    <form v-else class="not-found overflow-x-auto w-full min-w-[548px]">
       <p class="not-found">You don't have any task in this dashboard</p>
-      <div ref="outsideClickTarget" class="">
+      <div ref="outsideClickTarget" class="w-full">
         <button
           type="button"
           @click="handleForm"

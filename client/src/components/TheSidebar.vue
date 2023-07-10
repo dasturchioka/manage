@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside } from "@vueuse/core";
 
 import Logo from "@/assets/icons/logo.svg";
 
@@ -24,7 +24,7 @@ defineProps({
   },
 });
 
-const emits = defineEmits(['outsideClick'])
+const emits = defineEmits(["outsideClick"]);
 
 const TheCreateDashboard = defineAsyncComponent(() => {
   return import("./TheCreateDashboard.vue");
@@ -41,21 +41,21 @@ const handleShow = () => {
   showCreateComponent.value = !showCreateComponent.value;
 };
 
-const outsideClickTarget = ref(null)
+const outsideClickTarget = ref(null);
 
-onClickOutside(outsideClickTarget, () => emits('outsideClick'))
+onClickOutside(outsideClickTarget, () => emits("outsideClick"));
 </script>
 
 <template>
   <aside
-  ref="outsideClickTarget"
+    ref="outsideClickTarget"
     :class="{ 'show shadow-2xl': show }"
-    class="sidebar-navigation flex flex-col bg-dark-secondary w-[370px]"
+    class="sidebar-navigation flex flex-col bg-dark-secondary w-[370px] z-[99999999999]"
   >
     <div class="side-top w-[70px] my-8 ml-5">
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
     </div>
-    <div class="side-links my-5">
+    <div class="side-links mb-5">
       <AppLink path="/">
         <HomeIcon class="mr-2" />
         Overview
@@ -69,7 +69,7 @@ onClickOutside(outsideClickTarget, () => emits('outsideClick'))
         Settings
       </AppLink>
       <div class="side-dashboards mt-6">
-        <h3 class="title mx-4 text-xl font-bold">Dashboards</h3>
+        <h3 class="title mx-4 text-xl font-bold">Dashboards ({{ dashboardStore.dashboards.list.length }})</h3>
         <div
           v-if="!dashboardStore.dashboards.list.length"
           class="not-found mx-4 mt-6 space-y-2"
@@ -82,7 +82,7 @@ onClickOutside(outsideClickTarget, () => emits('outsideClick'))
             <TheCreateDashboard v-if="showCreateComponent" />
           </transition>
         </div>
-        <ul v-else class="custom-scroll mt-4 max-h-[370px] overflow-y-scroll">
+        <ul v-else class="custom-scroll mt-4 max-h-[270px] overflow-y-scroll">
           <AppLink
             class="hover-show-child relative"
             v-for="(dashboard, index) in dashboardStore.dashboards.list"
