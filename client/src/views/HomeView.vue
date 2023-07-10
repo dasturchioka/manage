@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheListOfTasks from '@/components/TheListOfTasks.vue';
+import TheTableOfTasks from "@/components/TheTableOfTasks.vue";
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import TheListOfTasks from '@/components/TheListOfTasks.vue';
         distinctio quaerat
       </p>
     </div>
-    <TheListOfTasks/>
+    <TheTableOfTasks />
   </main>
 </template>
 

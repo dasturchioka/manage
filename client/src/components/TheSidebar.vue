@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
+import { onClickOutside } from '@vueuse/core'
 
 import Logo from "@/assets/icons/logo.svg";
 
@@ -17,6 +18,14 @@ import { useModal } from "@/stores/modal";
 
 import { defineAsyncComponent, ref } from "vue";
 
+defineProps({
+  show: {
+    type: Boolean,
+  },
+});
+
+const emits = defineEmits(['outsideClick'])
+
 const TheCreateDashboard = defineAsyncComponent(() => {
   return import("./TheCreateDashboard.vue");
 });
@@ -31,10 +40,18 @@ const showCreateComponent = ref(false);
 const handleShow = () => {
   showCreateComponent.value = !showCreateComponent.value;
 };
+
+const outsideClickTarget = ref(null)
+
+onClickOutside(outsideClickTarget, () => emits('outsideClick'))
 </script>
 
 <template>
-  <aside class="sidebar-navigation bg-dark-secondary w-[270px]">
+  <aside
+  ref="outsideClickTarget"
+    :class="{ 'show shadow-2xl': show }"
+    class="sidebar-navigation flex flex-col bg-dark-secondary w-[370px]"
+  >
     <div class="side-top w-[70px] my-8 ml-5">
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
     </div>
@@ -119,6 +136,19 @@ const handleShow = () => {
 </template>
 
 <style scoped>
+@media (max-width: 654px) {
+  .sidebar-navigation {
+    position: fixed;
+    height: 100vh;
+    width: 280px;
+    transition: all 0.4s ease;
+    transform: translateX(-100%);
+  }
+
+  .sidebar-navigation.show {
+    transform: translate(0);
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
