@@ -5,7 +5,7 @@ export enum CONSTANTS {
   DASHBOARD_URL = import.meta.env.VITE_APP_SERVER_BASE_DASHBOARD,
 }
 
-export declare enum TASK_STATUS {
+export enum TASK_STATUS {
   TODO = "todo",
   INPROGRESS = "in progress",
   COMPLETED = "completed",

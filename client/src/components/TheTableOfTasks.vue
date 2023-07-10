@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { TASK_STATUS } from "@/constants/index";
+import TheStatus from "./TheStatus.vue";
 
 defineProps({
   dashboard: {
@@ -40,8 +42,10 @@ onClickOutside(outsideClickTarget, () => {
       />{{ dashboard }}
     </h1>
 
-    <div v-if="tasks" class="relative overflow-x-auto">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <div class="relative overflow-x-auto custom-scroll-h custom-scroll">
+      <table
+        class="w-full text-sm text-left text-gray-500 dark:text-gray-400 "
+      >
         <tbody class="mt-4 space-y-4">
           <tr class="bg-dark">
             <th
@@ -50,7 +54,12 @@ onClickOutside(outsideClickTarget, () => {
             >
               Apple MacBook Pro 17"
             </th>
-            <td class="px-6 py-4">Silver</td>
+            <td class="px-6 py-4">
+              <TheStatus
+                :has-selection="true"
+                :status-name="TASK_STATUS.COMPLETED"
+              />
+            </td>
             <td class="px-6 py-4 text-right">Laptop</td>
             <td class="px-6 py-4 text-right">$2999</td>
           </tr>
@@ -61,7 +70,12 @@ onClickOutside(outsideClickTarget, () => {
             >
               Microsoft Surface Pro
             </th>
-            <td class="px-6 py-4">White</td>
+            <td class="px-6 py-4">
+              <TheStatus
+                :has-selection="true"
+                :status-name="TASK_STATUS.COMPLETED"
+              />
+            </td>
             <td class="px-6 py-4 text-right">Laptop PC</td>
             <td class="px-6 py-4 text-right">$1999</td>
           </tr>
@@ -72,14 +86,67 @@ onClickOutside(outsideClickTarget, () => {
             >
               Magic Mouse 2
             </th>
-            <td class="px-6 py-4">Black</td>
+            <td class="px-6 py-4">
+              <TheStatus
+                :has-selection="true"
+                :status-name="TASK_STATUS.COMPLETED"
+              />
+            </td>
+            <td class="px-6 py-4 text-right">Accessories</td>
+            <td class="px-6 py-4 text-right">$99</td>
+          </tr>
+          <tr class="bg-dark">
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              Apple MacBook Pro 17"
+            </th>
+            <td class="px-6 py-4">
+              <TheStatus
+                :has-selection="true"
+                :status-name="TASK_STATUS.COMPLETED"
+              />
+            </td>
+            <td class="px-6 py-4 text-right">Laptop</td>
+            <td class="px-6 py-4 text-right">$2999</td>
+          </tr>
+          <tr class="bg-dark">
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              Microsoft Surface Pro
+            </th>
+            <td class="px-6 py-4">
+              <TheStatus
+                :has-selection="true"
+                :status-name="TASK_STATUS.COMPLETED"
+              />
+            </td>
+            <td class="px-6 py-4 text-right">Laptop PC</td>
+            <td class="px-6 py-4 text-right">$1999</td>
+          </tr>
+          <tr class="bg-dark">
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              Magic Mouse 2
+            </th>
+            <td class="px-6 py-4">
+              <TheStatus
+                :has-selection="true"
+                :status-name="TASK_STATUS.COMPLETED"
+              />
+            </td>
             <td class="px-6 py-4 text-right">Accessories</td>
             <td class="px-6 py-4 text-right">$99</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <form v-else class="not-found overflow-x-auto w-full min-w-[548px]">
+    <!-- <form v-else class="not-found overflow-x-auto w-full min-w-[548px]">
       <p class="not-found">You don't have any task in this dashboard</p>
       <div ref="outsideClickTarget" class="w-full">
         <button
@@ -105,7 +172,7 @@ onClickOutside(outsideClickTarget, () => {
           </div>
         </transition>
       </div>
-    </form>
+    </form> -->
   </div>
 </template>
 

@@ -18,6 +18,13 @@ import { useModal } from "@/stores/modal";
 
 import { defineAsyncComponent, ref } from "vue";
 
+const TheCreateDashboard = defineAsyncComponent(() => {
+  return import("./TheCreateDashboard.vue");
+});
+
+const dashboardStore = useDashboard();
+const modal = useModal();
+
 defineProps({
   show: {
     type: Boolean,
@@ -26,14 +33,7 @@ defineProps({
 
 const emits = defineEmits(["outsideClick"]);
 
-const TheCreateDashboard = defineAsyncComponent(() => {
-  return import("./TheCreateDashboard.vue");
-});
-
 const { sliceLetter } = useSlicedLetter();
-
-const dashboardStore = useDashboard();
-const modal = useModal();
 
 const showCreateComponent = ref(false);
 
@@ -69,7 +69,9 @@ onClickOutside(outsideClickTarget, () => emits("outsideClick"));
         Settings
       </AppLink>
       <div class="side-dashboards mt-6">
-        <h3 class="title mx-4 text-xl font-bold">Dashboards ({{ dashboardStore.dashboards.list.length }})</h3>
+        <h3 class="title mx-4 text-xl font-bold">
+          Dashboards ({{ dashboardStore.dashboards.list.length }})
+        </h3>
         <div
           v-if="!dashboardStore.dashboards.list.length"
           class="not-found mx-4 mt-6 space-y-2"
