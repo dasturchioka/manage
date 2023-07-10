@@ -15,9 +15,14 @@ module.exports = {
         purple: {
           DEFAULT: "#BD00FF",
         },
-        green: "#0E320E",
-        blue: "#0B1B34",
-        red: "#310C15",
+        green: "#008000",
+        blue: "#0077B6",
+        red: "#FF2E00",
+        gray: {
+          DEFAULT: "#A9A9A9",
+          darker: "#4F4F4F",
+        },
+        yellow: "#FAD643",
       },
     },
   },
