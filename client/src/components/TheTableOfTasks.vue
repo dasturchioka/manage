@@ -1,27 +1,44 @@
 <script setup lang="ts">
-// defineProps({
-//   dashboard: {
-//     type: String,
-//     required: true,
-//   },
-//   tasks: {
-//     type: Array,
-//     required: true,
-//   },
-// });
+import { ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
+
+defineProps({
+  dashboard: {
+    type: String,
+    required: true,
+  },
+  tasks: {
+    type: Array || undefined,
+    required: true,
+  },
+});
+
+const showForm = ref(false);
+
+const handleForm = () => {
+  showForm.value = !showForm.value;
+};
+
+const outsideClickTarget = ref(null);
+
+onClickOutside(outsideClickTarget, () => {
+  showForm.value = false;
+});
 </script>
 
 <template>
-  <div class="list-of-tasks bg-dark-secondary p-6 rounded">
-    <h1 class="flex items-center text-2xl mb-6">
+  <div class="list-of-tasks bg-dark-secondary sm:p-6 p-4 rounded">
+    <h1
+      class="flex items-center text-2xl font-bold sm:mb-6 mb-4 first-letter:uppercase"
+    >
       <img
         src="../assets/icons/dashboard_icon.svg"
         class="mr-2"
         alt="manage"
-      />Frontend
+      />{{ dashboard }}
     </h1>
 
-    <div class="relative overflow-x-auto">
+    <div v-if="tasks" class="relative overflow-x-auto">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <tbody class="mt-4 space-y-4">
           <tr class="bg-dark">
@@ -60,6 +77,33 @@
         </tbody>
       </table>
     </div>
+    <form v-else class="not-found">
+      <p class="not-found">You don't have any task in this dashboard</p>
+      <div ref="outsideClickTarget" class="">
+        <button
+          type="button"
+          @click="handleForm"
+          class="create-btn text-sm opacity-30 flex items-center transition hover:bg-[#e5e7eb] hover:bg-opacity-[15%] px-4 py-2 rounded w-full mt-4"
+        >
+          <span class="text-lg mr-2">{{
+            !showForm ? `&plus;` : `&minus;`
+          }}</span>
+          {{ !showForm ? "Create new task" : "Discard" }}
+        </button>
+        <transition name="fade" mode="out-in">
+          <div
+            v-if="showForm"
+            class="form-group mt-2 w-full border border-purple rounded"
+          >
+            <input
+              type="text"
+              placeholder="New task"
+              class="outline-none bg-transparent px-3 py-1 w-[40%]"
+            />
+          </div>
+        </transition>
+      </div>
+    </form>
   </div>
 </template>
 

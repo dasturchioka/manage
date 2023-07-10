@@ -149,15 +149,7 @@ onClickOutside(outsideClickTarget, () => emits('outsideClick'))
     transform: translate(0);
   }
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 .hover-show-child button {
   opacity: 0;
   transition: all 0.5s ease;
