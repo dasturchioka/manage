@@ -1,11 +1,15 @@
 <script lang="ts" setup>
+import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 
 const showForm = ref(false);
+const outsideClickTarget = ref(null);
 
 const handleForm = () => {
   showForm.value = !showForm.value;
 };
+
+onClickOutside(outsideClickTarget, () => (showForm.value = false));
 </script>
 
 <template>

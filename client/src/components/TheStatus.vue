@@ -30,24 +30,11 @@ defineProps({
 
 <template>
   <div class="status-component flex items-center">
-    <span
-      :class="{
-        'bg-green': statusName === TASK_STATUS.COMPLETED,
-        'bg-red': statusName === TASK_STATUS.FAILED,
-        'bg-gray': statusName === TASK_STATUS.TODO,
-        'bg-blue': statusName === TASK_STATUS.INPROGRESS,
-      }"
-      class="w-3 h-3 rounded mr-2"
-    ></span>
+    <span :class="`status-${statusName}`" class="w-3 h-3 rounded mr-2"></span>
     <div class="selection-part relative" v-if="hasSelection">
       <button
         @click="handleStatus()"
-        :class="{
-          'text-green': statusName === TASK_STATUS.COMPLETED,
-          'text-red': statusName === TASK_STATUS.FAILED,
-          'text-gray': statusName === TASK_STATUS.TODO,
-          'text-blue': statusName === TASK_STATUS.INPROGRESS,
-        }"
+        :class="`status-${statusName}-text`"
         class="status-name uppercase font-extrabold text-sm"
       >
         {{ statusName }}
@@ -95,3 +82,31 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style scoped>
+.status-completed {
+  @apply bg-green;
+}
+.status-todo {
+  @apply bg-gray;
+}
+.status-in.progress {
+  @apply bg-blue;
+}
+.status-failed {
+  @apply bg-red;
+}
+
+.status-completed-text {
+  @apply text-green;
+}
+.status-todo-text {
+  @apply text-gray;
+}
+.status-in.progress-text {
+  @apply text-blue;
+}
+.status-failed-text {
+  @apply text-red;
+}
+</style>

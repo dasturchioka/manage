@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDashboard } from "@/stores/dashboard";
-import TheTableOfTasks from "@/components/TheTableOfTasks.vue";
+import TheListOfTasks from "@/components/TheListOfTasks.vue";
 
 const dashboardStore = useDashboard();
 </script>
@@ -14,7 +14,7 @@ const dashboardStore = useDashboard();
         distinctio quaerat
       </p>
     </div>
-    <TheTableOfTasks
+    <TheListOfTasks
       v-for="(dashboard, index) in dashboardStore.dashboards.list"
       :key="index"
       :dashboard="(dashboard.name as string)"

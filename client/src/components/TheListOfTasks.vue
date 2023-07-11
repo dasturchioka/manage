@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { onClickOutside } from "@vueuse/core";
 import { TASK_STATUS } from "@/constants/index";
 import TheTableSort from "./TheTableSort.vue";
 import TheStatus from "./TheStatus.vue";
@@ -17,22 +16,11 @@ defineProps({
   },
 });
 
-const showForm = ref(false);
 const showTable = ref(true);
-
-const handleForm = () => {
-  showForm.value = !showForm.value;
-};
 
 const handleTable = () => {
   showTable.value = !showTable.value;
 };
-
-const outsideClickTarget = ref(null);
-
-onClickOutside(outsideClickTarget, () => {
-  showForm.value = false;
-});
 </script>
 
 <template>
@@ -54,13 +42,13 @@ onClickOutside(outsideClickTarget, () => {
             v-if="!showTable"
             class="ml-3"
             src="../assets/icons/arrow-right.svg"
-            alt="arrow right "
+            alt="arrow right"
           />
           <img
             v-else
             class="ml-3"
             src="../assets/icons/arrow-bottom.svg"
-            alt="arrow bottom "
+            alt="arrow bottom"
           />
         </button>
         <p
@@ -74,34 +62,8 @@ onClickOutside(outsideClickTarget, () => {
         <TheTableSort />
       </div>
     </div>
-
-    <div
-      v-show="showTable"
-      class="relative sm:mt-6 mt-4 overflow-x-auto custom-scroll-h custom-scroll"
-    >
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <tbody class="mt-4 space-y-4">
-          <tr class="bg-dark">
-            <th
-              scope="row"
-              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Apple MacBook Pro 17"
-            </th>
-            <td class="p-4">
-              <TheStatus
-                :has-selection="true"
-                :status-name="TASK_STATUS.COMPLETED"
-              />
-            </td>
-            <td class="p-4 text-right">Laptop</td>
-            <td class="px-6 py-4 text-right">$2999</td>
-          </tr>
-          
-        </tbody>
-      </table>
-    </div>
-    <TheCreateTask />
+    
+    <TheCreateTask v-show="showTable" />
   </div>
 </template>
 
