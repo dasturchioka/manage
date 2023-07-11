@@ -11,3 +11,11 @@ export enum TASK_STATUS {
   COMPLETED = "completed",
   FAILED = "failed",
 }
+
+export enum PRIORITIES {
+  LOW = 'low',
+  NORMAL = 'normal',
+  HIGH = 'high',
+  URGENT = 'urgent'
+}
+

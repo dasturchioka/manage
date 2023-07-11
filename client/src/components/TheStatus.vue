@@ -21,6 +21,10 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  hasText: {
+    type: Boolean,
+    default: true,
+  },
 });
 </script>
 
