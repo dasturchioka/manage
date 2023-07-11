@@ -20,7 +20,7 @@ const createDashboard = async () => {
     @submit.prevent="createDashboard"
     class="create-dashboard bg-dark rounded p-4 w-full"
   >
-    <div class="form-group mb-4 space-y-1">
+    <div class="form-group mb-4 space-y-1 flex flex-col">
       <label for="name">Dashboard's name:</label>
       <input
         v-model="dashboardName"

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import AppButton from "./UI/AppButton.vue";
 
 const showOptions = ref(false);
 
@@ -16,7 +17,7 @@ onClickOutside(outsideClickTarget, () => {
 </script>
 
 <template>
-  <div class="sort-component relative">
+  <div ref="outsideClickTarget" class="sort-component relative">
     <button
       @click="handleOptions"
       class="component-sort rounded p-3 transition hover:bg-dark-lighter"
@@ -25,39 +26,18 @@ onClickOutside(outsideClickTarget, () => {
     </button>
     <div
       v-show="showOptions"
-      ref="outsideClickTarget"
       class="status-list flex max-h-[120px] overflow-y-scroll custom-scroll absolute right-0 items-center z-[99999999999] flex-col min-w-[200px] bg-dark break-words rounded border border-gray-700"
     >
-      <button
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-extrabold px-3 py-2 w-full disabled:opacity-20 text-sm"
-      >
-        High priorities up
-      </button>
-      <button
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-extrabold px-3 py-2 w-full disabled:opacity-20 text-sm"
-      >
-        Low priorities up
-      </button>
-      <button
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-extrabold px-3 py-2 w-full disabled:opacity-20 text-sm"
-      >
-        todo up
-      </button>
-      <button
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-extrabold px-3 py-2 w-full disabled:opacity-20 text-sm"
-      >
-        in progress up
-      </button>
-      <button
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-extrabold px-3 py-2 w-full disabled:opacity-20 text-sm"
-      >
-        completed up
-      </button>
-      <button
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-extrabold px-3 py-2 w-full disabled:opacity-20 text-sm"
-      >
-        failed up
-      </button>
+      <AppButton :small-btn="true"> High priorities up </AppButton>
+      <AppButton :small-btn="true"> Low priorities up </AppButton>
+
+      <AppButton :small-btn="true"> Todo up </AppButton>
+
+      <AppButton :small-btn="true"> In progress up </AppButton>
+
+      <AppButton :small-btn="true"> Completed up </AppButton>
+
+      <AppButton :small-btn="true"> Failed up </AppButton>
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@ import { onClickOutside } from "@vueuse/core";
 import { TASK_STATUS } from "@/constants/index";
 import TheTableSort from "./TheTableSort.vue";
 import TheStatus from "./TheStatus.vue";
+import TheCreateTask from "./TheCreateTask.vue";
 
 defineProps({
   dashboard: {
@@ -62,7 +63,12 @@ onClickOutside(outsideClickTarget, () => {
             alt="arrow bottom "
           />
         </button>
-        <p class="ml-4 bg-dark text-gray-700 rounded text-sm font-extrabold uppercase py-1 px-2" v-if="!showTable">7 tasks</p>
+        <p
+          class="ml-4 bg-dark text-gray-700 rounded text-sm font-extrabold uppercase py-1 px-2"
+          v-if="!showTable"
+        >
+          7 tasks
+        </p>
       </div>
       <div class="top-right">
         <TheTableSort />
@@ -78,130 +84,103 @@ onClickOutside(outsideClickTarget, () => {
           <tr class="bg-dark">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               Apple MacBook Pro 17"
             </th>
-            <td class="px-6 py-4">
+            <td class="p-4">
               <TheStatus
                 :has-selection="true"
                 :status-name="TASK_STATUS.COMPLETED"
               />
             </td>
-            <td class="px-6 py-4 text-right">Laptop</td>
+            <td class="p-4 text-right">Laptop</td>
             <td class="px-6 py-4 text-right">$2999</td>
           </tr>
           <tr class="bg-dark">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               Microsoft Surface Pro
             </th>
-            <td class="px-6 py-4">
+            <td class="p-4">
               <TheStatus
                 :has-selection="true"
                 :status-name="TASK_STATUS.COMPLETED"
               />
             </td>
-            <td class="px-6 py-4 text-right">Laptop PC</td>
-            <td class="px-6 py-4 text-right">$1999</td>
+            <td class="p-4 text-right">Laptop PC</td>
+            <td class="p-4 text-right">$1999</td>
           </tr>
           <tr class="bg-dark">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               Magic Mouse 2
             </th>
-            <td class="px-6 py-4">
+            <td class="p-4">
               <TheStatus
                 :has-selection="true"
                 :status-name="TASK_STATUS.COMPLETED"
               />
             </td>
-            <td class="px-6 py-4 text-right">Accessories</td>
-            <td class="px-6 py-4 text-right">$99</td>
+            <td class="p-4 text-right">Accessories</td>
+            <td class="p-4 text-right">$99</td>
           </tr>
           <tr class="bg-dark">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               Apple MacBook Pro 17"
             </th>
-            <td class="px-6 py-4">
+            <td class="p-4">
               <TheStatus
                 :has-selection="true"
                 :status-name="TASK_STATUS.COMPLETED"
               />
             </td>
-            <td class="px-6 py-4 text-right">Laptop</td>
-            <td class="px-6 py-4 text-right">$2999</td>
+            <td class="p-4 text-right">Laptop</td>
+            <td class="p-4 text-right">$2999</td>
           </tr>
           <tr class="bg-dark">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               Microsoft Surface Pro
             </th>
-            <td class="px-6 py-4">
+            <td class="p-4">
               <TheStatus
                 :has-selection="true"
                 :status-name="TASK_STATUS.COMPLETED"
               />
             </td>
-            <td class="px-6 py-4 text-right">Laptop PC</td>
-            <td class="px-6 py-4 text-right">$1999</td>
+            <td class="p-4 text-right">Laptop PC</td>
+            <td class="p-4 text-right">$1999</td>
           </tr>
           <tr class="bg-dark">
             <th
               scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               Magic Mouse 2
             </th>
-            <td class="px-6 py-4">
+            <td class="p-4">
               <TheStatus
                 :has-selection="true"
                 :status-name="TASK_STATUS.COMPLETED"
               />
             </td>
-            <td class="px-6 py-4 text-right">Accessories</td>
-            <td class="px-6 py-4 text-right">$99</td>
+            <td class="p-4 text-right">Accessories</td>
+            <td class="p-4 text-right">$99</td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <!-- <form v-else class="not-found overflow-x-auto w-full min-w-[548px]">
-      <p class="not-found">You don't have any task in this dashboard</p>
-      <div ref="outsideClickTarget" class="w-full">
-        <button
-          type="button"
-          @click="handleForm"
-          class="create-btn text-sm opacity-30 flex items-center transition hover:bg-[#e5e7eb] hover:bg-opacity-[15%] px-4 py-2 rounded w-full mt-4"
-        >
-          <span class="text-lg mr-2">{{
-            !showForm ? `&plus;` : `&minus;`
-          }}</span>
-          {{ !showForm ? "Create new task" : "Discard" }}
-        </button>
-        <transition name="fade" mode="out-in">
-          <div
-            v-if="showForm"
-            class="form-group mt-2 w-full border border-purple rounded"
-          >
-            <input
-              type="text"
-              placeholder="New task"
-              class="outline-none bg-transparent px-3 py-1 w-[40%]"
-            />
-          </div>
-        </transition>
-      </div>
-    </form> -->
+    <TheCreateTask />
   </div>
 </template>
 
