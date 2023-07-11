@@ -14,7 +14,7 @@ const handleForm = () => {
       <button
         type="button"
         @click="handleForm"
-        class="create-btn text-sm opacity-30 flex items-center transition hover:bg-[#e5e7eb] hover:bg-opacity-[15%] px-2 py-1 rounded w-full mt-4"
+        class="create-btn text-sm opacity-30 flex items-center transition hover:bg-[#e5e7eb] hover:bg-opacity-[15%] px-2 py-1 rounded w-full"
       >
         <span class="text-lg mr-2">{{ !showForm ? `&plus;` : `&minus;` }}</span>
         {{ !showForm ? "Create new task" : "Discard" }}
