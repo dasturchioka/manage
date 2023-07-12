@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { type Dashboard } from "@/interfaces/Dashboard";
-import { reactive, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
 import { useUser } from "./user";
 import { useRouter, useRoute } from "vue-router";
 import { useModal } from "./modal";
+import Cookies from "js-cookie";
 
 export const useDashboard = defineStore("dashboard", () => {
   const router = useRouter();
@@ -16,6 +17,10 @@ export const useDashboard = defineStore("dashboard", () => {
 
   const dashboards = reactive({
     list: [] as Dashboard[],
+  });
+
+  const dashboardListLength = computed(() => {
+    return dashboards.list.length;
   });
 
   async function pushDashboard(payload: Dashboard) {
@@ -38,6 +43,12 @@ export const useDashboard = defineStore("dashboard", () => {
 
       if (data.dashboards) {
         await setDashboards(data.dashboards);
+        if (Cookies.get("dashboardsLength")) {
+          Cookies.remove("dashboardsLength");
+          Cookies.set("dashboardsLength", data.dashboards.length as string);
+        } else {
+          Cookies.set("dashboardsLength", data.dashboards.length as string);
+        }
       } else {
         toast("Something went wrong in dashboard store");
         return;
@@ -121,5 +132,6 @@ export const useDashboard = defineStore("dashboard", () => {
     createDashboard,
     dashboards,
     deleteDashboard,
+    dashboardListLength,
   };
 });

@@ -5,7 +5,7 @@
     <div class="titles">
       <slot name="titles" />
     </div>
-    <div class="content custom-scroll flex w-full space-x-4 overflow-x-scroll">
+    <div class="content custom-scroll-h flex w-full space-x-4 overflow-x-scroll overflow-y-auto h-screen">
       <slot name="content" />
     </div>
   </div>
