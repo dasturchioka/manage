@@ -11,7 +11,7 @@ const dashboardStore = useDashboard();
 
 <template>
   <main
-    class="overview-page sm:px-4 px-2 h-screen w-full overflow-x-scroll custom-scroll overflow-y-hidden custom-scroll-h py-6"
+    class="overview-page flex-shrink-0 sm:px-4 px-2 h-screen w-full overflow-x-scroll custom-scroll overflow-y-hidden custom-scroll-h py-6"
   >
     <TheHorizontalScroll>
       <template #titles></template>
