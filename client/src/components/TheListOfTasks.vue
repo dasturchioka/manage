@@ -1,20 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { TASK_STATUS } from "@/constants/index";
 import TheTableSort from "./TheTableSort.vue";
-import TheStatus from "./TheStatus.vue";
 import TheCreateTask from "./TheCreateTask.vue";
+import TheList from "./TheList.vue";
 
-defineProps({
-  dashboard: {
-    type: String,
-    required: true,
-  },
-  tasks: {
-    type: Array || undefined,
-    required: true,
-  },
-});
+defineProps<{ dashboard: String; tasks: Object[] }>();
 
 const showTable = ref(true);
 
@@ -25,9 +15,12 @@ const handleTable = () => {
 
 <template>
   <div
-    class="list-of-tasks bg-dark-secondary sm:p-6 p-4 rounded w-full relative overflow-x-scroll custom-scroll-h"
+    class="list-of-tasks-component bg-dark-secondary sm:p-6 p-4 rounded w-full overflow-x-scroll overflow-y-auto custom-scroll-h"
   >
-    <div class="top flex items-center justify-between">
+    <div
+      :class="{ 'mb-4': showTable }"
+      class="top flex items-center justify-between"
+    >
       <div class="top-left flex items-center">
         <button
           @click="handleTable"
@@ -62,7 +55,7 @@ const handleTable = () => {
         <TheTableSort />
       </div>
     </div>
-    
+    <TheList v-show="showTable" />
     <TheCreateTask v-show="showTable" />
   </div>
 </template>

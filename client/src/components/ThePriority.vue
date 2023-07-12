@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-        
+import Flag from './icons/Flag.vue';
 </script>
 
-<template></template>
+<template>
+    <div class="high-priority">
+        
+    </div>
+</template>

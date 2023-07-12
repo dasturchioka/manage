@@ -22,7 +22,7 @@
 .custom-scroll-h::-webkit-scrollbar-thumb {
   background-color: #ffffff;
   border-radius: 10px;
-  width: 2px;
+  height: 2px;
 }
 
 .fade-enter-active,
