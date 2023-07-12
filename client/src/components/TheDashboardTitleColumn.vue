@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import TheTableSort from "./TheTableSort.vue";
 import EditIcon from "./icons/Edit.vue";
+import AppIconButton from "./UI/AppIconButton.vue";
 defineProps<{ title: string }>();
 
 const showForm = ref(false);
@@ -28,20 +29,12 @@ const handleForm = () => (showForm.value = !showForm.value);
         />
       </form>
       <div class="functions flex items-center">
-        <button
-          v-show="!showForm"
-          @click="handleForm"
-          class="edit-btn rounded p-3 transition hover:bg-dark-lighter"
-        >
+        <AppIconButton v-show="!showForm" @click="handleForm">
           <EditIcon />
-        </button>
-        <button
-          v-show="showForm"
-          @click="handleForm"
-          class="confirm-btn rounded p-2 transition hover:bg-dark-lighter"
-        >
+        </AppIconButton>
+        <AppIconButton v-show="showForm" @click="handleForm">
           <p>&check;</p>
-        </button>
+        </AppIconButton>
         <TheTableSort />
       </div>
     </div>

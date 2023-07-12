@@ -1,3 +1,7 @@
 <script lang="ts" setup></script>
 
-<template></template>
+<template>
+  <button class="rounded p-2 transition hover:bg-dark-lighter">
+    <slot />
+  </button>
+</template>
