@@ -8,3 +8,5 @@ const {
 } = require("../middlewares/accessibility.middleware");
 
 router.get("/all/user-id/:id", checkAccess, checkSelfAccess, getAllTasks);
+
+module.exports = router
