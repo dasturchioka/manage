@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { userInstance } from "@/http";
 import { useToast } from "vue-toastification";
 import { type User } from "@/interfaces/User";
+import { AxiosError } from "axios";
 
 const toast = useToast();
 
@@ -54,12 +55,7 @@ export const useUser = defineStore("user", () => {
 
         return;
       }
-
-      toast("Something went wrong in auth store");
-      return;
-      
     } catch (error) {
-      console.log(error);
       toast("Something went wrong in user store");
     }
   }

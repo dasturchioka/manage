@@ -1,6 +1,7 @@
 import axios, {
   type InternalAxiosRequestConfig,
   type AxiosResponse,
+  AxiosError,
 } from "axios";
 import { CONSTANTS } from "../constants";
 import { useLoading } from "@/stores/loading";
@@ -50,8 +51,16 @@ const interceptor = {
   errorResponse: function (error: any) {
     const loading = useLoading();
     loading.setLoading(false);
-    console.log(error);
-    toast(error.response.data.msg, { type: "error" });
+    if (error.response) {
+      toast(error.response?.data?.msg);
+      if (error.response.status === 403) {
+        Cookies.remove("token");
+        Cookies.remove("user");
+        setTimeout(() => {
+          window.location.href = "/auth";
+        }, 1500);
+      }
+    }
   },
 };
 

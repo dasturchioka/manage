@@ -11,10 +11,10 @@ datasource db {
 }
 
 model Dashboard {
-  id     String   @id @unique @default(cuid())
+  id     String  @id @unique @default(cuid())
   name   String
   tasks  Tasks?
-  User   User?    @relation(fields: [userId], references: [id])
+  User   User?   @relation(fields: [userId], references: [id])
   userId String?
 }
 
@@ -28,17 +28,11 @@ model User {
 model Tasks {
   id          String    @id @unique @default(cuid())
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
-  tasks       Task[]
-  dashboardId String    @unique
-}
-
-model Task {
-  id          String  @id @unique @default(cuid())
   name        String
   description String
   status      String
   subtasks    Json[]
   priority    String
-  Tasks       Tasks?  @relation(fields: [tasksId], references: [id])
   tasksId     String?
+  dashboardId String    @unique
 }
