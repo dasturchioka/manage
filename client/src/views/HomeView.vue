@@ -4,6 +4,7 @@ import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
 import TheDashboardTitleColumn from "@/components/TheDashboardTitleColumn.vue";
 import AppIconButton from "@/components/UI/AppIconButton.vue";
 import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
+import TheTaskBoardElement from "@/components/TheTaskBoardElement.vue";
 import { ref } from "vue";
 
 const showForm = ref(false)
@@ -30,6 +31,7 @@ const dashboardStore = useDashboard();
           <TheDashboardTitleColumn
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
+          <TheTaskBoardElement page="overview" :dashboard="(dashboard.name as string)"/>
         </div>
       </template>
     </TheHorizontalScroll>

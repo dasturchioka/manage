@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
+
+defineProps<{ page: "overview" | "dashboard", dashboard: string }>();
+
 const showForm = ref(false);
 
 const handleForm = () => (showForm.value = !showForm.value);
@@ -8,27 +11,12 @@ const handleForm = () => (showForm.value = !showForm.value);
 
 <template>
   <div
-    class="board-element bg-dark-secondary transition py-2 px-4 rounded border-t border-t-purple"
+    class="board-element bg-dark-secondary transition py-2 px-4 rounded"
   >
-    <div class="titles flex items-center justify-between">
-      <form
-        v-show="showForm"
-        class="edit-title-form first-letter:uppercase w-[170px]"
-      >
-        <input
-          type="text"
-          class="bg-transparent outline-none border rounded w-full"
-        />
-      </form>
-      <div class="functions flex items-center">
-        <AppIconButton v-show="!showForm" @click="handleForm">
-          <EditIcon />
-        </AppIconButton>
-        <AppIconButton v-show="showForm" @click="handleForm">
-          <p>&check;</p>
-        </AppIconButton>
-        <TheTableSort />
-      </div>
+    <p class="dashboard-name mt-2 first-letter:uppercase opacity-30 text-[12px]">{{dashboard}}</p>
+    <h2 class="title mt-2 text-lg">Make something better</h2>
+    <div class="bottom">
+      
     </div>
-  </div>
+  </div>  
 </template>
