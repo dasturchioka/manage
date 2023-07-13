@@ -60,6 +60,14 @@ const checkSelfAccess = async (req, res, next) => {
       },
     });
 
+    if (!existUser) {
+      return res.status(403).json({
+        code: 403,
+        status: "Access denied",
+        msg: "You don't have permission to operate that",
+      });
+    }
+
     if (existUser.id !== id) {
       return res.status(403).json({
         code: 403,
