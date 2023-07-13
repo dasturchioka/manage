@@ -13,6 +13,8 @@ const handleStatus = () => {
   emit("activeListItem", showStatus.value);
 };
 
+const statusList: TASK_STATUS[] = Object.values(TASK_STATUS);
+
 onClickOutside(outsideClickTarget, () => handleStatus());
 
 defineProps<{ statusName: string; variant: "full" | "short" }>();
@@ -44,37 +46,16 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
       class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[160px] rounded absolute -top-14 left-8 border border-gray-700"
     >
       <button
-        :disabled="statusName === TASK_STATUS.TODO"
+        v-for="(status, index) in statusList"
+        :key="index"
+        :disabled="statusName === status"
         class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
       >
         <span class="w-3 h-3 rounded mr-2 bg-gray"></span>
         {{ TASK_STATUS.TODO }}
         <p v-if="statusName === TASK_STATUS.TODO">&check;</p>
       </button>
-      <button
-        :disabled="statusName === TASK_STATUS.INPROGRESS"
-        class="list-btn uppercase hover:bg-dark-lighter disabled:hover:bg-none flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
-      >
-        <span class="w-3 h-3 rounded mr-2 bg-blue"></span>
-        {{ TASK_STATUS.INPROGRESS }}
-        <p v-if="statusName === TASK_STATUS.INPROGRESS">&check;</p>
-      </button>
-      <button
-        :disabled="statusName === TASK_STATUS.COMPLETED"
-        class="list-btn uppercase hover:bg-dark-lighter disabled:hover:bg-none flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
-      >
-        <span class="w-3 h-3 rounded mr-2 bg-green"></span>
-        {{ TASK_STATUS.COMPLETED }}
-        <p class="ml-4" v-if="statusName === TASK_STATUS.COMPLETED">&check;</p>
-      </button>
-      <button
-        :disabled="statusName === TASK_STATUS.FAILED"
-        class="list-btn uppercase hover:bg-dark-lighter disabled:hover:bg-none flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
-      >
-        <span class="w-3 h-3 rounded mr-2 bg-red"></span>
-        {{ TASK_STATUS.FAILED }}
-        <p v-if="statusName === TASK_STATUS.FAILED">&check;</p>
-      </button>
+      ]
     </div>
   </div>
 </template>
