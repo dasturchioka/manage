@@ -5,7 +5,6 @@ import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
 import { useUser } from "./user";
 import { useRouter, useRoute } from "vue-router";
-import { useModal } from "./modal";
 import Cookies from "js-cookie";
 
 export const useDashboard = defineStore("dashboard", () => {
@@ -13,7 +12,6 @@ export const useDashboard = defineStore("dashboard", () => {
   const route = useRoute();
   const toast = useToast();
   const userStore = useUser();
-  const modalStore = useModal();
 
   const dashboards = reactive({
     list: [] as Dashboard[],
