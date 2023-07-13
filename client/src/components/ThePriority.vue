@@ -14,13 +14,17 @@ const handlePriority = () => {
   emit("activeListItem", showPriority.value);
 };
 
+const prioritiesList: PRIORITIES[] = Object.values(PRIORITIES);
+
+console.log(prioritiesList);
+
 onClickOutside(outsideClickTarget, () => handlePriority());
 
 defineProps<{ priorityName: string; variant: "full" | "short" }>();
 </script>
 
 <template>
-  <div class="status-component flex items-center relative text-sm">
+  <div class="priority-component flex items-center relative text-sm">
     <button
       @click="handlePriority"
       v-if="variant === 'short'"
@@ -39,9 +43,14 @@ defineProps<{ priorityName: string; variant: "full" | "short" }>();
     <div
       ref="outsideClickTarget"
       v-if="showPriority"
-      class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[160px] rounded absolute -top-14 left-8 border border-gray-700"
+      class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[120px] rounded absolute top-0 left-8 border border-gray-700"
     >
-      <button></button>
+      <button
+        v-for="(priority, index) in prioritiesList"
+        :key="index"
+        :disabled="priorityName === priority"
+        :class="`priority-${priority} w-full`"
+      >{{ priority }}</button>
     </div>
   </div>
 </template>
