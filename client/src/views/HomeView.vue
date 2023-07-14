@@ -8,11 +8,11 @@ import TheTaskBoardElement from "@/components/TheTaskBoardElement.vue";
 import { ref } from "vue";
 import TheCreateTask from "@/components/TheCreateTask.vue";
 
-const showForm = ref(false)
+const showForm = ref(false);
 
 const handleForm = () => {
-  showForm.value = !showForm.value
-}
+  showForm.value = !showForm.value;
+};
 
 const dashboardStore = useDashboard();
 </script>
@@ -27,13 +27,16 @@ const dashboardStore = useDashboard();
         <div
           v-for="(dashboard, index) in dashboardStore.dashboards.list"
           :key="index"
-          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5  "
+          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheDashboardTitleColumn
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
-          <TheTaskBoardElement page="overview" :dashboard="(dashboard.name as string)"/>
-          <TheCreateTask/>
+          <TheTaskBoardElement
+            page="overview"
+            :dashboard="(dashboard.name as string)"
+          />
+          <TheCreateTask />
         </div>
       </template>
     </TheHorizontalScroll>
@@ -52,14 +55,16 @@ const dashboardStore = useDashboard();
         <h1 class="text-2xl font-bold">Ooops!</h1>
         <p class="mt-2">You don't have any dashboards yet.</p>
       </div>
-      <div class="create-dashboard-component relative flex flex-col items-center justify-center">
+      <div
+        class="create-dashboard-component relative flex flex-col items-center justify-center"
+      >
         <AppIconButton @click="handleForm" class="flex items-center px-4 mb-4">
           <p v-show="!showForm" class="mr-2 text-xl">&plus;</p>
           <p v-show="!showForm">Create one!</p>
-          <p v-show="showForm"  class="mr-2 text-xl">-</p>
+          <p v-show="showForm" class="mr-2 text-xl">-</p>
           <p v-show="showForm">Discard</p>
         </AppIconButton>
-        <TheCreateDashboard v-show="showForm" @dashboard-created="handleForm"/>
+        <TheCreateDashboard v-show="showForm" @dashboard-created="handleForm" />
       </div>
     </div>
   </main>

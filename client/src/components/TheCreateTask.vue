@@ -2,9 +2,10 @@
 import { onMounted, reactive, ref, watch } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 
+const emit = defineEmits(["createdSubtask"]);
+
 const showForm = ref(false);
 const outsideClickTarget = ref(null);
-const subtasksRef = ref<HTMLElement>();
 
 const handleForm = () => {
   showForm.value = !showForm.value;
@@ -14,15 +15,8 @@ const subTasks = reactive<{ task: string; done: boolean }[]>([]);
 
 const addSubTask = () => {
   subTasks.push({ task: "", done: false });
-  subtasksRef.value?.childNodes.forEach((child) => {});
 };
 
-watch(
-  () => subtasksRef.value,
-  (newVal) => {
-    console.log(newVal?.lastChild);
-  }
-);
 </script>
 
 <template>
@@ -50,7 +44,7 @@ watch(
           ></textarea>
           <p class="subtasks-title">Subtasks</p>
           <div v-if="subTasks.length" class="subtasks">
-            <ul ref="subtasksRef" class="subtasks mt-2 list-disc space-y-2">
+            <ul class="subtasks mt-2 list-disc space-y-2">
               <input
                 v-for="(subtask, index) in subTasks"
                 :key="index"
