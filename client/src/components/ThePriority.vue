@@ -36,49 +36,45 @@ defineProps<{ priorityName: string; variant: "full" | "short" }>();
       @click="handlePriority"
       v-if="variant === 'full'"
       class="full-variant flex items-center uppercase"
+      :class="`priority-${priorityName} priority-${priorityName}-text`"
     >
       <Flag :color="`priority-${priorityName}`" />
-      {{ priorityName }}
+      <p class="text-[12px] font-bold ml-2">{{ priorityName }}</p>
     </button>
     <div
       ref="outsideClickTarget"
       v-if="showPriority"
-      class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[120px] rounded absolute top-0 left-8 border border-gray-700"
+      class="priority-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[120px] rounded absolute top-0 left-8 border border-gray-700"
     >
       <button
         v-for="(priority, index) in prioritiesList"
         :key="index"
         :disabled="priorityName === priority"
-        :class="`priority-${priority} w-full`"
-      >{{ priority }}</button>
+        :class="`priority-${priority}-text`"
+        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center px-3 py-1 w-full disabled:opacity-20"
+      >
+        <Flag :color="`priority-${priority}`" />
+        <p class="text-[12px] ml-2">{{ priority }}</p>
+        <p class="ml-3" v-if="priorityName === priority">&check;</p>
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.status-completed {
-  @apply bg-green;
-}
-.status-todo {
-  @apply bg-gray;
-}
-.status-in.progress {
-  @apply bg-blue;
-}
-.status-failed {
-  @apply bg-red;
-}
-
-.status-completed-text {
-  @apply text-green;
-}
-.status-todo-text {
+.priority-low-text {
   @apply text-gray;
 }
-.status-in.progress-text {
+
+.priority-normal-text {
   @apply text-blue;
 }
-.status-failed-text {
+
+.priority-high-text {
+  @apply text-yellow;
+}
+
+.priority-urgent-text {
   @apply text-red;
 }
 </style>

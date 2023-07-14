@@ -26,7 +26,7 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
       @click="handleStatus"
       v-if="variant === 'short'"
       :class="`status-${statusName}`"
-      class="short-variant w-3 h-3 rounded"
+      class="short-variant w-3 h-3 rounded-full"
     ></button>
     <button
       @click="handleStatus"
@@ -36,9 +36,9 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
     >
       <span
         :class="`status-${statusName}`"
-        class="short-variant w-3 h-3 rounded mr-2"
+        class="short-variant w-2 h-2 rounded mr-2"
       ></span>
-      {{ statusName }}
+      <p class="text-[12px]">{{ statusName }}</p>
     </button>
     <div
       ref="outsideClickTarget"
@@ -51,11 +51,10 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
         :disabled="statusName === status"
         class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
       >
-        <span class="w-3 h-3 rounded mr-2" :class="`status-${status}`"></span>
-        {{ status }}
-        <p v-if="statusName === status">&check;</p>
+        <span class="w-2 h-2 rounded mr-2" :class="`status-${status}`"></span>
+        <p class="text-[12px]">{{ status }}</p>
+        <p class="ml-3" v-if="statusName === status">&check;</p>
       </button>
-      ]
     </div>
   </div>
 </template>
