@@ -51,9 +51,9 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
         :disabled="statusName === status"
         class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
       >
-        <span class="w-3 h-3 rounded mr-2 bg-gray"></span>
-        {{ TASK_STATUS.TODO }}
-        <p v-if="statusName === TASK_STATUS.TODO">&check;</p>
+        <span class="w-3 h-3 rounded mr-2" :class="`status-${status}`"></span>
+        {{ status }}
+        <p v-if="statusName === status">&check;</p>
       </button>
       ]
     </div>

@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
+import TheStatus from "./TheStatus.vue";
 
 defineProps<{ page: "overview" | "dashboard", dashboard: string }>();
 
@@ -18,6 +19,7 @@ const handleForm = () => (showForm.value = !showForm.value);
     <h2 class="title mt-2 text-lg">Make something better</h2>
     <div class="bottom">
       <ThePriority priority-name="high" variant="full"/>
+      <TheStatus />
     </div>
   </div>  
 </template>
