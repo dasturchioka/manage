@@ -31,8 +31,10 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
     <button
       @click="handleStatus"
       v-if="variant === 'full'"
-      :class="`status-${statusName}-text`"
-      class="full-variant flex items-center uppercase font-bold"
+      :class="`status-${statusName}-text ${
+        showStatus ? 'bg-gray bg-opacity-10' : ''
+      }`"
+      class="full-variant flex items-center uppercase font-bold transition rounded px-2 py-1"
     >
       <span
         :class="`status-${statusName}`"
@@ -40,22 +42,26 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
       ></span>
       <p class="text-[12px]">{{ statusName }}</p>
     </button>
-    <div
-      ref="outsideClickTarget"
-      v-if="showStatus"
-      class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[160px] rounded absolute -top-14 left-8 border border-gray-700"
-    >
-      <button
-        v-for="(status, index) in statusList"
-        :key="index"
-        :disabled="statusName === status"
-        class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
+    <transition name="fade" mode="out-in">
+      <div
+        ref="outsideClickTarget"
+        v-if="showStatus"
+        class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[160px] rounded absolute top-7 left-[30px] border border-gray-700"
       >
-        <span class="w-2 h-2 rounded mr-2" :class="`status-${status}`"></span>
-        <p class="text-[12px]">{{ status }}</p>
-        <p class="ml-3" v-if="statusName === status">&check;</p>
-      </button>
-    </div>
+        <button
+          v-for="(status, index) in statusList"
+          :key="index"
+          :disabled="statusName === status"
+          class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
+        >
+          <span class="w-2 h-2 rounded mr-2" :class="`status-${status}`"></span>
+          <p :class="`status-${status}-text`" class="text-[12px]">
+            {{ status }}
+          </p>
+          <p class="ml-3" v-if="statusName === status">&check;</p>
+        </button>
+      </div>
+    </transition>
   </div>
 </template>
 

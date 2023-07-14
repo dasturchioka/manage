@@ -6,6 +6,7 @@ import AppIconButton from "@/components/UI/AppIconButton.vue";
 import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
 import TheTaskBoardElement from "@/components/TheTaskBoardElement.vue";
 import { ref } from "vue";
+import TheCreateTask from "@/components/TheCreateTask.vue";
 
 const showForm = ref(false)
 
@@ -26,12 +27,13 @@ const dashboardStore = useDashboard();
         <div
           v-for="(dashboard, index) in dashboardStore.dashboards.list"
           :key="index"
-          class="card h-auto flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-8"
+          class="card h-auto flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3"
         >
           <TheDashboardTitleColumn
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
           <TheTaskBoardElement page="overview" :dashboard="(dashboard.name as string)"/>
+          <TheCreateTask/>
         </div>
       </template>
     </TheHorizontalScroll>

@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import TheTableSort from "./TheTableSort.vue";
 import EditIcon from "./icons/Edit.vue";
+import TickIcon from "./icons/Tick.vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 defineProps<{ title: string }>();
 
@@ -32,7 +33,7 @@ const handleForm = () => (showForm.value = !showForm.value);
           <EditIcon />
         </AppIconButton>
         <AppIconButton v-show="showForm" @click="handleForm">
-          <p>&check;</p>
+          <TickIcon/>
         </AppIconButton>
         <TheTableSort />
       </div>
