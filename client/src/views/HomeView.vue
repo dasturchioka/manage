@@ -19,7 +19,7 @@ const dashboardStore = useDashboard();
 
 <template>
   <main
-    class="overview-page flex-shrink-0 sm:px-4 px-2 h-screen w-full overflow-x-scroll custom-scroll overflow-y-hidden custom-scroll-h py-6"
+    class="overview-page flex-shrink-0 sm:px-4 px-2 h-screen w-full overflow-x-scroll custom-scroll overflow-y-hidden custom-scroll-h pt-6"
   >
     <TheHorizontalScroll v-if="dashboardStore.dashboards.list.length">
       <template #titles></template>
