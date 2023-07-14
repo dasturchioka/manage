@@ -27,7 +27,7 @@ const dashboardStore = useDashboard();
         <div
           v-for="(dashboard, index) in dashboardStore.dashboards.list"
           :key="index"
-          class="card h-auto flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3"
+          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5  "
         >
           <TheDashboardTitleColumn
             :title="(dashboard.name as string)"

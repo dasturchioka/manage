@@ -1,19 +1,28 @@
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 
 const showForm = ref(false);
 const outsideClickTarget = ref(null);
+const subtasksRef = ref<HTMLElement>();
 
 const handleForm = () => {
   showForm.value = !showForm.value;
 };
 
-const subTasks = reactive([{ task: "", done: false }]);
+const subTasks = reactive<{ task: string; done: boolean }[]>([]);
 
 const addSubTask = () => {
   subTasks.push({ task: "", done: false });
+  subtasksRef.value?.childNodes.forEach((child) => {});
 };
+
+watch(
+  () => subtasksRef.value,
+  (newVal) => {
+    console.log(newVal?.lastChild);
+  }
+);
 </script>
 
 <template>
@@ -39,24 +48,26 @@ const addSubTask = () => {
             placeholder="Description"
             class="outline-none mt-5 bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded h-[150px] max-h-[150px]"
           ></textarea>
-          <ul class="subtasks mt-2 list-disc space-y-2">
-            <p class="subtasks-title">Subtasks</p>
-            <li v-for="(subtask, index) in subTasks" :key="index">
+          <p class="subtasks-title">Subtasks</p>
+          <div v-if="subTasks.length" class="subtasks">
+            <ul ref="subtasksRef" class="subtasks mt-2 list-disc space-y-2">
               <input
+                v-for="(subtask, index) in subTasks"
+                :key="index"
                 type="text"
                 v-model="subtask.task"
                 class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
               />
-            </li>
-            <AppIconButton
-              @click="addSubTask"
-              type="button"
-              class="text-gray w-full mt-2 flex items-center"
-            >
-              <p class="mr-2 text-lg">&plus;</p>
-              Add new subtask
-            </AppIconButton>
-          </ul>
+            </ul>
+          </div>
+          <AppIconButton
+            @click="addSubTask"
+            type="button"
+            class="text-gray w-full mt-2 flex items-center"
+          >
+            <p class="mr-2 text-lg">&plus;</p>
+            Add new subtask
+          </AppIconButton>
         </div>
       </transition>
     </div>
