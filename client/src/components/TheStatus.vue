@@ -17,18 +17,24 @@ const statusList: TASK_STATUS[] = Object.values(TASK_STATUS);
 
 onClickOutside(outsideClickTarget, () => handleStatus());
 
-defineProps<{ statusName: string; variant: "full" | "short" }>();
+defineProps<{
+  statusName: string;
+  variant: "full" | "short";
+  listPosition?: string;
+}>();
 </script>
 
 <template>
   <div class="status-component flex items-center relative text-sm">
     <button
+      type="button"
       @click="handleStatus"
       v-if="variant === 'short'"
       :class="`status-${statusName}`"
       class="short-variant w-3 h-3 rounded-full"
     ></button>
     <button
+      type="button"
       @click="handleStatus"
       v-if="variant === 'full'"
       :class="`status-${statusName}-text ${
@@ -46,9 +52,11 @@ defineProps<{ statusName: string; variant: "full" | "short" }>();
       <div
         ref="outsideClickTarget"
         v-if="showStatus"
-        class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[160px] rounded absolute top-7 left-[30px] border border-gray-700"
+        class="status-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[160px] rounded absolute border border-gray-700"
+        :class="listPosition ? listPosition : 'top-7 left-[30px]'"
       >
         <button
+          type="button"
           v-for="(status, index) in statusList"
           :key="index"
           :disabled="statusName === status"

@@ -18,12 +18,17 @@ const prioritiesList: PRIORITIES[] = Object.values(PRIORITIES);
 
 onClickOutside(outsideClickTarget, () => handlePriority());
 
-defineProps<{ priorityName: string; variant: "full" | "short" }>();
+defineProps<{
+  priorityName: string;
+  variant: "full" | "short";
+  listPosition?: string;
+}>();
 </script>
 
 <template>
   <div class="priority-component flex items-center relative text-sm">
     <button
+      type="button"
       @click="handlePriority"
       v-if="variant === 'short'"
       class="short-variant"
@@ -31,6 +36,7 @@ defineProps<{ priorityName: string; variant: "full" | "short" }>();
       <Flag :color="`priority-${priorityName}`" />
     </button>
     <button
+      type="button"
       @click="handlePriority"
       v-if="variant === 'full'"
       class="full-variant flex items-center uppercase transition rounded px-2 py-1"
@@ -45,9 +51,11 @@ defineProps<{ priorityName: string; variant: "full" | "short" }>();
       <div
         ref="outsideClickTarget"
         v-if="showPriority"
-        class="priority-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[120px] rounded absolute top-7 left-[30px] border border-gray-700"
+        class="priority-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[120px] rounded absolute border border-gray-700"
+        :class="listPosition ? listPosition : `top-7 left-[30px]`"
       >
         <button
+          type="button"
           v-for="(priority, index) in prioritiesList"
           :key="index"
           :disabled="priorityName === priority"

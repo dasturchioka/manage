@@ -4,9 +4,9 @@ import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
 import TheDashboardTitleColumn from "@/components/TheDashboardTitleColumn.vue";
 import AppIconButton from "@/components/UI/AppIconButton.vue";
 import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
-import TheTaskBoardElement from "@/components/TheTaskBoardElement.vue";
-import { ref } from "vue";
+import TheTaskBoardElements from "@/components/TheTaskBoardElements.vue";
 import TheCreateTask from "@/components/TheCreateTask.vue";
+import { ref } from "vue";
 
 const showForm = ref(false);
 
@@ -19,7 +19,7 @@ const dashboardStore = useDashboard();
 
 <template>
   <main
-    class="overview-page flex-shrink-0 sm:px-4 px-2 h-screen w-full overflow-x-scroll custom-scroll overflow-y-hidden custom-scroll-h pt-6"
+    class="overview-page flex-shrink-0 sm:px-4 px-2 h-screen w-full overflow-x-scroll custom-scroll overflow-y-hidden custom-scroll-h sm:pt-6 pt-3"
   >
     <TheHorizontalScroll v-if="dashboardStore.dashboards.list.length">
       <template #titles></template>
@@ -32,11 +32,19 @@ const dashboardStore = useDashboard();
           <TheDashboardTitleColumn
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
-          <TheTaskBoardElement
+          <TheTaskBoardElements
             page="overview"
             :dashboard="(dashboard.name as string)"
           />
           <TheCreateTask />
+        </div>
+        <div class="create-dashboard">
+          <AppIconButton>
+            <span class="text-lg mr-2">{{
+              !showForm ? `&plus;` : `&minus;`
+            }}</span>
+            {{ !showForm ? "Create new dashboard" : "Discard" }}
+          </AppIconButton>
         </div>
       </template>
     </TheHorizontalScroll>
