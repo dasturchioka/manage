@@ -33,6 +33,5 @@ model Tasks {
   status      String
   subtasks    Json[]
   priority    String
-  tasksId     String?
   dashboardId String    @unique
 }
