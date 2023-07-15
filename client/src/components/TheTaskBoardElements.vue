@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
@@ -7,7 +7,19 @@ import Trash from "./icons/Trash.vue";
 import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
 
-defineProps<{ page: "overview" | "dashboard"; dashboard: string }>();
+import { useTasks } from "@/stores/tasks";
+
+const props = defineProps<{
+  page: "overview" | "dashboard";
+  dashboardName: string;
+  dashboardId: string;
+}>();
+
+const tasksStore = useTasks();
+
+onMounted(async () => {
+  await tasksStore.getDashboardTasks(props.dashboardId);
+});
 
 const showEditInput = ref(false);
 
@@ -15,7 +27,7 @@ const handleEditInput = () => {
   showEditInput.value = !showEditInput.value;
 };
 
-const taskTitle = ref(" Make something better");
+const taskTitle = ref("Make something better");
 </script>
 
 <template>
@@ -24,7 +36,7 @@ const taskTitle = ref(" Make something better");
       <p
         class="dashboard-name mt-2 first-letter:uppercase opacity-30 text-[12px]"
       >
-        {{ dashboard }}
+        {{ props.dashboardName }}
       </p>
       <h2 v-show="!showEditInput" class="title mt-2 text-lg flex">
         {{ taskTitle }}

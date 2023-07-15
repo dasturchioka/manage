@@ -34,7 +34,8 @@ const dashboardStore = useDashboard();
           ></TheDashboardTitleColumn>
           <TheTaskBoardElements
             page="overview"
-            :dashboard="(dashboard.name as string)"
+            :dashboard-name="(dashboard.name as string)"
+            :dashboard-id="(dashboard.id as string)"
           />
           <TheCreateTask />
         </div>

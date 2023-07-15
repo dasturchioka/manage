@@ -25,6 +25,14 @@ const getAllTasks = async (req, res) => {
 const getDashboardTasks = async (req, res) => {
   try {
     const { id: dashboardId } = req.body;
+    console.log(req.body);
+
+    if (!dashboardId.length) {
+      return res.status(402).json({
+        status: "id must be here",
+        msg: "Please enter the dashboard's id",
+      });
+    }
 
     const tasks = await prisma.tasks.findMany({
       where: {
