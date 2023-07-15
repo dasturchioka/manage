@@ -16,7 +16,7 @@ router.get(
   "/dashboard-tasks/user-id/:id",
   checkAccess,
   checkSelfAccess,
-  getAllTasks
+  getDashboardTasks
 );
 
 module.exports = router;
