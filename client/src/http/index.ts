@@ -28,6 +28,13 @@ export const dashboardInstance = axios.create({
   },
 });
 
+export const tasksInstance = axios.create({
+  baseURL: String(CONSTANTS.TASKS_URL),
+  headers: {
+    Authorization: `Bearer ${Cookies.get("token")}`,
+  },
+});
+
 const interceptor = {
   request: function (config: InternalAxiosRequestConfig) {
     const loading = useLoading();
@@ -90,6 +97,27 @@ dashboardInstance.interceptors.request.use(
 );
 
 dashboardInstance.interceptors.response.use(
+  interceptor.response,
+  function (error: any) {
+    const loading = useLoading();
+    loading.setLoading(false);
+    if (
+      error.response.data.status !== "not found" &&
+      !error.config.url.includes("/all/user-id")
+    ) {
+      toast(error.response.data.msg, { type: "error" });
+    } else {
+      return;
+    }
+  }
+);
+
+tasksInstance.interceptors.request.use(
+  interceptor.request,
+  interceptor.errorRequest
+);
+
+tasksInstance.interceptors.response.use(
   interceptor.response,
   function (error: any) {
     const loading = useLoading();

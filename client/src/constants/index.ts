@@ -3,6 +3,7 @@ export enum CONSTANTS {
   AUTH_URL = import.meta.env.VITE_APP_SERVER_BASE_AUTH,
   USER_URL = import.meta.env.VITE_APP_SERVER_BASE_USER,
   DASHBOARD_URL = import.meta.env.VITE_APP_SERVER_BASE_DASHBOARD,
+  TASKS_URL = import.meta.env.VITE_APP_SERVER_BASE_TASKS,
 }
 
 export enum TASK_STATUS {
