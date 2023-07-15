@@ -29,9 +29,9 @@ model Tasks {
   id          String    @id @unique @default(cuid())
   name        String
   description String
-  status      String
+  status      Int
   subtasks    Json[]
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
-  priority    String
+  priority    Int
   dashboardId String
 }
