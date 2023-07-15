@@ -38,7 +38,11 @@ const getDashboardTasks = async (req, res) => {
         msg: "There are no tasks in this dashboard yet.",
       });
     }
-  } catch (error) {}
+
+    return res.json({ tasks, status: "ok" });
+  } catch (error) {
+    return res.status(500).json({ error, msg: error.message });
+  }
 };
 
-module.exports = { getAllTasks };
+module.exports = { getAllTasks, getDashboardTasks };
