@@ -13,7 +13,7 @@ const {
 router.get("/all/user-id/:id", checkAccess, checkSelfAccess, getAllTasks);
 
 router.get(
-  "/dashboard-tasks/user-id/:id",
+  "/dashboard-tasks/:dashboardId/user-id/:id",
   checkAccess,
   checkSelfAccess,
   getDashboardTasks

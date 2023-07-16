@@ -21,8 +21,7 @@ export const useTasks = defineStore("tasks", () => {
   async function getDashboardTasks(id: string) {
     try {
       const res = await tasksInstance.get(
-        `/dashboard-tasks/user-id/${userStore.userDetails.user.id}`,
-        { data: { id } }
+        `/dashboard-tasks/${id}/user-id/${userStore.userDetails.user.id}`,
       );
 
       console.log(res);
