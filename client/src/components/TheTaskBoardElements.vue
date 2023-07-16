@@ -24,13 +24,16 @@ const dashboardsTasks = computed(() => {
   });
 });
 
+const elementRefs = ref([])
+
+console.log(elementRefs.value);
+
+
 const showEditInput = ref(false);
 
 const handleEditInput = () => {
   showEditInput.value = !showEditInput.value;
 };
-
-const taskTitle = ref("Make something better");
 </script>
 
 <template>
@@ -38,6 +41,7 @@ const taskTitle = ref("Make something better");
     <div
       v-for="(task, index) in dashboardsTasks"
       :key="index"
+      ref="elementRefs"
       class="board-element bg-dark-secondary transition py-2 px-4 rounded"
     >
       <p
@@ -45,7 +49,10 @@ const taskTitle = ref("Make something better");
       >
         {{ props.dashboardName }}
       </p>
-      <h2 v-show="!showEditInput" class="title mt-2 text-lg flex">
+      <h2
+        v-show="!showEditInput"
+        class="title mt-2 text-lg flex"
+      >
         {{ task.name }}
         <AppIconButton
           @click="handleEditInput"
