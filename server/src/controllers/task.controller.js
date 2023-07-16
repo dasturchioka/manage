@@ -39,7 +39,7 @@ const getDashboardTasks = async (req, res) => {
       },
     });
 
-    if (!tasks) {
+    if (!tasks.length) {
       return res.status(404).json({
         status: "not found",
         msg: "There are no tasks in this dashboard yet.",

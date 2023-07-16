@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import { type Task } from "@/interfaces/Task";
 import { tasksInstance } from "@/http";
 import { useUser } from "./user";
@@ -21,17 +21,33 @@ export const useTasks = defineStore("tasks", () => {
   async function getDashboardTasks(id: string) {
     try {
       const res = await tasksInstance.get(
-        `/dashboard-tasks/${id}/user-id/${userStore.userDetails.user.id}`,
+        `/dashboard-tasks/${id}/user-id/${userStore.userDetails.user.id}`
       );
 
-      console.log(res);
+      if (!res) return;
+
+      res.data.tasks.forEach(async (item: Task) => {
+        await pushTask(item);
+      });
+
+      console.log(tasks.list);
     } catch (error) {
       console.log(error);
       toast("Something went wrong in dashboard store");
     }
   }
 
+  async function dashboardTasks(id: string) {
+    const filteredOnes = tasks.list.filter((task: Task) => {
+      return task.id === id;
+    });
+
+    return filteredOnes;
+  }
+
   return {
     getDashboardTasks,
+    tasks,
+    dashboardTasks,
   };
 });
