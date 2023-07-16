@@ -1,25 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
 import Trash from "./icons/Trash.vue";
 import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
-
-import { useTasks } from "@/stores/tasks";
+import type { Task } from "@/interfaces/Task";
 
 const props = defineProps<{
   page: "overview" | "dashboard";
   dashboardName: string;
   dashboardId: string;
+  dashboardTasks: Task[];
 }>();
-
-const tasksStore = useTasks();
-
-onMounted(async () => {
-  await tasksStore.getDashboardTasks(props.dashboardId);
-});
 
 const showEditInput = ref(false);
 
@@ -31,15 +25,18 @@ const taskTitle = ref("Make something better");
 </script>
 
 <template>
-  <div>
-    <div class="board-element bg-dark-secondary transition py-2 px-4 rounded">
+  <div class="elements space-y-4">
+    <div
+      v-for="(task, index) in dashboardTasks"
+      class="board-element bg-dark-secondary transition py-2 px-4 rounded"
+    >
       <p
         class="dashboard-name mt-2 first-letter:uppercase opacity-30 text-[12px]"
       >
         {{ props.dashboardName }}
       </p>
       <h2 v-show="!showEditInput" class="title mt-2 text-lg flex">
-        {{ taskTitle }}
+        {{ task.name }}
         <AppIconButton
           @click="handleEditInput"
           class="transition opacity-0 flex items-center justify-center ml-2"

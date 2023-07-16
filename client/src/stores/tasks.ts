@@ -37,17 +37,8 @@ export const useTasks = defineStore("tasks", () => {
     }
   }
 
-  async function dashboardTasks(id: string) {
-    const filteredOnes = tasks.list.filter((task: Task) => {
-      return task.id === id;
-    });
-
-    return filteredOnes;
-  }
-
   return {
     getDashboardTasks,
     tasks,
-    dashboardTasks,
   };
 });

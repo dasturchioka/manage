@@ -34,6 +34,7 @@ const getAllDashboards = async (req, res) => {
 
     const dashboards = await prisma.dashboard.findMany({
       where: { userId },
+      include: { tasks: true },
     });
 
     if (!dashboards.length) {
