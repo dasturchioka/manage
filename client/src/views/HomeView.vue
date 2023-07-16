@@ -7,7 +7,7 @@ import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
 import TheTaskBoardElements from "@/components/TheTaskBoardElements.vue";
 import TheCreateTask from "@/components/TheCreateTask.vue";
 import { ref } from "vue";
-import type { Task } from "@/interfaces/Task";
+import type { Tasks } from "@/interfaces/Tasks";
 
 const showForm = ref(false);
 
@@ -37,7 +37,7 @@ const dashboardStore = useDashboard();
             page="overview"
             :dashboard-name="(dashboard.name as string)"
             :dashboard-id="(dashboard.id as string)"
-            :dashboard-tasks="(dashboard.tasks as unknown as Task[])"
+            :dashboard-tasks="(dashboard.tasks as unknown as Tasks[])"
           />
           <TheCreateTask />
         </div>

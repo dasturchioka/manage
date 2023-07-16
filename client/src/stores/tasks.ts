@@ -14,28 +14,8 @@ export const useTasks = defineStore("tasks", () => {
     tasks.list = payload;
   }
 
-  async function getDashboardTasks(id: string) {
-    try {
-      const res = await tasksInstance.get(
-        `/dashboard-tasks/${id}/user-id/${userStore.userDetails.user.id}`
-      );
-
-      if (!res) return;
-
-      res.data.tasks.forEach(async (item: Tasks) => {
-        tasks.list.push(item);
-      });
-
-      console.log(tasks.list);
-    } catch (error) {
-      console.log(error);
-      toast("Something went wrong in dashboard store");
-    }
-  }
-
   return {
-    getDashboardTasks,
     tasks,
-    setTasks
+    setTasks,
   };
 });

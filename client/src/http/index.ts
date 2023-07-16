@@ -98,18 +98,7 @@ dashboardInstance.interceptors.request.use(
 
 dashboardInstance.interceptors.response.use(
   interceptor.response,
-  function (error: any) {
-    const loading = useLoading();
-    loading.setLoading(false);
-    if (
-      error.response.data.status !== "not found" &&
-      !error.config.url.includes("/all/user-id")
-    ) {
-      toast(error.response.data.msg, { type: "error" });
-    } else {
-      return;
-    }
-  }
+  interceptor.errorResponse
 );
 
 tasksInstance.interceptors.request.use(

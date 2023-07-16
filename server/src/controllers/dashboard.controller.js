@@ -55,12 +55,19 @@ const deleteDashboard = async (req, res) => {
     console.log(req.body);
     const { id: dashboardId } = req.body;
 
-    const deleted = await prisma.dashboard.delete({
+    await prisma.dashboard.delete({
       where: { id: dashboardId },
+      include: { tasks: true },
+    });
+
+    await prisma.tasks.delete({
+      where: { dashboardId },
     });
 
     return res.json({ status: "ok", msg: "Dashboard deleted" });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ error, error: error.message });
+  }
 };
 
 module.exports = { createDashboard, getAllDashboards, deleteDashboard };

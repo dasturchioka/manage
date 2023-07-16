@@ -1,18 +1,22 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
 import Trash from "./icons/Trash.vue";
 import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
-import Times from "./icons/Times.vue"
+import Times from "./icons/Times.vue";
 import { useTasks } from "@/stores/tasks";
 import { useStatus } from "@/composables/useStatus";
 import { usePriority } from "@/composables/usePriority";
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
+import { tasksInstance } from "@/http";
+import { useUser } from "@/stores/user";
+import type { Tasks } from "@/interfaces/Tasks";
 
 const tasksStore = useTasks();
+const userStore = useUser();
 
 const { convertStatus } = useStatus();
 const { convertPriority } = usePriority();
@@ -24,11 +28,23 @@ const props = defineProps<{
   dashboardId: string;
 }>();
 
-const dashboardsTasks = computed(() => {
-  return tasksStore.tasks.list.filter((task) => {
-    return task.dashboardId === props.dashboardId;
-  });
-});
+const tasks = ref<Tasks[]>([]);
+
+async function getDashboardTasks(id: string) {
+  try {
+    const res = await tasksInstance.get(
+      `/dashboard-tasks/${id}/user-id/${userStore.userDetails.user.id}`
+    );
+
+    if (!res) return;
+
+    tasks.value = res.data.tasks;
+    console.log(tasks.value);
+    return;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const elementRefs = ref([]);
 
@@ -54,18 +70,28 @@ const closeForm = (index: number) => {
   form.classList.add("hidden");
 };
 
-const showEditInput = ref(false);
+const isDataFetching = ref(false);
 
-const handleEditInput = () => {
-  showEditInput.value = !showEditInput.value;
-};
+onMounted(async () => {
+  if (!isDataFetching.value) {
+    isDataFetching.value = true;
+
+    try {
+      await getDashboardTasks(props.dashboardId);
+    } catch (error) {
+      console.log(error);
+    }
+
+    isDataFetching.value = false;
+  }
+});
 </script>
 
 <template>
-  <div class="elements space-y-4">
+  <div v-if="tasks.length" class="elements space-y-4">
     <div
-      v-for="(task, index) in dashboardsTasks"
-      :key="index"
+      v-for="(task, index) in tasks"
+      :key="task.id"
       ref="elementRefs"
       class="board-element bg-dark-secondary transition py-2 px-4 rounded"
     >
@@ -112,7 +138,7 @@ const handleEditInput = () => {
             type="button"
             class="px-4 flex items-center"
           >
-            <Times class="mr-2"/>
+            <Times class="mr-2" />
             CLOSE
           </AppIconButton>
         </div>
