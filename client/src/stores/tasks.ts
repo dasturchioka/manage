@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, computed } from "vue";
-import { type Task } from "@/interfaces/Task";
+import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useUser } from "./user";
 import { useToast } from "vue-toastification";
@@ -8,13 +8,13 @@ import { useToast } from "vue-toastification";
 export const useTasks = defineStore("tasks", () => {
   const userStore = useUser();
   const toast = useToast();
-  const tasks = reactive({ list: [] as Task[] });
+  const tasks = reactive({ list: [] as Tasks[] });
 
-  async function setTasks(payload: Task[]) {
+  async function setTasks(payload: Tasks[]) {
     tasks.list = payload;
   }
 
-  async function pushTask(payload: Task) {
+  async function pushTask(payload: Tasks) {
     tasks.list.push(payload);
   }
 
@@ -26,7 +26,7 @@ export const useTasks = defineStore("tasks", () => {
 
       if (!res) return;
 
-      res.data.tasks.forEach(async (item: Task) => {
+      res.data.tasks.forEach(async (item: Tasks) => {
         await pushTask(item);
       });
 
@@ -40,5 +40,6 @@ export const useTasks = defineStore("tasks", () => {
   return {
     getDashboardTasks,
     tasks,
+    pushTask
   };
 });

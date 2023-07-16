@@ -3,6 +3,6 @@ import type { Tasks } from "./Tasks";
 export interface Dashboard {
   id?: String;
   name: String;
-  tasks?: Tasks;
+  tasks?: Tasks[];
   userId?: String;
 }

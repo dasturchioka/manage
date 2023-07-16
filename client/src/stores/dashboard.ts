@@ -1,17 +1,20 @@
 import { defineStore } from "pinia";
 import { type Dashboard } from "@/interfaces/Dashboard";
-import { computed, reactive, watch } from "vue";
+import { computed, reactive } from "vue";
 import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
 import { useUser } from "./user";
+import { useTasks } from "./tasks";
 import { useRouter, useRoute } from "vue-router";
 import Cookies from "js-cookie";
+import type { Tasks } from "@/interfaces/Tasks";
 
 export const useDashboard = defineStore("dashboard", () => {
   const router = useRouter();
   const route = useRoute();
   const toast = useToast();
   const userStore = useUser();
+  const tasksStore = useTasks();
 
   const dashboards = reactive({
     list: [] as Dashboard[],
@@ -41,6 +44,13 @@ export const useDashboard = defineStore("dashboard", () => {
 
       if (data.dashboards) {
         await setDashboards(data.dashboards);
+
+        data.dashboards.forEach(async (dashboard: Dashboard) => {
+          dashboard.tasks?.forEach(async (task: Tasks) => {
+            await tasksStore.pushTask(task);
+          });
+        });
+
         if (Cookies.get("dashboardsLength")) {
           Cookies.remove("dashboardsLength");
           Cookies.set("dashboardsLength", data.dashboards.length as string);

@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
 import Trash from "./icons/Trash.vue";
 import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
-import type { Task } from "@/interfaces/Task";
+import { useTasks } from "@/stores/tasks";
+import { useStatus } from "@/composables/useStatus";
+
+const tasksStore = useTasks();
+const { convertStatus } = useStatus();
 
 const props = defineProps<{
   page: "overview" | "dashboard";
   dashboardName: string;
   dashboardId: string;
-  dashboardTasks: Task[];
 }>();
+
+const dashboardsTasks = computed(() => {
+  return tasksStore.tasks.list.filter((task) => {
+    return task.dashboardId === props.dashboardId;
+  });
+});
 
 const showEditInput = ref(false);
 
@@ -27,7 +36,8 @@ const taskTitle = ref("Make something better");
 <template>
   <div class="elements space-y-4">
     <div
-      v-for="(task, index) in dashboardTasks"
+      v-for="(task, index) in dashboardsTasks"
+      :key="index"
       class="board-element bg-dark-secondary transition py-2 px-4 rounded"
     >
       <p
@@ -51,7 +61,7 @@ const taskTitle = ref("Make something better");
         <input
           type="text"
           placeholder="Edit and press Enter"
-          v-model="taskTitle"
+          v-model="task.name"
           autocomplete="off"
           id="title"
           class="rounded outline-none bg-transparent border border-gray-800 transition focus:border-white pl-1"
@@ -62,7 +72,7 @@ const taskTitle = ref("Make something better");
       </form>
       <div class="bottom flex items-center justify-between mt-3 space-x-2">
         <div class="left flex items-center space-x-2">
-          <TheStatus status-name="failed" variant="full" />
+          <TheStatus :status-name="convertStatus(task.status)" variant="full" />
           <ThePriority priority-name="high" variant="full" />
         </div>
         <div class="right">
