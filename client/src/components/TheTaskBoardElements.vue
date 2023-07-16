@@ -1,18 +1,22 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
 import Trash from "./icons/Trash.vue";
 import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
+import Times from "./icons/Times.vue"
 import { useTasks } from "@/stores/tasks";
 import { useStatus } from "@/composables/useStatus";
 import { usePriority } from "@/composables/usePriority";
+import { useSlicedLetter } from "@/composables/useSlicedLetter";
 
 const tasksStore = useTasks();
+
 const { convertStatus } = useStatus();
 const { convertPriority } = usePriority();
+const { sliceLetter } = useSlicedLetter();
 
 const props = defineProps<{
   page: "overview" | "dashboard";
@@ -29,19 +33,25 @@ const dashboardsTasks = computed(() => {
 const elementRefs = ref([]);
 
 const showForm = (index: number) => {
-  elementRefs.value[index]?.children[1].classList.remove("flex");
-  elementRefs.value[index]?.children[1].classList.add("hidden");
+  const title = elementRefs.value[index]?.children[1];
+  const form = elementRefs.value[index]?.children[2];
 
-  elementRefs.value[index]?.children[2].classList.remove("hidden");
-  elementRefs.value[index]?.children[2].classList.add("flex");
+  title.classList.remove("flex");
+  title.classList.add("hidden");
+
+  form.classList.remove("hidden");
+  form.classList.add("flex");
 };
 
 const closeForm = (index: number) => {
-  elementRefs.value[index]?.children[1].classList.remove("hidden");
-  elementRefs.value[index]?.children[1].classList.add("flex");
+  const title = elementRefs.value[index]?.children[1];
+  const form = elementRefs.value[index]?.children[2];
 
-  elementRefs.value[index]?.children[2].classList.remove("flex");
-  elementRefs.value[index]?.children[2].classList.add("hidden");
+  title.classList.remove("hidden");
+  title.classList.add("flex");
+
+  form.classList.remove("flex");
+  form.classList.add("hidden");
 };
 
 const showEditInput = ref(false);
@@ -64,41 +74,56 @@ const handleEditInput = () => {
       >
         {{ props.dashboardName }}
       </p>
-      <h2 class="title mt-2 text-lg flex">
-        {{ task.name }}
-        <AppIconButton
-          @click="showForm(index)"
-          class="transition opacity-0 flex items-center justify-center ml-2"
-        >
-          <Edit />
-        </AppIconButton>
-      </h2>
-      <form class="inline-edit-task mt-2 items-center hidden">
-        <input
-          type="text"
-          placeholder="Edit and press Enter"
-          v-model="task.name"
-          autocomplete="off"
-          id="title"
-          class="rounded outline-none bg-transparent border border-gray-800 transition focus:border-white pl-1"
-        />
-        <div class="buttons flex items-center">
-          <AppIconButton class="ml-2">
-            <Tick />
+      <div class="title mt-2 flex flex-col">
+        <div class="task-info top flex">
+          <h1 class="task-name text-lg">{{ task.name }}</h1>
+          <AppIconButton
+            @click="showForm(index)"
+            class="edit-icon transition opacity-0 flex items-center justify-center ml-2"
+          >
+            <Edit />
+          </AppIconButton>
+        </div>
+        <p class="description text-sm opacity-50 mt-2">
+          {{ sliceLetter(43, task.description) }}
+        </p>
+      </div>
+      <form class="inline-edit-task mt-2 flex-col items-start hidden">
+        <div class="form-groups flex flex-col w-full">
+          <input
+            type="text"
+            placeholder="Edit and press Enter"
+            v-model="task.name"
+            autocomplete="off"
+            id="title"
+            class="rounded text-sm py-2 pl-2 outline-none bg-transparent border border-gray-800 transition focus:border-white"
+          />
+          <textarea
+            v-model="task.description"
+            class="rounded h-[100px] mt-3 max-h-[100px] py-2 pl-2 outline-none bg-transparent border border-gray-800 transition focus:border-white"
+          ></textarea>
+        </div>
+        <div class="buttons flex items-center mt-2">
+          <AppIconButton class="flex items-center px-4">
+            <Tick class="mr-2" /> DONE
           </AppIconButton>
           <AppIconButton
             @click="closeForm(index)"
             type="button"
-            class="px-2 py-0"
+            class="px-4 flex items-center"
           >
-            <p class="text-2xl">&times;</p>
+            <Times class="mr-2"/>
+            CLOSE
           </AppIconButton>
         </div>
       </form>
       <div class="bottom flex items-center justify-between mt-3">
         <div class="left flex items-center">
           <TheStatus :status-name="convertStatus(task.status)" variant="full" />
-          <ThePriority :priority-name="convertPriority(task.priority)" variant="full" />
+          <ThePriority
+            :priority-name="convertPriority(task.priority)"
+            variant="full"
+          />
         </div>
         <div class="right flex items-center">
           <AppIconButton>
@@ -114,7 +139,7 @@ const handleEditInput = () => {
 </template>
 
 <style scoped>
-h2:hover button {
+.task-info:hover .edit-icon {
   @apply opacity-100;
 }
 </style>

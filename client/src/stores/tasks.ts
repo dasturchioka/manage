@@ -14,10 +14,6 @@ export const useTasks = defineStore("tasks", () => {
     tasks.list = payload;
   }
 
-  async function pushTask(payload: Tasks) {
-    tasks.list.push(payload);
-  }
-
   async function getDashboardTasks(id: string) {
     try {
       const res = await tasksInstance.get(
@@ -27,7 +23,7 @@ export const useTasks = defineStore("tasks", () => {
       if (!res) return;
 
       res.data.tasks.forEach(async (item: Tasks) => {
-        await pushTask(item);
+        tasks.list.push(item);
       });
 
       console.log(tasks.list);
@@ -40,6 +36,6 @@ export const useTasks = defineStore("tasks", () => {
   return {
     getDashboardTasks,
     tasks,
-    pushTask
+    setTasks
   };
 });

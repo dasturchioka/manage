@@ -45,10 +45,20 @@ export const useDashboard = defineStore("dashboard", () => {
       if (data.dashboards) {
         await setDashboards(data.dashboards);
 
-        data.dashboards.forEach(async (dashboard: Dashboard) => {
-          dashboard.tasks?.forEach(async (task: Tasks) => {
-            await tasksStore.pushTask(task);
-          });
+        const tasksOnly: Array<[]> = data.dashboards.map((item: any) => {
+          return [...item.tasks];
+        });
+
+        let allTheTasks: object[] = [];
+
+        tasksOnly.forEach((item: object[]) => {
+          if (tasksOnly[tasksOnly.length - 1]) {
+            tasksStore.tasks.list.push(...item as Tasks[]);
+            return;
+          }
+
+          tasksStore.tasks.list.push(...item as Tasks[])
+          console.log(tasksStore.tasks.list);
         });
 
         if (Cookies.get("dashboardsLength")) {
