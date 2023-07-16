@@ -8,9 +8,11 @@ import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
 import { useTasks } from "@/stores/tasks";
 import { useStatus } from "@/composables/useStatus";
+import { usePriority } from "@/composables/usePriority";
 
 const tasksStore = useTasks();
 const { convertStatus } = useStatus();
+const { convertPriority } = usePriority();
 
 const props = defineProps<{
   page: "overview" | "dashboard";
@@ -24,10 +26,23 @@ const dashboardsTasks = computed(() => {
   });
 });
 
-const elementRefs = ref([])
+const elementRefs = ref([]);
 
-console.log(elementRefs.value);
+const showForm = (index: number) => {
+  elementRefs.value[index]?.children[1].classList.remove("flex");
+  elementRefs.value[index]?.children[1].classList.add("hidden");
 
+  elementRefs.value[index]?.children[2].classList.remove("hidden");
+  elementRefs.value[index]?.children[2].classList.add("flex");
+};
+
+const closeForm = (index: number) => {
+  elementRefs.value[index]?.children[1].classList.remove("hidden");
+  elementRefs.value[index]?.children[1].classList.add("flex");
+
+  elementRefs.value[index]?.children[2].classList.remove("flex");
+  elementRefs.value[index]?.children[2].classList.add("hidden");
+};
 
 const showEditInput = ref(false);
 
@@ -49,22 +64,16 @@ const handleEditInput = () => {
       >
         {{ props.dashboardName }}
       </p>
-      <h2
-        v-show="!showEditInput"
-        class="title mt-2 text-lg flex"
-      >
+      <h2 class="title mt-2 text-lg flex">
         {{ task.name }}
         <AppIconButton
-          @click="handleEditInput"
+          @click="showForm(index)"
           class="transition opacity-0 flex items-center justify-center ml-2"
         >
           <Edit />
         </AppIconButton>
       </h2>
-      <form
-        v-show="showEditInput"
-        class="inline-edit-task mt-2 flex items-center"
-      >
+      <form class="inline-edit-task mt-2 items-center hidden">
         <input
           type="text"
           placeholder="Edit and press Enter"
@@ -73,16 +82,25 @@ const handleEditInput = () => {
           id="title"
           class="rounded outline-none bg-transparent border border-gray-800 transition focus:border-white pl-1"
         />
-        <AppIconButton class="ml-2">
-          <Tick />
-        </AppIconButton>
-      </form>
-      <div class="bottom flex items-center justify-between mt-3 space-x-2">
-        <div class="left flex items-center space-x-2">
-          <TheStatus :status-name="convertStatus(task.status)" variant="full" />
-          <ThePriority priority-name="high" variant="full" />
+        <div class="buttons flex items-center">
+          <AppIconButton class="ml-2">
+            <Tick />
+          </AppIconButton>
+          <AppIconButton
+            @click="closeForm(index)"
+            type="button"
+            class="px-2 py-0"
+          >
+            <p class="text-2xl">&times;</p>
+          </AppIconButton>
         </div>
-        <div class="right">
+      </form>
+      <div class="bottom flex items-center justify-between mt-3">
+        <div class="left flex items-center">
+          <TheStatus :status-name="convertStatus(task.status)" variant="full" />
+          <ThePriority :priority-name="convertPriority(task.priority)" variant="full" />
+        </div>
+        <div class="right flex items-center">
           <AppIconButton>
             <Trash />
           </AppIconButton>

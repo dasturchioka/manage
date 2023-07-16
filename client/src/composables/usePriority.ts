@@ -4,7 +4,7 @@ import { ref } from "vue";
 export const usePriority = () => {
   const actualPriority = ref("");
 
-  const convertStatus = (code: number): string => {
+  const convertPriority = (code: number): string => {
     if (code === 0) {
       actualPriority.value = PRIORITIES.LOW;
       return actualPriority.value;
@@ -24,10 +24,10 @@ export const usePriority = () => {
       return actualPriority.value;
     }
 
-    return actualStatus.value;
+    return actualPriority.value;
   };
 
   return {
-    convertStatus,
+    convertPriority,
   };
 };
