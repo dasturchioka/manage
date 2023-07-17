@@ -52,7 +52,6 @@ const getAllDashboards = async (req, res) => {
 
 const deleteDashboard = async (req, res) => {
   try {
-    console.log(req.body);
     const { id: dashboardId } = req.body;
 
     await prisma.dashboard.delete({
@@ -62,9 +61,27 @@ const deleteDashboard = async (req, res) => {
 
     return res.json({ status: "ok", msg: "Dashboard deleted" });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error, error: error.message });
   }
 };
 
-module.exports = { createDashboard, getAllDashboards, deleteDashboard };
+const changeDashboardName = async (req, res) => {
+  try {
+    const { id: dashboardId, name } = req.body;
+
+    const edited = await prisma.dashboard.update({
+      where: { id: dashboardId },
+      data: { name },
+    });
+
+    return res.json({
+      status: "ok",
+      msg: "Dashboard name was edited",
+      dashboard: edited,
+    });
+  } catch (error) {
+    return res.status(500).json({ error, error: error.message });
+  }
+};
+
+module.exports = { createDashboard, getAllDashboards, deleteDashboard, changeDashboardName };

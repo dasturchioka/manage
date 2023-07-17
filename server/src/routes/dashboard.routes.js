@@ -4,6 +4,7 @@ const {
   getAllDashboards,
   createDashboard,
   deleteDashboard,
+  changeDashboardName,
 } = require("../controllers/dashboard.controller");
 const {
   checkAccess,
@@ -23,5 +24,13 @@ router.delete(
   checkSelfAccess,
   deleteDashboard
 );
+router.put(
+  "/edit/user-id/:id",
+  checkAccess,
+  checkSelfAccess,
+  changeDashboardName
+);
+
+// remove their middlewares and put them into their route file (simplifying the task.)
 
 module.exports = router;
