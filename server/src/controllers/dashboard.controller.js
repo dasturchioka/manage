@@ -60,12 +60,9 @@ const deleteDashboard = async (req, res) => {
       include: { tasks: true },
     });
 
-    await prisma.tasks.delete({
-      where: { dashboardId },
-    });
-
     return res.json({ status: "ok", msg: "Dashboard deleted" });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error, error: error.message });
   }
 };
