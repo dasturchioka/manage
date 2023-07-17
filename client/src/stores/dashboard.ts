@@ -24,6 +24,14 @@ export const useDashboard = defineStore("dashboard", () => {
     return dashboards.list.length;
   });
 
+  const getOneDashboard = (id: string): Tasks => {
+    const foundDashboard = dashboards.list.find((item: any) => {
+      return item.id === id;
+    });
+
+    return foundDashboard as Tasks;
+  };
+
   async function pushDashboard(payload: Dashboard) {
     dashboards.list.push(payload);
   }
@@ -127,6 +135,44 @@ export const useDashboard = defineStore("dashboard", () => {
       toast("Something went wrong in dashboard store");
     }
   }
+
+  async function editDashboard(name: string, id: string) {
+    try {
+      console.log(name, id);
+      
+      const currentDashboard = getOneDashboard(id);
+
+      if (!name.length) {
+        toast("ID must be filled!");
+        return;
+      }
+
+      const res = await dashboardInstance.put(
+        `/edit/user-id/${userStore.userDetails.user.id}`,
+        { name }
+      );
+
+      if (!res) return;
+
+      if (res.data.status === "ok") {
+        const indexOfEditedObj = dashboards.list.findIndex(
+          (obj) => obj.id === res.data.dashboard.id
+        );
+
+        if (indexOfEditedObj > -1) {
+          dashboards.list.splice(indexOfEditedObj, 1);
+          await pushDashboard(res.data.dashboard);
+          return;
+        }
+      } else {
+        toast("Something went wrong in dashboard store");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Something went wrong in dashboard store");
+    }
+  }
   return {
     setDashboards,
     pushDashboard,
@@ -135,5 +181,7 @@ export const useDashboard = defineStore("dashboard", () => {
     dashboards,
     deleteDashboard,
     dashboardListLength,
+    editDashboard,
+    getOneDashboard,
   };
 });

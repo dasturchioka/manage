@@ -31,6 +31,7 @@ const dashboardStore = useDashboard();
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheDashboardTitleColumn
+            :id="(dashboard.id as string)"
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
           <TheTaskBoardElements
