@@ -24,12 +24,12 @@ export const useDashboard = defineStore("dashboard", () => {
     return dashboards.list.length;
   });
 
-  const getOneDashboard = (id: string): Tasks => {
+  const getOneDashboard = (id: string): Dashboard => {
     const foundDashboard = dashboards.list.find((item: any) => {
       return item.id === id;
     });
 
-    return foundDashboard as Tasks;
+    return foundDashboard as Dashboard;
   };
 
   async function pushDashboard(payload: Dashboard) {
@@ -149,7 +149,7 @@ export const useDashboard = defineStore("dashboard", () => {
 
       const res = await dashboardInstance.put(
         `/edit/user-id/${userStore.userDetails.user.id}`,
-        { name }
+        { name, id: currentDashboard.id }
       );
 
       if (!res) return;

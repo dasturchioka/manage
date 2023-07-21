@@ -11,10 +11,14 @@ const props = defineProps<{ title: string; id: string }>();
 const dashboardStore = useDashboard();
 
 const currentDashboard = dashboardStore.getOneDashboard(props.id);
+const oldName = currentDashboard.name;
 
 const showForm = ref(false);
 
-const handleForm = () => (showForm.value = !showForm.value);
+const handleForm = () => {
+  showForm.value = !showForm.value;
+  currentDashboard.name = oldName;
+};
 </script>
 
 <template>
@@ -26,7 +30,12 @@ const handleForm = () => (showForm.value = !showForm.value);
         {{ currentDashboard.name }}
       </h3>
       <form
-        @submit.prevent="dashboardStore.editDashboard(props.title, props.id)"
+        @submit.prevent="
+          dashboardStore.editDashboard(
+            currentDashboard.name as string,
+            props.id
+          )
+        "
         v-show="showForm"
         class="edit-title-form first-letter:uppercase flex items-center justify-between w-full"
       >
