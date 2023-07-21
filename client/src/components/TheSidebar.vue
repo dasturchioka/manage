@@ -56,15 +56,15 @@ onClickOutside(outsideClickTarget, () => emits("outsideClick"));
       <img :src="Logo" class="w-full h-full object-cover" alt="logo" />
     </div>
     <div class="side-links mb-5">
-      <AppLink path="/">
+      <AppLink @click="emits('outsideClick')" path="/">
         <HomeIcon class="mr-2" />
         Overview
       </AppLink>
-      <AppLink path="/notification">
+      <AppLink @click="emits('outsideClick')" path="/notifications">
         <BellIcon class="mr-2" />
         Notification
       </AppLink>
-      <AppLink path="/settings">
+      <AppLink @click="emits('outsideClick')" path="/settings">
         <SettingsIcon class="mr-2" />
         Settings
       </AppLink>
@@ -86,6 +86,7 @@ onClickOutside(outsideClickTarget, () => emits("outsideClick"));
         </div>
         <ul v-else class="custom-scroll mt-4 max-h-[270px] overflow-y-scroll">
           <AppLink
+            @click="emits('outsideClick')"
             class="hover-show-child relative"
             v-for="(dashboard, index) in dashboardStore.dashboards.list"
             :key="index"

@@ -19,6 +19,16 @@ const router = createRouter({
           path: "dashboard/:id",
           component: () => import("../views/DashboardView.vue"),
         },
+        {
+          name: "default-settings",
+          path: "settings",
+          component: () => import("../views/SettingsView.vue")
+        },
+        {
+          name: "default-notifications",
+          path: "notifications",
+          component: () => import("../views/NotificationsView.vue")
+        }
       ],
       beforeEnter(to, from, next) {
         if (Cookie.get("token")) {

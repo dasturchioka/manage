@@ -6,7 +6,7 @@ const emit = defineEmits(["btnClicked"]);
 
 <template>
   <nav
-    class="navbar fixed top-0 bg-dark-secondary w-full flex items-center justify-between px-2 py-4"
+    class="navbar fixed top-0 bg-dark-secondary w-full flex items-center justify-between px-2 py-4 z-[999999] shadow-lg"
   >
     <button @click="emit('btnClicked')" class="bg-purple p-2 rounded">
       <img class="w-5" src="../assets/icons/hamburger.svg" alt="manage" />
