@@ -7,7 +7,6 @@ import Trash from "./icons/Trash.vue";
 import Tick from "./icons/Tick.vue";
 import Edit from "./icons/Edit.vue";
 import Times from "./icons/Times.vue";
-import { useTasks } from "@/stores/tasks";
 import { useStatus } from "@/composables/useStatus";
 import { usePriority } from "@/composables/usePriority";
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
@@ -15,7 +14,6 @@ import { tasksInstance } from "@/http";
 import { useUser } from "@/stores/user";
 import type { Tasks } from "@/interfaces/Tasks";
 
-const tasksStore = useTasks();
 const userStore = useUser();
 
 const { convertStatus } = useStatus();

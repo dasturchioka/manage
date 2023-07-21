@@ -3,7 +3,7 @@ import { TASK_STATUS } from "@/constants";
 import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 
-const emit = defineEmits(["activeListItem"]);
+const emit = defineEmits(["activeListItem", "statusSelected"]);
 
 const showStatus = ref(false);
 const outsideClickTarget = ref(null);
@@ -11,6 +11,11 @@ const outsideClickTarget = ref(null);
 const handleStatus = () => {
   showStatus.value = !showStatus.value;
   emit("activeListItem", showStatus.value);
+};
+
+const selectStatus = (status: string) => {
+  emit("statusSelected", status);
+  handleStatus();
 };
 
 const statusList: TASK_STATUS[] = Object.values(TASK_STATUS);
@@ -58,6 +63,7 @@ defineProps<{
         <button
           type="button"
           v-for="(status, index) in statusList"
+          @click="selectStatus(status)"
           :key="index"
           :disabled="statusName === status"
           class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"

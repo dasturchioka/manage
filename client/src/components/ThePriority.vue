@@ -4,7 +4,7 @@ import { onClickOutside } from "@vueuse/core";
 import Flag from "./icons/Flag.vue";
 import { ref } from "vue";
 
-const emit = defineEmits(["activeListItem"]);
+const emit = defineEmits(["activeListItem", "prioritySelected"]);
 
 const showPriority = ref(false);
 const outsideClickTarget = ref(null);
@@ -12,6 +12,11 @@ const outsideClickTarget = ref(null);
 const handlePriority = () => {
   showPriority.value = !showPriority.value;
   emit("activeListItem", showPriority.value);
+};
+
+const selectPriority = (priority: string) => {
+  emit("prioritySelected", priority);
+  handlePriority();
 };
 
 const prioritiesList: PRIORITIES[] = Object.values(PRIORITIES);
@@ -57,6 +62,7 @@ defineProps<{
         <button
           type="button"
           v-for="(priority, index) in prioritiesList"
+          @click="selectPriority(priority)"
           :key="index"
           :disabled="priorityName === priority"
           :class="`priority-${priority}-text`"
