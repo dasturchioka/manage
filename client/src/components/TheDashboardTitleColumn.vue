@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 import TheTableSort from "./TheTableSort.vue";
 import EditIcon from "./icons/Edit.vue";
 import TickIcon from "./icons/Tick.vue";
@@ -19,6 +19,10 @@ const handleForm = () => {
   showForm.value = !showForm.value;
   currentDashboard.name = oldName;
 };
+
+onUnmounted(() => {
+  currentDashboard.name = oldName;
+});
 </script>
 
 <template>
