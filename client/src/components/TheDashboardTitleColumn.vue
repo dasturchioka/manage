@@ -20,6 +20,11 @@ const handleForm = () => {
   currentDashboard.name = oldName;
 };
 
+const editDashboard = async (name: string, id: string) => {
+  await dashboardStore.editDashboard(name, id);
+  showForm.value = false;
+};
+
 onUnmounted(() => {
   currentDashboard.name = oldName;
 });
@@ -34,12 +39,7 @@ onUnmounted(() => {
         {{ currentDashboard.name }}
       </h3>
       <form
-        @submit.prevent="
-          dashboardStore.editDashboard(
-            currentDashboard.name as string,
-            props.id
-          )
-        "
+        @submit.prevent="editDashboard(currentDashboard.name as string, props.id)"
         v-show="showForm"
         class="edit-title-form first-letter:uppercase flex items-center justify-between w-full"
       >
