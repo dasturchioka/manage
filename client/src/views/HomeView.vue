@@ -31,6 +31,7 @@ const dashboardStore = useDashboard();
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheDashboardTitleColumn
+            page="overview"
             :id="(dashboard.id as string)"
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
@@ -41,14 +42,6 @@ const dashboardStore = useDashboard();
             :dashboard-tasks="(dashboard.tasks as unknown as Tasks[])"
           />
           <TheCreateTask />
-        </div>
-        <div class="create-dashboard">
-          <AppIconButton>
-            <span class="text-lg mr-2">{{
-              !showForm ? `&plus;` : `&minus;`
-            }}</span>
-            {{ !showForm ? "Create new dashboard" : "Discard" }}
-          </AppIconButton>
         </div>
       </template>
     </TheHorizontalScroll>

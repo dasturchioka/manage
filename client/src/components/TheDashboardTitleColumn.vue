@@ -6,11 +6,15 @@ import TickIcon from "./icons/Tick.vue";
 import TimesIcon from "./icons/Times.vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import { useDashboard } from "@/stores/dashboard";
-const props = defineProps<{ title: string; id: string }>();
+const props = defineProps<{
+  title: string;
+  id: string;
+  page: "overview" | "dashboard";
+}>();
 
 const dashboardStore = useDashboard();
 
-const currentDashboard = dashboardStore.getOneDashboard(props.id);
+const currentDashboard =  dashboardStore.getOneDashboard(props.id);
 const oldName = currentDashboard.name;
 
 const showForm = ref(false);
@@ -32,6 +36,7 @@ onUnmounted(() => {
 
 <template>
   <div
+    v-if="props.page === 'overview'"
     class="dashboard-title bg-dark-secondary transition py-2 px-4 rounded border-t border-t-purple"
   >
     <div class="titles flex items-center justify-between">
@@ -39,7 +44,9 @@ onUnmounted(() => {
         {{ currentDashboard.name }}
       </h3>
       <form
-        @submit.prevent="editDashboard(currentDashboard.name as string, props.id)"
+        @submit.prevent="
+          editDashboard(currentDashboard.name as string, props.id)
+        "
         v-show="showForm"
         class="edit-title-form first-letter:uppercase flex items-center justify-between w-full"
       >
@@ -65,4 +72,8 @@ onUnmounted(() => {
       </div>
     </div>
   </div>
+  <div
+    class="dashboard-title bg-dark-secondary transition py-2 px-4 rounded border-t border-t-purple"
+    v-else-if="props.page === 'dashboard'"
+  ></div>
 </template>

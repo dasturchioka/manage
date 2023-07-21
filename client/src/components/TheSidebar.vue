@@ -90,7 +90,7 @@ onClickOutside(outsideClickTarget, () => emits("outsideClick"));
             class="hover-show-child relative"
             v-for="(dashboard, index) in dashboardStore.dashboards.list"
             :key="index"
-            :path="`/dashboard/${dashboard.id}`"
+            :path="`/dashboard/${dashboard.id}/${dashboard.name}`"
           >
             <DashboardLightIcon class="mr-2" />
             {{ sliceLetter(17, String(dashboard.name)) }}

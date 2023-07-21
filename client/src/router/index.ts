@@ -16,7 +16,7 @@ const router = createRouter({
         },
         {
           name: "default-dashboard",
-          path: "dashboard/:id",
+          path: "dashboard/:id/:name",
           component: () => import("../views/DashboardView.vue"),
         },
         {

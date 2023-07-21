@@ -24,7 +24,7 @@ export const useDashboard = defineStore("dashboard", () => {
     return dashboards.list.length;
   });
 
-  const getOneDashboard = (id: string): Dashboard => {
+  const getOneDashboard =  (id: string): Dashboard => {
     const foundDashboard = dashboards.list.find((item: any) => {
       return item.id === id;
     });
@@ -139,8 +139,8 @@ export const useDashboard = defineStore("dashboard", () => {
   async function editDashboard(name: string, id: string) {
     try {
       console.log(name, id);
-      
-      const currentDashboard = getOneDashboard(id);
+
+      const currentDashboard = await getOneDashboard(id);
 
       if (!name.length) {
         toast("ID must be filled!");
