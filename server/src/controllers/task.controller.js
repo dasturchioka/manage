@@ -52,4 +52,41 @@ const getDashboardTasks = async (req, res) => {
   }
 };
 
-module.exports = { getAllTasks, getDashboardTasks };
+const createTask = async (req, res) => {
+  try {
+    const { dashboardId } = req.params;
+    const {
+      task: { name, description, priority, status, subtasks },
+    } = req.body;
+
+    if (!dashboardId) {
+      return res.status(402).json({
+        status: "id must be here",
+        msg: "Please enter the dashboard's id",
+      });
+    }
+
+    if (!task) {
+      return res.status(402).json({
+        status: "task must be here",
+        msg: "Please enter the full task",
+      });
+    }
+
+    const newTask = await prisma.tasks.create({
+      data: {
+        name,
+        description,
+        priority,
+        status,
+        subtasks,
+      },
+    });
+
+    return res.json({ task: newTask, status: "ok", msg: "New task created" });
+  } catch (error) {
+    return res.status(500).json({ error, msg: error.message });
+  }
+};
+
+module.exports = { getAllTasks, getDashboardTasks, createTask };
