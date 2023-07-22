@@ -13,8 +13,11 @@ const handleStatus = () => {
   emit("activeListItem", showStatus.value);
 };
 
+const newStatusName = ref("");
+
 const selectStatus = (status: string) => {
   emit("statusSelected", status);
+  newStatusName.value = status;
   handleStatus();
 };
 
@@ -35,23 +38,25 @@ defineProps<{
       type="button"
       @click="handleStatus"
       v-if="variant === 'short'"
-      :class="`status-${statusName}`"
+      :class="`status-${newStatusName ? newStatusName : statusName}`"
       class="short-variant w-3 h-3 rounded-full"
     ></button>
     <button
       type="button"
       @click="handleStatus"
       v-if="variant === 'full'"
-      :class="`status-${statusName}-text ${
+      :class="`status-${newStatusName ? newStatusName : statusName}-text ${
         showStatus ? 'bg-gray bg-opacity-10' : ''
       }`"
       class="full-variant flex items-center uppercase font-bold transition rounded px-2 py-1"
     >
       <span
-        :class="`status-${statusName}`"
+        :class="`status-${newStatusName ? newStatusName : statusName}`"
         class="short-variant w-2 h-2 rounded mr-2"
       ></span>
-      <p class="text-[12px]">{{ statusName }}</p>
+      <p class="text-[12px]">
+        {{ newStatusName ? newStatusName : statusName }}
+      </p>
     </button>
     <transition name="fade" mode="out-in">
       <div
@@ -65,14 +70,19 @@ defineProps<{
           v-for="(status, index) in statusList"
           @click="selectStatus(status)"
           :key="index"
-          :disabled="statusName === status"
+          :disabled="(newStatusName ? newStatusName : statusName) === status"
           class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center font-semibold px-3 py-1 w-full disabled:opacity-20"
         >
           <span class="w-2 h-2 rounded mr-2" :class="`status-${status}`"></span>
           <p :class="`status-${status}-text`" class="text-[12px]">
             {{ status }}
           </p>
-          <p class="ml-3" v-if="statusName === status">&check;</p>
+          <p
+            class="ml-3"
+            v-if="(newStatusName ? newStatusName : statusName) === status"
+          >
+            &check;
+          </p>
         </button>
       </div>
     </transition>
