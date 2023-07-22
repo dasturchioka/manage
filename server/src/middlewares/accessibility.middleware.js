@@ -11,7 +11,7 @@ const checkAccess = async (req, res, next) => {
     if (!token) {
       return res.status(403).json({
         msg: "You don't have permission to operate that",
-        status: `Access denied`,
+        status: `Access denied (token is not found)`,
         code: 403,
       });
     }
@@ -21,7 +21,7 @@ const checkAccess = async (req, res, next) => {
     if (!verifiedToken) {
       return res.status(403).json({
         msg: "You don't have permission to operate that",
-        status: `Access denied`,
+        status: `Access denied (token is not verified)`,
         code: 403,
       });
     }
@@ -39,7 +39,7 @@ const checkSelfAccess = async (req, res, next) => {
     if (!token) {
       return res.status(403).json({
         msg: "You don't have permission to operate that",
-        status: `Access denied`,
+        status: `Access denied (token is not found)`,
         code: 403,
       });
     }
@@ -49,7 +49,7 @@ const checkSelfAccess = async (req, res, next) => {
     if (!verifiedToken) {
       return res.status(403).json({
         msg: "You don't have permission to operate that",
-        status: `Access denied`,
+        status: `Access denied (token is not verified)`,
         code: 403,
       });
     }
@@ -63,7 +63,7 @@ const checkSelfAccess = async (req, res, next) => {
     if (!existUser) {
       return res.status(403).json({
         code: 403,
-        status: "Access denied",
+        status: "Access denied (user is not found)",
         msg: "You don't have permission to operate that",
       });
     }
@@ -71,8 +71,9 @@ const checkSelfAccess = async (req, res, next) => {
     if (existUser.id !== id) {
       return res.status(403).json({
         code: 403,
-        status: "Access denied",
+        status: "Access denied (property is not user's)",
         msg: "You don't have permission to operate that",
+        token
       });
     }
 

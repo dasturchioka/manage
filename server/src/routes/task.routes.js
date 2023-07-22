@@ -10,10 +10,10 @@ const {
   checkSelfAccess,
 } = require("../middlewares/accessibility.middleware");
 
-router.get("/all", checkAccess, checkSelfAccess, getAllTasks);
+router.get("/user-id/:id/all", checkAccess, checkSelfAccess, getAllTasks);
 
 router.get(
-  "/dashboard-tasks/:dashboardId",
+  "/user-id/:id/dashboard-tasks/:dashboardId",
   checkAccess,
   checkSelfAccess,
   getDashboardTasks

@@ -11,10 +11,10 @@ const {
   checkSelfAccess,
 } = require("../middlewares/accessibility.middleware");
 
-router.get("/all", checkAccess, checkSelfAccess, getAllDashboards);
-router.post("/create", checkAccess, checkSelfAccess, createDashboard);
-router.delete("/delete", checkAccess, checkSelfAccess, deleteDashboard);
-router.put("/edit", checkAccess, checkSelfAccess, changeDashboardName);
+router.get("/user-id/:id/all", checkAccess, checkSelfAccess, getAllDashboards);
+router.post("/user-id/:id/create", checkAccess, checkSelfAccess, createDashboard);
+router.delete("/user-id/:id/delete", checkAccess, checkSelfAccess, deleteDashboard);
+router.put("/user-id/:id/edit", checkAccess, checkSelfAccess, changeDashboardName);
 
 // remove their middlewares and put them into their route file (simplifying the task.)
 

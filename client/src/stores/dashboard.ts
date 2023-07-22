@@ -48,9 +48,7 @@ export const useDashboard = defineStore("dashboard", () => {
 
   async function getAllDashboards() {
     try {
-      const res = await dashboardInstance.get(
-        `/all/user-id/${userStore.userDetails.user.id}`
-      );
+      const res = await dashboardInstance.get(`/all`);
 
       if (!res) return;
 
@@ -82,10 +80,7 @@ export const useDashboard = defineStore("dashboard", () => {
         return;
       }
 
-      const res = await dashboardInstance.post(
-        `/create/user-id/${userStore.userDetails.user.id}`,
-        { name }
-      );
+      const res = await dashboardInstance.post(`/create`, { name });
 
       if (!res) return;
 
@@ -113,10 +108,9 @@ export const useDashboard = defineStore("dashboard", () => {
         return;
       }
 
-      const res = await dashboardInstance.delete(
-        `/delete/user-id/${userStore.userDetails.user.id}`,
-        { data: { id: payload } }
-      );
+      const res = await dashboardInstance.delete(`/delete`, {
+        data: { id: payload },
+      });
 
       if (!res) return;
 
@@ -146,17 +140,17 @@ export const useDashboard = defineStore("dashboard", () => {
     try {
       console.log(name, id);
 
-      const currentDashboard = await getOneDashboard(id);
+      const currentDashboard = getOneDashboard(id);
 
       if (!name.length) {
         toast("ID must be filled!");
         return;
       }
 
-      const res = await dashboardInstance.put(
-        `/edit/user-id/${userStore.userDetails.user.id}`,
-        { name, id: currentDashboard.id }
-      );
+      const res = await dashboardInstance.put(`/edit`, {
+        name,
+        id: currentDashboard.id,
+      });
 
       if (!res) return;
 

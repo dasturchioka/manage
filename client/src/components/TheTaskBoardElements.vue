@@ -31,7 +31,7 @@ const tasks = ref<Tasks[]>([]);
 async function getDashboardTasks(id: string) {
   try {
     const res = await tasksInstance.get(
-      `/dashboard-tasks/${id}/user-id/${userStore.userDetails.user.id}`
+      `/dashboard-tasks/${id}`
     );
 
     if (!res) return;

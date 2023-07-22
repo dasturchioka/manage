@@ -8,8 +8,8 @@ app.use(cors({ origin: "*" }));
 
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/user", require("./routes/user.routes"));
-app.use("/api/dashboard/user-id/:id", require("./routes/dashboard.routes"));
-app.use("/api/tasks/user-id/:id", require("./routes/task.routes"));
+app.use("/api/dashboard", require("./routes/dashboard.routes"));
+app.use("/api/tasks", require("./routes/task.routes"));
 
 app.get("/api", (req, res) => {
   return res.json({ msg: "Hello my friend!" });

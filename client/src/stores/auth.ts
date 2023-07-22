@@ -29,6 +29,7 @@ export const useAuth = defineStore("auth", () => {
       if (data.token) {
         Cookies.set("token", data.token);
         Cookies.set("user", JSON.stringify(data.user));
+        Cookies.set("userId", data.user.id);
         await userStore.setUser(data.user);
         await userStore.setToken(data.token);
 
@@ -39,7 +40,6 @@ export const useAuth = defineStore("auth", () => {
 
       toast("Something went wrong in auth store");
       return;
-      
     } catch (error) {
       console.log(error);
       toast("Something went wrong in auth store");
@@ -65,6 +65,7 @@ export const useAuth = defineStore("auth", () => {
       if (data.token) {
         Cookies.set("token", data.token);
         Cookies.set("user", JSON.stringify(data.user));
+        Cookies.set("userId", data.user.id);
         await userStore.setUser(data.user);
         await userStore.setToken(data.token);
 

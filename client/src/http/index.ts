@@ -1,12 +1,14 @@
 import axios, {
   type InternalAxiosRequestConfig,
   type AxiosResponse,
-  AxiosError,
 } from "axios";
 import { CONSTANTS } from "../constants";
 import { useLoading } from "@/stores/loading";
 import { useToast } from "vue-toastification";
 import Cookies from "js-cookie";
+
+const user = { id: Cookies.get("userId") as string };
+console.log(user);
 
 const toast = useToast();
 
@@ -22,14 +24,14 @@ export const userInstance = axios.create({
 });
 
 export const dashboardInstance = axios.create({
-  baseURL: String(CONSTANTS.DASHBOARD_URL),
+  baseURL: String(CONSTANTS.DASHBOARD_URL + user.id),
   headers: {
     Authorization: `Bearer ${Cookies.get("token")}`,
   },
 });
 
 export const tasksInstance = axios.create({
-  baseURL: String(CONSTANTS.TASKS_URL),
+  baseURL: String(CONSTANTS.TASKS_URL + user.id),
   headers: {
     Authorization: `Bearer ${Cookies.get("token")}`,
   },
@@ -63,9 +65,7 @@ const interceptor = {
       if (error.response.status === 403) {
         Cookies.remove("token");
         Cookies.remove("user");
-        setTimeout(() => {
-          window.location.href = "/auth";
-        }, 1500);
+        console.log(error);
       }
     }
   },
