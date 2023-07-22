@@ -65,6 +65,7 @@ const interceptor = {
       if (error.response.status === 403) {
         Cookies.remove("token");
         Cookies.remove("user");
+        Cookies.remove("userId");
         console.log(error);
       }
     }
