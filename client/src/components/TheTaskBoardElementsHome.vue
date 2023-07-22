@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
@@ -10,39 +10,19 @@ import Times from "./icons/Times.vue";
 import { useStatus } from "@/composables/useStatus";
 import { usePriority } from "@/composables/usePriority";
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
-import { tasksInstance } from "@/http";
-import { useUser } from "@/stores/user";
+import { useTasks } from "@/stores/tasks";
 import type { Tasks } from "@/interfaces/Tasks";
-
-const userStore = useUser();
 
 const { convertStatus } = useStatus();
 const { convertPriority } = usePriority();
 const { sliceLetter } = useSlicedLetter();
+const tasksStore = useTasks();
 
 const props = defineProps<{
   page: "overview" | "dashboard";
   dashboardName: string;
   dashboardId: string;
 }>();
-
-const tasks = ref<Tasks[]>([]);
-
-async function getDashboardTasks(id: string) {
-  try {
-    const res = await tasksInstance.get(
-      `/dashboard-tasks/${id}`
-    );
-
-    if (!res) return;
-
-    tasks.value = res.data.tasks;
-    console.log(tasks.value);
-    return;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 const elementRefs = ref([]);
 
@@ -68,20 +48,16 @@ const closeForm = (index: number) => {
   form.classList.add("hidden");
 };
 
-const isDataFetching = ref(false);
+const tasks = ref([]);
 
-onMounted(async () => {
-  if (!isDataFetching.value) {
-    isDataFetching.value = true;
+onMounted(() => {
+  const dashboardTasks = computed(() => {
+    return tasksStore.tasks.list.filter((task: Tasks) => {
+      return task.dashboardId === props.dashboardId;
+    });
+  });
 
-    try {
-      await getDashboardTasks(props.dashboardId);
-    } catch (error) {
-      console.log(error);
-    }
-
-    isDataFetching.value = false;
-  }
+  console.log(dashboardTasks.value);
 });
 </script>
 
@@ -128,21 +104,21 @@ onMounted(async () => {
           ></textarea>
         </div>
         <div class="buttons flex items-center mt-2">
-          <AppIconButton class="flex items-center px-4">
-            <Tick class="mr-2" /> DONE
+          <AppIconButton class="flex items-center text-sm px-4">
+            <Tick class="mr-2 w-4" /> DONE
           </AppIconButton>
           <AppIconButton
             @click="closeForm(index)"
             type="button"
-            class="px-4 flex items-center"
+            class="px-4 flex items-center text-sm"
           >
-            <Times class="mr-2" />
+            <Times class="mr-2 w-4" />
             CLOSE
           </AppIconButton>
         </div>
       </form>
       <div class="bottom flex items-center justify-between mt-3">
-        <div class="left flex items-center">
+        <div class="left flex items-center space-x-2">
           <TheStatus :status-name="convertStatus(task.status)" variant="full" />
           <ThePriority
             :priority-name="convertPriority(task.priority)"

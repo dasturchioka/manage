@@ -5,7 +5,6 @@ import TheNavbar from "@/components/TheNavbar.vue";
 
 import { RouterView } from "vue-router";
 import { useUser } from "@/stores/user";
-import { useDashboard } from "@/stores/dashboard";
 import { onMounted, ref } from "vue";
 import { useModal } from "@/stores/modal";
 
@@ -13,7 +12,6 @@ const showSideber = ref(false);
 
 const modalStore = useModal();
 const userStore = useUser();
-const dashboardStore = useDashboard();
 
 const handleSidebar = () => {
   showSideber.value = !showSideber.value;  
@@ -25,7 +23,6 @@ const closeSidebar = () => {
 
 onMounted(async () => {
   await userStore.getUser();
-  await dashboardStore.getAllDashboards();
 });
 </script>
 

@@ -14,6 +14,7 @@ const props = defineProps<{
   priority: string | "normal";
   status: string | "todo";
   showStatus: boolean;
+  dashboardId: string;
 }>();
 
 const tasksStore = useTasks();
@@ -52,14 +53,24 @@ const prioritySelected = (priority: string): void => {
   task.priority = recoverPriority(priority);
 };
 
-const submitForm = async (status: string, priority: string): Promise<void> => {
-  task.status = recoverStatus(status);
-  task.priority = recoverPriority(priority);
+const submitForm = async (): Promise<void> => {
+  await tasksStore.createTask(task, props.dashboardId);
+
+  task.name = "";
+  task.description = "";
+  task.priority = 0;
+  task.status = 0;
+  task.subtasks = [];
+
+  showForm.value = false;
 };
 </script>
 
 <template>
-  <form class="overflow-x-auto w-full overflow-auto">
+  <form
+    @submit.prevent="submitForm"
+    class="overflow-x-auto w-full overflow-auto"
+  >
     <div class="w-full overflow-auto">
       <button
         type="button"
@@ -75,12 +86,14 @@ const submitForm = async (status: string, priority: string): Promise<void> => {
           class="form-group mt-2 w-full overflow-auto min-h-[500px]"
         >
           <input
+            required
             v-model="task.name"
             type="text"
             placeholder="Title"
             class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
           />
           <textarea
+            required
             v-model="task.description"
             type="text"
             placeholder="Description"
@@ -108,6 +121,7 @@ const submitForm = async (status: string, priority: string): Promise<void> => {
                 class="form-group flex items-center space-x-3"
               >
                 <input
+                  :required="true"
                   type="text"
                   v-model="subtask.task"
                   class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"

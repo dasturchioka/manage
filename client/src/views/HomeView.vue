@@ -4,10 +4,14 @@ import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
 import TheDashboardTitleColumn from "@/components/TheDashboardTitleColumn.vue";
 import AppIconButton from "@/components/UI/AppIconButton.vue";
 import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
-import TheTaskBoardElements from "@/components/TheTaskBoardElements.vue";
+import TheTaskBoardElementsHome from "@/components/TheTaskBoardElementsHome.vue";
 import TheCreateTask from "@/components/TheCreateTask.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import type { Tasks } from "@/interfaces/Tasks";
+import { useTasks } from "@/stores/tasks";
+
+const dashboardStore = useDashboard();
+const tasksStore = useTasks()
 
 const showForm = ref(false);
 
@@ -15,7 +19,10 @@ const handleForm = () => {
   showForm.value = !showForm.value;
 };
 
-const dashboardStore = useDashboard();
+onMounted(async () => {
+  await dashboardStore.getAllDashboards()
+  await tasksStore.getAllTasks()  
+})
 </script>
 
 <template>
@@ -28,20 +35,24 @@ const dashboardStore = useDashboard();
         <div
           v-for="(dashboard, index) in dashboardStore.dashboards.list"
           :key="index"
-          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
+          class="card h-[90vh] flex-shrink-0 w-80 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheDashboardTitleColumn
             page="overview"
             :id="(dashboard.id as string)"
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
-          <TheTaskBoardElements
+          <TheTaskBoardElementsHome
             page="overview"
             :dashboard-name="(dashboard.name as string)"
-            :dashboard-id="(dashboard.id as string)"
-            :dashboard-tasks="(dashboard.tasks as unknown as Tasks[])"
+            :dashboard-id="(dashboard.id as string)"  
           />
-          <TheCreateTask priority="normal" status="todo" :show-status="true" />
+          <TheCreateTask
+            :dashboard-id="(dashboard.id as string)"
+            priority="normal"
+            status="todo"
+            :show-status="true"
+          />
         </div>
       </template>
     </TheHorizontalScroll>

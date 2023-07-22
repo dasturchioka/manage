@@ -26,6 +26,7 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
         >
           <TheStatusTitleColumn :status="status" />
           <TheCreateTask
+            :dashboard-id="(route.params.id as string)"
             :priority="PRIORITIES.NORMAL"
             :show-status="false"
             :status="status"

@@ -55,9 +55,8 @@ const getDashboardTasks = async (req, res) => {
 const createTask = async (req, res) => {
   try {
     const { dashboardId } = req.params;
-    const {
-      task: { name, description, priority, status, subtasks },
-    } = req.body;
+    const { name, description, priority, status, subtasks } = req.body;
+    console.log(req.body);
 
     if (!dashboardId) {
       return res.status(402).json({
@@ -66,10 +65,10 @@ const createTask = async (req, res) => {
       });
     }
 
-    if (!task) {
+    if (!name && !description && !priority && !status) {
       return res.status(402).json({
-        status: "task must be here",
-        msg: "Please enter the full task",
+        status: "fill everything",
+        msg: "Please enter name, description, priority and status",
       });
     }
 
@@ -80,11 +79,13 @@ const createTask = async (req, res) => {
         priority,
         status,
         subtasks,
+        dashboardId
       },
     });
 
     return res.json({ task: newTask, status: "ok", msg: "New task created" });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error, msg: error.message });
   }
 };

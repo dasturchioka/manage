@@ -7,7 +7,6 @@ import { useUser } from "./user";
 import { useTasks } from "./tasks";
 import { useRouter, useRoute } from "vue-router";
 import Cookies from "js-cookie";
-import type { Tasks } from "@/interfaces/Tasks";
 
 export const useDashboard = defineStore("dashboard", () => {
   const router = useRouter();
