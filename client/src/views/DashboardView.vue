@@ -3,6 +3,7 @@ import { TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useDashboard } from "@/stores/dashboard";
 import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
+import TheDashboardTitleColumn from "@/components/TheDashboardTitleColumn.vue";
 
 const route = useRoute();
 const dashboardStore = useDashboard();
@@ -17,12 +18,13 @@ const tasks: TASK_STATUS[] = Object.values(TASK_STATUS);
     <TheHorizontalScroll>
       <template #titles></template>
       <template #content>
-        {{ route.params.name }}
         <div
           v-for="(task, index) in tasks"
           :key="index"
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
-        ></div>
+        >
+          
+        </div>
       </template>
     </TheHorizontalScroll>
   </main>

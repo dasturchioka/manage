@@ -9,12 +9,11 @@ import { useDashboard } from "@/stores/dashboard";
 const props = defineProps<{
   title: string;
   id: string;
-  page: "overview" | "dashboard";
 }>();
 
 const dashboardStore = useDashboard();
 
-const currentDashboard =  dashboardStore.getOneDashboard(props.id);
+const currentDashboard = dashboardStore.getOneDashboard(props.id);
 const oldName = currentDashboard.name;
 
 const showForm = ref(false);
@@ -36,7 +35,6 @@ onUnmounted(() => {
 
 <template>
   <div
-    v-if="props.page === 'overview'"
     class="dashboard-title bg-dark-secondary transition py-2 px-4 rounded border-t border-t-purple"
   >
     <div class="titles flex items-center justify-between">
@@ -72,8 +70,4 @@ onUnmounted(() => {
       </div>
     </div>
   </div>
-  <div
-    class="dashboard-title bg-dark-secondary transition py-2 px-4 rounded border-t border-t-purple"
-    v-else-if="props.page === 'dashboard'"
-  ></div>
 </template>

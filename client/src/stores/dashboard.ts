@@ -20,14 +20,20 @@ export const useDashboard = defineStore("dashboard", () => {
     list: [] as Dashboard[],
   });
 
+  const currentDashboard = reactive({
+    details: {} as Dashboard,
+  });
+
   const dashboardListLength = computed(() => {
     return dashboards.list.length;
   });
 
-  const getOneDashboard =  (id: string): Dashboard => {
+  const getOneDashboard = (id: string): Dashboard => {
     const foundDashboard = dashboards.list.find((item: any) => {
       return item.id === id;
     });
+
+    currentDashboard.details = foundDashboard as Dashboard;
 
     return foundDashboard as Dashboard;
   };
@@ -183,5 +189,6 @@ export const useDashboard = defineStore("dashboard", () => {
     dashboardListLength,
     editDashboard,
     getOneDashboard,
+    currentDashboard,
   };
 });
