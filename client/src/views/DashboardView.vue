@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useDashboard } from "@/stores/dashboard";
 import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
 import TheStatusTitleColumn from "@/components/TheStatusTitleColumn.vue";
-import TheCreateTaskVue from "@/components/TheCreateTask.vue";
+import TheCreateTask from "@/components/TheCreateTask.vue";
 
 const route = useRoute();
 const dashboardStore = useDashboard();
@@ -25,7 +25,7 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheStatusTitleColumn :status="status" />
-          <TheCreateTaskVue :status="status" priority="normal" />
+          <TheCreateTask :show-status="true" :status="status" priority="normal" />
         </div>
       </template>
     </TheHorizontalScroll>

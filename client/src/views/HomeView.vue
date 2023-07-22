@@ -41,7 +41,7 @@ const dashboardStore = useDashboard();
             :dashboard-id="(dashboard.id as string)"
             :dashboard-tasks="(dashboard.tasks as unknown as Tasks[])"
           />
-          <TheCreateTask />
+          <TheCreateTask priority="normal" status="todo" :show-status="true" />
         </div>
       </template>
     </TheHorizontalScroll>
