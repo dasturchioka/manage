@@ -35,7 +35,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="dashboard-title bg-dark-secondary transition py-2 px-4 rounded border-t border-t-purple"
+    class="dashboard-title bg-dark-secondary transition py-2 px-4 rounded border-t-2 border-t-purple"
   >
     <div class="titles flex items-center justify-between">
       <h3 v-show="!showForm" class="title first-letter:uppercase">
@@ -66,7 +66,7 @@ onUnmounted(() => {
         <AppIconButton v-show="!showForm" @click="handleForm">
           <EditIcon />
         </AppIconButton>
-        <TheTableSort v-show="!showForm" />
+        <TheTableSort :status="true" v-show="!showForm" />
       </div>
     </div>
   </div>

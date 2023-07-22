@@ -3,17 +3,27 @@ import { reactive, ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
+import Trash from "./icons/Trash.vue";
+defineProps<{
+  priority: string | "normal";
+  status: string | "todo";
+  showStatus: boolean;
+}>();
 
 const showForm = ref(false);
 
-const handleForm = () => {
+const handleForm = (): void => {
   showForm.value = !showForm.value;
 };
 
 const subTasks = reactive<{ task: string; done: boolean }[]>([]);
 
-const addSubTask = () => {
+const addSubTask = (): void => {
   subTasks.push({ task: "", done: false });
+};
+
+const removeSubTask = (index: number): void => {
+  subTasks.splice(index, 1);
 };
 </script>
 
@@ -29,7 +39,10 @@ const addSubTask = () => {
         {{ !showForm ? "Create new task" : "Discard" }}
       </button>
       <transition name="fade" mode="out-in">
-        <div v-if="showForm" class="form-group mt-2 w-full overflow-auto min-h-[500px]">
+        <div
+          v-if="showForm"
+          class="form-group mt-2 w-full overflow-auto min-h-[500px]"
+        >
           <input
             type="text"
             placeholder="Title"
@@ -41,19 +54,26 @@ const addSubTask = () => {
             class="outline-none mt-5 bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded h-[150px] max-h-[150px]"
           ></textarea>
           <div class="options flex items-center">
-            <TheStatus status-name="todo" variant="full"/>
-            <ThePriority  priority-name="high" variant="full"/>
+            <TheStatus v-if="showStatus" :status-name="status" variant="full" />
+            <ThePriority :priority-name="priority" variant="full" />
           </div>
           <p class="subtasks-title mt-4">Subtasks</p>
           <div v-if="subTasks.length" class="subtasks">
             <ul class="subtasks mt-2 list-disc space-y-2">
-              <input
+              <div
                 v-for="(subtask, index) in subTasks"
                 :key="index"
-                type="text"
-                v-model="subtask.task"
-                class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
-              />
+                class="form-group flex items-center space-x-3"
+              >
+                <input
+                  type="text"
+                  v-model="subtask.task"
+                  class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
+                />
+                <AppIconButton @click="removeSubTask(index)" type="button">
+                  <Trash />
+                </AppIconButton>
+              </div>
             </ul>
           </div>
           <AppIconButton

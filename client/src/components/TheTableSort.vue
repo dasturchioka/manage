@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import AppButton from "./UI/AppButton.vue";
+defineProps<{ status: boolean }>();
 
 const showOptions = ref(false);
 
@@ -30,14 +31,12 @@ onClickOutside(outsideClickTarget, () => {
     >
       <AppButton :small-btn="true"> High priorities up </AppButton>
       <AppButton :small-btn="true"> Low priorities up </AppButton>
-
-      <AppButton :small-btn="true"> Todo up </AppButton>
-
-      <AppButton :small-btn="true"> In progress up </AppButton>
-
-      <AppButton :small-btn="true"> Completed up </AppButton>
-
-      <AppButton :small-btn="true"> Failed up </AppButton>
+      <div v-if="status" class="statuses flex flex-col items-center w-full">
+        <AppButton :small-btn="true"> Todo up </AppButton>
+        <AppButton :small-btn="true"> In progress up </AppButton>
+        <AppButton :small-btn="true"> Completed up </AppButton>
+        <AppButton :small-btn="true"> Failed up </AppButton>
+      </div>
     </div>
   </div>
 </template>
