@@ -2,7 +2,8 @@ import { PRIORITIES } from "@/constants";
 import { ref } from "vue";
 
 export const usePriority = () => {
-  const actualPriority = ref("");
+  const actualPriority = ref<string>("");
+  const codePriority = ref<number>(0);
 
   const convertPriority = (code: number): string => {
     if (code === 0) {
@@ -27,7 +28,29 @@ export const usePriority = () => {
     return actualPriority.value;
   };
 
+  const recoverPriority = (priority: string): number => {
+    if (priority === PRIORITIES.LOW) {
+      codePriority.value = 0;
+      return codePriority.value;
+    }
+    if (priority === PRIORITIES.NORMAL) {
+      codePriority.value = 1;
+      return codePriority.value;
+    }
+    if (priority === PRIORITIES.HIGH) {
+      codePriority.value = 2;
+      return codePriority.value;
+    }
+    if (priority === PRIORITIES.URGENT) {
+      codePriority.value = 3;
+      return codePriority.value;
+    }
+
+    return codePriority.value;
+  };
+
   return {
     convertPriority,
+    recoverPriority,
   };
 };

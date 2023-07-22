@@ -4,11 +4,20 @@ import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
 import Trash from "./icons/Trash.vue";
-defineProps<{
+import { useTasks } from "@/stores/tasks";
+import { type Tasks } from "@/interfaces/Tasks";
+import { useStatus } from "@/composables/useStatus";
+import { usePriority } from "@/composables/usePriority";
+
+const props = defineProps<{
   priority: string | "normal";
   status: string | "todo";
   showStatus: boolean;
 }>();
+
+const tasksStore = useTasks();
+const { recoverStatus } = useStatus();
+const { recoverPriority } = usePriority();
 
 const showForm = ref(false);
 
@@ -16,14 +25,30 @@ const handleForm = (): void => {
   showForm.value = !showForm.value;
 };
 
-const subTasks = reactive<{ task: string; done: boolean }[]>([]);
+const subtasks = reactive<{ task: string; done: boolean }[]>([]);
 
 const addSubTask = (): void => {
-  subTasks.push({ task: "", done: false });
+  subtasks.push({ task: "", done: false });
 };
 
 const removeSubTask = (index: number): void => {
-  subTasks.splice(index, 1);
+  subtasks.splice(index, 1);
+};
+
+const task = reactive<Tasks>({
+  name: "",
+  description: "",
+  priority: 0,
+  status: 0,
+  subtasks,
+});
+
+const statusSelected = (status: string): void => {
+  console.log(recoverStatus(status));
+};
+
+const prioritySelected = (priority: string): void => {
+  console.log(recoverPriority(priority));
 };
 </script>
 
@@ -54,14 +79,19 @@ const removeSubTask = (index: number): void => {
             class="outline-none mt-5 bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded h-[150px] max-h-[150px]"
           ></textarea>
           <div class="options flex items-center">
-            <TheStatus v-if="showStatus" :status-name="status" variant="full" />
-            <ThePriority :priority-name="priority" variant="full" />
+            <TheStatus
+              @status-selected="statusSelected"
+              v-if="showStatus"
+              :status-name="status"
+              variant="full"
+            />
+            <ThePriority @priority-selected="prioritySelected" :priority-name="priority" variant="full" />
           </div>
           <p class="subtasks-title mt-4">Subtasks</p>
-          <div v-if="subTasks.length" class="subtasks">
+          <div v-if="subtasks.length" class="subtasks">
             <ul class="subtasks mt-2 list-disc space-y-2">
               <div
-                v-for="(subtask, index) in subTasks"
+                v-for="(subtask, index) in subtasks"
                 :key="index"
                 class="form-group flex items-center space-x-3"
               >

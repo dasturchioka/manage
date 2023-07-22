@@ -14,8 +14,21 @@ export const useTasks = defineStore("tasks", () => {
     tasks.list = payload;
   }
 
+  async function createTask(payload: Tasks, dashboardId: string) {
+    try {
+      const res = await tasksInstance.post(`/create/${dashboardId}`, {
+        task: payload,
+      });
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return {
     tasks,
     setTasks,
+    createTask,
   };
 });

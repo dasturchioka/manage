@@ -4,6 +4,7 @@ const router = require("express").Router();
 const {
   getAllTasks,
   getDashboardTasks,
+  createTask,
 } = require("../controllers/task.controller");
 const {
   checkAccess,
@@ -17,6 +18,13 @@ router.get(
   checkAccess,
   checkSelfAccess,
   getDashboardTasks
+);
+
+router.post(
+  "/user-id/:id/create/:dashboardId",
+  checkAccess,
+  checkSelfAccess,
+  createTask
 );
 
 module.exports = router;
