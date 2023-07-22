@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TASK_STATUS } from "@/constants";
+import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useDashboard } from "@/stores/dashboard";
 import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
@@ -25,7 +25,11 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheStatusTitleColumn :status="status" />
-          <TheCreateTask :show-status="true" :status="status" priority="normal" />
+          <TheCreateTask
+            :priority="PRIORITIES.NORMAL"
+            :show-status="false"
+            :status="status"
+          />
         </div>
       </template>
     </TheHorizontalScroll>

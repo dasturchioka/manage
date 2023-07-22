@@ -8,6 +8,7 @@ import { useTasks } from "@/stores/tasks";
 import { type Tasks } from "@/interfaces/Tasks";
 import { useStatus } from "@/composables/useStatus";
 import { usePriority } from "@/composables/usePriority";
+import AppButton from "./UI/AppButton.vue";
 
 const props = defineProps<{
   priority: string | "normal";
@@ -16,8 +17,8 @@ const props = defineProps<{
 }>();
 
 const tasksStore = useTasks();
-const { recoverStatus } = useStatus();
-const { recoverPriority } = usePriority();
+const { recoverStatus, convertStatus } = useStatus();
+const { recoverPriority, convertPriority } = usePriority();
 
 const showForm = ref(false);
 
@@ -38,17 +39,22 @@ const removeSubTask = (index: number): void => {
 const task = reactive<Tasks>({
   name: "",
   description: "",
-  priority: 0,
-  status: 0,
+  priority: props.priority ? recoverPriority(props.priority) : 2,
+  status: props.status ? recoverStatus(props.status) : 0,
   subtasks,
 });
 
 const statusSelected = (status: string): void => {
-  console.log(recoverStatus(status));
+  task.status = recoverStatus(status);
 };
 
 const prioritySelected = (priority: string): void => {
-  console.log(recoverPriority(priority));
+  task.priority = recoverPriority(priority);
+};
+
+const submitForm = async (status: string, priority: string): Promise<void> => {
+  task.status = recoverStatus(status);
+  task.priority = recoverPriority(priority);
 };
 </script>
 
@@ -69,11 +75,13 @@ const prioritySelected = (priority: string): void => {
           class="form-group mt-2 w-full overflow-auto min-h-[500px]"
         >
           <input
+            v-model="task.name"
             type="text"
             placeholder="Title"
             class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
           />
           <textarea
+            v-model="task.description"
             type="text"
             placeholder="Description"
             class="outline-none mt-5 bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded h-[150px] max-h-[150px]"
@@ -82,10 +90,14 @@ const prioritySelected = (priority: string): void => {
             <TheStatus
               @status-selected="statusSelected"
               v-if="showStatus"
-              :status-name="status"
+              :status-name="convertStatus(task.status)"
               variant="full"
             />
-            <ThePriority @priority-selected="prioritySelected" :priority-name="priority" variant="full" />
+            <ThePriority
+              @priority-selected="prioritySelected"
+              :priority-name="convertPriority(task.priority)"
+              variant="full"
+            />
           </div>
           <p class="subtasks-title mt-4">Subtasks</p>
           <div v-if="subtasks.length" class="subtasks">
@@ -114,6 +126,7 @@ const prioritySelected = (priority: string): void => {
             <p class="mr-2 text-lg">&plus;</p>
             Add new subtask
           </AppIconButton>
+          <AppButton> CREATE </AppButton>
         </div>
       </transition>
     </div>

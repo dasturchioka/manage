@@ -8,7 +8,6 @@ import { useToast } from "vue-toastification";
 import Cookies from "js-cookie";
 
 const user = { id: Cookies.get("userId") as string };
-console.log(user);
 
 const toast = useToast();
 

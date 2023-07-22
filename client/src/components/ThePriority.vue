@@ -9,13 +9,16 @@ const emit = defineEmits(["activeListItem", "prioritySelected"]);
 const showPriority = ref(false);
 const outsideClickTarget = ref(null);
 
-const handlePriority = () => {
+const handlePriority = (): void => {
   showPriority.value = !showPriority.value;
   emit("activeListItem", showPriority.value);
 };
 
-const selectPriority = (priority: string) => {
+const newPriorityName = ref("");
+
+const selectPriority = (priority: string): void => {
   emit("prioritySelected", priority);
+  newPriorityName.value = priority;
   handlePriority();
 };
 
@@ -38,19 +41,19 @@ defineProps<{
       v-if="variant === 'short'"
       class="short-variant"
     >
-      <Flag :color="`priority-${priorityName}`" />
+      <Flag :color="`priority-${newPriorityName ? newPriorityName : priorityName}`" />
     </button>
     <button
       type="button"
       @click="handlePriority"
       v-if="variant === 'full'"
       class="full-variant flex items-center uppercase transition rounded px-2 py-1"
-      :class="`priority-${priorityName} priority-${priorityName}-text ${
+      :class="`priority-${newPriorityName ? newPriorityName : priorityName} priority-${newPriorityName ? newPriorityName : priorityName}-text ${
         showPriority ? 'bg-gray bg-opacity-10' : ''
       }`"
     >
-      <Flag :color="`priority-${priorityName}`" />
-      <p class="text-[12px] font-bold ml-2">{{ priorityName }}</p>
+      <Flag :color="`priority-${newPriorityName ? newPriorityName : priorityName}`" />
+      <p class="text-[12px] font-bold ml-2">{{ newPriorityName ? newPriorityName : priorityName }}</p>
     </button>
     <transition name="fade" mode="out-in">
       <div
@@ -64,13 +67,13 @@ defineProps<{
           v-for="(priority, index) in prioritiesList"
           @click="selectPriority(priority)"
           :key="index"
-          :disabled="priorityName === priority"
+          :disabled="(newPriorityName ? newPriorityName : priorityName) === priority"
           :class="`priority-${priority}-text`"
           class="list-btn transition hover:bg-dark-lighter disabled:hover:bg-none uppercase flex items-center px-3 py-1 w-full disabled:opacity-20"
         >
           <Flag :color="`priority-${priority}`" />
           <p class="text-[12px] ml-2 font-bold">{{ priority }}</p>
-          <p class="ml-3" v-show="priorityName === priority">&check;</p>
+          <p class="ml-3" v-show="(newPriorityName ? newPriorityName : priorityName) === priority">&check;</p>
         </button>
       </div>
     </transition>
