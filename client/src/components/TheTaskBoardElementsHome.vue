@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
@@ -46,7 +46,6 @@ const closeForm = (index: number) => {
   form.classList.remove("flex");
   form.classList.add("hidden");
 };
-
 </script>
 
 <template>
@@ -64,7 +63,7 @@ const closeForm = (index: number) => {
       </p>
       <div class="title mt-2 flex flex-col">
         <div class="task-info top flex">
-          <h1 class="task-name text-lg">{{ task.name }}</h1>
+          <h1 class="task-name text-xl font-bold">{{ task.name }}</h1>
           <AppIconButton
             @click="showForm(index)"
             class="edit-icon transition opacity-0 flex items-center justify-center ml-2"
@@ -72,9 +71,15 @@ const closeForm = (index: number) => {
             <Edit />
           </AppIconButton>
         </div>
-        <p class="description text-sm opacity-50 mt-2">
+        <p class="description text-sm opacity-50">
           {{ sliceLetter(43, task.description) }}
         </p>
+        <ul v-if="task.subtasks.length" class="subtasks mt-4">
+          <p class="text-sm">Subtasks</p>
+          <li class="text-sm opacity-50" v-for="subtask in task.subtasks">
+            - {{ subtask.task }}
+          </li>
+        </ul>
       </div>
       <form class="inline-edit-task mt-2 flex-col items-start hidden">
         <div class="form-groups flex flex-col w-full">
@@ -90,6 +95,19 @@ const closeForm = (index: number) => {
             v-model="task.description"
             class="rounded h-[100px] mt-3 max-h-[100px] py-2 pl-2 outline-none bg-transparent border border-gray-800 transition focus:border-white"
           ></textarea>
+          <div v-if="task.subtasks.length" class="subtasks mt-4 space-y-2">
+            <div v-for="subtask in task.subtasks" class="form-group flex items-center space-x-2">
+              <input
+                :required="true"
+                type="text"
+                v-model="subtask.task"
+                class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
+              />
+              <AppIconButton type="button">
+                <Trash />
+              </AppIconButton>
+            </div>
+          </div>
         </div>
         <div class="buttons flex items-center mt-2">
           <AppIconButton class="flex items-center text-sm px-4">

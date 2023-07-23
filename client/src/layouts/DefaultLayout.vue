@@ -7,11 +7,15 @@ import { RouterView } from "vue-router";
 import { useUser } from "@/stores/user";
 import { onMounted, ref } from "vue";
 import { useModal } from "@/stores/modal";
+import { useDashboard } from "@/stores/dashboard";
+import { useTasks } from "@/stores/tasks";
 
 const showSideber = ref(false);
 
 const modalStore = useModal();
 const userStore = useUser();
+const dashboardStore = useDashboard()
+const tasksStore = useTasks()
 
 const handleSidebar = () => {
   showSideber.value = !showSideber.value;  
@@ -23,6 +27,8 @@ const closeSidebar = () => {
 
 onMounted(async () => {
   await userStore.getUser();
+  await dashboardStore.getAllDashboards();
+  await tasksStore.getAllTasks()
 });
 </script>
 

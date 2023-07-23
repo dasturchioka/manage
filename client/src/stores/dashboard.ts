@@ -90,10 +90,11 @@ export const useDashboard = defineStore("dashboard", () => {
         toast(data.msg);
         await getAllDashboards();
         router.push(`/dashboard/${data.dashboard.id}`);
-      } else {
-        toast("Something went wrong in dashboard store");
+
         return;
       }
+      toast("Something went wrong in dashboard store");
+      return;
     } catch (error) {
       console.log(error);
       toast("Something went wrong in dashboard store");
@@ -154,13 +155,13 @@ export const useDashboard = defineStore("dashboard", () => {
       if (!res) return;
 
       if (res.data.status === "ok") {
-        const indexOfEditedObj = dashboards.list.findIndex(
+        let foundObj = dashboards.list.find(
           (obj) => obj.id === res.data.dashboard.id
         );
 
-        if (indexOfEditedObj > -1) {
-          dashboards.list.splice(indexOfEditedObj, 1);
-          await pushDashboard(res.data.dashboard);
+        if (foundObj?.name) {
+          foundObj.name = res.data.dashboard.name;
+
           return;
         }
       } else {

@@ -3,7 +3,10 @@ export interface Tasks {
   name: string;
   description: string;
   status: number;
-  subtasks: object[];
+  subtasks: {
+    task: string;
+    done: boolean;
+  }[];
   priority: number;
   dashboardId?: string;
 }

@@ -6,8 +6,7 @@ import AppIconButton from "@/components/UI/AppIconButton.vue";
 import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
 import TheTaskBoardElementsHome from "@/components/TheTaskBoardElementsHome.vue";
 import TheCreateTask from "@/components/TheCreateTask.vue";
-import { onMounted, ref } from "vue";
-import type { Tasks } from "@/interfaces/Tasks";
+import { ref } from "vue";
 import { useTasks } from "@/stores/tasks";
 
 const dashboardStore = useDashboard();
@@ -18,11 +17,6 @@ const showForm = ref(false);
 const handleForm = () => {
   showForm.value = !showForm.value;
 };
-
-onMounted(async () => {
-  await dashboardStore.getAllDashboards();
-  await tasksStore.getAllTasks()
-});
 </script>
 
 <template>

@@ -128,7 +128,7 @@ const submitForm = async (): Promise<void> => {
                 />
                 <AppIconButton @click="removeSubTask(index)" type="button">
                   <Trash />
-                </AppIconButton>
+                </AppIconButton>  
               </div>
             </ul>
           </div>

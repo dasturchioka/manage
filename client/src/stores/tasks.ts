@@ -38,7 +38,7 @@ export const useTasks = defineStore("tasks", () => {
       if (!res) return;
 
       if (res.data.task) {
-        await dashboardStore.getAllDashboards();
+        await getAllTasks();
       }
     } catch (error) {
       console.log(error);
@@ -55,6 +55,7 @@ export const useTasks = defineStore("tasks", () => {
         await setTasks(res.data.tasks);
 
         console.log(tasks.list);
+
         return;
       }
 

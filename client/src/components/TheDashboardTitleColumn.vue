@@ -14,14 +14,19 @@ const props = defineProps<{
 const dashboardStore = useDashboard();
 
 const currentDashboard = dashboardStore.getOneDashboard(props.id);
-const oldName = currentDashboard.name;
+
+const newName = ref<string>(props.title ? props.title : "");
 
 const showForm = ref(false);
 
-const handleForm = () => {
-  showForm.value = !showForm.value;
-  currentDashboard.name = oldName;
+const closeForm = () => {
+  showForm.value = false;
+  newName.value = props.title;
 };
+
+const openForm = () => {
+  showForm.value = true
+}
 
 const editDashboard = async (name: string, id: string) => {
   await dashboardStore.editDashboard(name, id);
@@ -29,7 +34,7 @@ const editDashboard = async (name: string, id: string) => {
 };
 
 onUnmounted(() => {
-  currentDashboard.name = oldName;
+  newName.value = props.title;
 });
 </script>
 
@@ -39,31 +44,29 @@ onUnmounted(() => {
   >
     <div class="titles flex items-center justify-between">
       <h3 v-show="!showForm" class="title first-letter:uppercase">
-        {{ currentDashboard.name }}
+        {{ newName }}
       </h3>
       <form
-        @submit.prevent="
-          editDashboard(currentDashboard.name as string, props.id)
-        "
+        @submit.prevent="editDashboard(newName, props.id)"
         v-show="showForm"
         class="edit-title-form first-letter:uppercase flex items-center justify-between w-full"
       >
         <input
           type="text"
           class="bg-transparent outline-none border rounded pl-2 w-[170px]"
-          v-model="(currentDashboard.name as string)"
+          v-model="newName"
         />
         <div class="options flex items-center justify-between">
           <AppIconButton v-show="showForm">
             <TickIcon class="w-[19px] h-[19px]" />
           </AppIconButton>
-          <AppIconButton type="button" v-show="showForm" @click="handleForm">
+          <AppIconButton type="button" v-show="showForm" @click="closeForm">
             <TimesIcon class="w-[19px] h-[19px]" />
           </AppIconButton>
         </div>
       </form>
       <div class="functions flex items-center">
-        <AppIconButton v-show="!showForm" @click="handleForm">
+        <AppIconButton v-show="!showForm" @click="openForm">
           <EditIcon />
         </AppIconButton>
         <TheTableSort :status="true" v-show="!showForm" />
