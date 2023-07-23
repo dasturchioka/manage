@@ -36,12 +36,21 @@ const handleForm = () => {
             :id="(dashboard.id as string)"
             :title="(dashboard.name as string)"
           ></TheDashboardTitleColumn>
-          <TheTaskBoardElementsHome
-            page="overview"
-            :dashboard-name="(dashboard.name as string)"
-            :dashboard-id="(dashboard.id as string)"
-            :dashboard-tasks="tasksStore.dashboardTasks(dashboard.id as string)"
-          />
+          <!-- RECURSIVE CALLS/MUTATIONS issue solved -->
+          <div
+            v-if="tasksStore.dashboardTasks(dashboard.id as string).length"
+            class="elements space-y-4"
+          >
+            <TheTaskBoardElementsHome
+              v-for="(task, index) in tasksStore.dashboardTasks(dashboard.id as string)"
+              :key="index"
+              :index="index"
+              :dashboard-id="(task.dashboardId as string)"
+              :dashboard-name="(dashboard.name as string)"
+              :dashboard-task="task"
+              page="overview"
+            />
+          </div>
           <TheCreateTask
             :dashboard-id="(dashboard.id as string)"
             priority="normal"

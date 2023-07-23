@@ -39,9 +39,19 @@ export const useTasks = defineStore("tasks", () => {
 
       if (res.data.task) {
         await getAllTasks();
+
+        return;
       }
-    } catch (error) {
+
+      toast("Something went wrong in tasks store");
+      return;
+    } catch (error: any) {
       console.log(error);
+      if (error?.response) {
+        toast(error.response.data.msg);
+      } else {
+        toast(error.message);
+      }
     }
   }
 
@@ -82,13 +92,11 @@ export const useTasks = defineStore("tasks", () => {
         res.data.tasks.forEach(async (task: Tasks) => {
           await pushTasks(task);
         });
-
+        return
+      } else {
+        toast("Something went wrong in tasks store");
         return;
       }
-
-      toast("Something went wrong in tasks store");
-
-      return;
     } catch (error: any) {
       console.log(error);
       if (error?.response) {

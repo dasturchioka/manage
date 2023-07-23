@@ -34,6 +34,9 @@ const getAllDashboards = async (req, res) => {
 
     const dashboards = await prisma.dashboard.findMany({
       where: { userId },
+      orderBy: {
+        name: "asc",
+      },
     });
 
     if (!dashboards.length) {
@@ -83,4 +86,9 @@ const changeDashboardName = async (req, res) => {
   }
 };
 
-module.exports = { createDashboard, getAllDashboards, deleteDashboard, changeDashboardName };
+module.exports = {
+  createDashboard,
+  getAllDashboards,
+  deleteDashboard,
+  changeDashboardName,
+};

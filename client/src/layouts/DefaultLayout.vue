@@ -14,21 +14,23 @@ const showSideber = ref(false);
 
 const modalStore = useModal();
 const userStore = useUser();
-const dashboardStore = useDashboard()
-const tasksStore = useTasks()
+const dashboardStore = useDashboard();
+const tasksStore = useTasks();
 
 const handleSidebar = () => {
-  showSideber.value = !showSideber.value;  
+  showSideber.value = !showSideber.value;
 };
 
 const closeSidebar = () => {
-  showSideber.value = false
-}
+  showSideber.value = false;
+};
 
 onMounted(async () => {
-  await userStore.getUser();
-  await dashboardStore.getAllDashboards();
-  await tasksStore.getAllTasks()
+  Promise.all([
+    userStore.getUser(),
+    dashboardStore.getAllDashboards(),
+    tasksStore.getAllTasks(),
+  ]);
 });
 </script>
 

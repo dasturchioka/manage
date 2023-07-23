@@ -90,4 +90,8 @@ const createTask = async (req, res) => {
   }
 };
 
+const updateTask = async (req, res) => {
+  
+}
+
 module.exports = { getAllTasks, getDashboardTasks, createTask };
