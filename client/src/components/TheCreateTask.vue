@@ -112,9 +112,12 @@ const submitForm = async (): Promise<void> => {
               variant="full"
             />
           </div>
-          <p class="subtasks-title mt-4">Subtasks</p>
-          <div v-if="subtasks.length" class="subtasks">
-            <ul class="subtasks mt-2 list-disc space-y-2">
+          <div class="subtasks mt-4">
+            <p class="subtasks-title">Subtasks</p>
+            <ul
+              v-if="subtasks.length"
+              class="subtasks-list mt-2 list-disc space-y-2"
+            >
               <div
                 v-for="(subtask, index) in subtasks"
                 :key="index"
@@ -128,18 +131,18 @@ const submitForm = async (): Promise<void> => {
                 />
                 <AppIconButton @click="removeSubTask(index)" type="button">
                   <Trash />
-                </AppIconButton>  
+                </AppIconButton>
               </div>
             </ul>
+            <AppIconButton
+              @click="addSubTask"
+              type="button"
+              class="text-gray w-full mt-2 flex items-center"
+            >
+              <p class="mr-2 text-lg">&plus;</p>
+              Add new subtask
+            </AppIconButton>
           </div>
-          <AppIconButton
-            @click="addSubTask"
-            type="button"
-            class="text-gray w-full mt-2 flex items-center"
-          >
-            <p class="mr-2 text-lg">&plus;</p>
-            Add new subtask
-          </AppIconButton>
           <AppButton> CREATE </AppButton>
         </div>
       </transition>
