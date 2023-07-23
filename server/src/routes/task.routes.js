@@ -5,6 +5,7 @@ const {
   getAllTasks,
   getDashboardTasks,
   createTask,
+  updateTask,
 } = require("../controllers/task.controller");
 const {
   checkAccess,
@@ -25,6 +26,13 @@ router.post(
   checkAccess,
   checkSelfAccess,
   createTask
+);
+
+router.put(
+  "/user-id/:id/update/:taskId",
+  checkAccess,
+  checkSelfAccess,
+  updateTask
 );
 
 module.exports = router;

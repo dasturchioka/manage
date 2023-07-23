@@ -92,14 +92,7 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const { dashboardId, taskId } = req.params;
-
-    if (!dashboardId) {
-      return res.status(402).json({
-        status: "id must be here",
-        msg: "Please enter the dashboard's id",
-      });
-    }
+    const { taskId } = req.params;
 
     const updateTask = await prisma.tasks.update({
       where: {
