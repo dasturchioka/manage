@@ -12,58 +12,56 @@ import { usePriority } from "@/composables/usePriority";
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
 import type { Tasks } from "@/interfaces/Tasks";
 
-const { convertStatus } = useStatus();
-const { convertPriority } = usePriority();
+const { convertStatus, recoverStatus } = useStatus();
+const { convertPriority, recoverPriority } = usePriority();
 const { sliceLetter } = useSlicedLetter();
+
+const showForm = ref(false);
+
+const handleForm = () => {
+  showForm.value = !showForm.value;
+};
 
 const props = defineProps<{
   page: "overview" | "dashboard";
   dashboardName: string;
   dashboardId: string;
   dashboardTask: Tasks;
-  index: number
+  index: number;
 }>();
 
-const elementRefs = ref([]);
+let taskPayload = ref<Tasks>(props.dashboardTask);
 
-const showForm = (index: number) => {
-  const title = elementRefs.value[index]?.children[1];
-  const form = elementRefs.value[index]?.children[2];
+const setStatusAndPriority = (
+  mode: "status" | "priority",
+  payload: string
+): void => {
+  if (mode === "priority") {
+    console.log(taskPayload.value);
+    taskPayload.value.priority = recoverPriority(payload);
+    return;
+  }
 
-  title.classList.remove("flex");
-  title.classList.add("hidden");
-
-  form.classList.remove("hidden");
-  form.classList.add("flex");
-};
-
-const closeForm = (index: number) => {
-  const title = elementRefs.value[index]?.children[1];
-  const form = elementRefs.value[index]?.children[2];
-
-  title.classList.remove("hidden");
-  title.classList.add("flex");
-
-  form.classList.remove("flex");
-  form.classList.add("hidden");
+  if (mode === "status") {
+    console.log(taskPayload.value);
+    taskPayload.value.status = recoverStatus(payload);
+    return;
+  }
 };
 </script>
 
 <template>
-  <div
-    ref="elementRefs"
-    class="board-element bg-dark-secondary transition py-2 px-4 rounded"
-  >
+  <div class="board-element bg-dark-secondary transition py-2 px-4 rounded">
     <p
       class="dashboard-name mt-2 first-letter:uppercase opacity-30 text-[12px]"
     >
       {{ props.dashboardName }}
     </p>
-    <div class="title mt-2 flex flex-col">
+    <div v-show="!showForm" class="title mt-2 flex flex-col">
       <div class="task-info top flex">
         <h1 class="task-name text-xl font-bold">{{ dashboardTask.name }}</h1>
         <AppIconButton
-          @click="showForm(index)"
+          @click="handleForm"
           class="edit-icon transition opacity-0 flex items-center justify-center ml-2"
         >
           <Edit />
@@ -74,12 +72,18 @@ const closeForm = (index: number) => {
       </p>
       <ul v-if="dashboardTask.subtasks.length" class="subtasks mt-4">
         <p class="text-sm">Subtasks</p>
-        <li class="text-sm opacity-50" v-for="subtask in dashboardTask.subtasks">
+        <li
+          class="text-sm opacity-50"
+          v-for="subtask in dashboardTask.subtasks"
+        >
           - {{ subtask.task }}
         </li>
       </ul>
     </div>
-    <form class="inline-edit-task mt-2 flex-col items-start hidden">
+    <form
+      v-show="showForm"
+      class="inline-edit-task mt-2 flex flex-col items-start"
+    >
       <div class="form-groups flex flex-col w-full">
         <input
           type="text"
@@ -93,7 +97,10 @@ const closeForm = (index: number) => {
           v-model="dashboardTask.description"
           class="rounded h-[100px] mt-3 max-h-[100px] py-2 pl-2 outline-none bg-transparent border border-gray-800 transition focus:border-white"
         ></textarea>
-        <div v-if="dashboardTask.subtasks.length" class="subtasks mt-4 space-y-2">
+        <div
+          v-if="dashboardTask.subtasks.length"
+          class="subtasks mt-4 space-y-2"
+        >
           <div
             v-for="subtask in dashboardTask.subtasks"
             class="form-group flex items-center space-x-2"
@@ -115,7 +122,7 @@ const closeForm = (index: number) => {
           <Tick class="mr-2 w-4" /> DONE
         </AppIconButton>
         <AppIconButton
-          @click="closeForm(index)"
+          @click="handleForm"
           type="button"
           class="px-4 flex items-center text-sm"
         >
@@ -126,8 +133,13 @@ const closeForm = (index: number) => {
     </form>
     <div class="bottom flex items-center justify-between mt-3">
       <div class="left flex items-center space-x-2">
-        <TheStatus :status-name="convertStatus(dashboardTask.status)" variant="full" />
+        <TheStatus
+          @status-selected="(e) => setStatusAndPriority('status', e)"
+          :status-name="convertStatus(dashboardTask.status)"
+          variant="full"
+        />
         <ThePriority
+          @priority-selected="(e) => setStatusAndPriority('status', e)"
           :priority-name="convertPriority(dashboardTask.priority)"
           variant="full"
         />
