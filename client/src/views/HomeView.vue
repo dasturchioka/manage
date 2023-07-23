@@ -11,7 +11,7 @@ import type { Tasks } from "@/interfaces/Tasks";
 import { useTasks } from "@/stores/tasks";
 
 const dashboardStore = useDashboard();
-const tasksStore = useTasks()
+const tasksStore = useTasks();
 
 const showForm = ref(false);
 
@@ -20,9 +20,9 @@ const handleForm = () => {
 };
 
 onMounted(async () => {
-  await dashboardStore.getAllDashboards()
-  await tasksStore.getAllTasks()  
-})
+  await dashboardStore.getAllDashboards();
+  await tasksStore.getAllTasks()
+});
 </script>
 
 <template>
@@ -45,7 +45,8 @@ onMounted(async () => {
           <TheTaskBoardElementsHome
             page="overview"
             :dashboard-name="(dashboard.name as string)"
-            :dashboard-id="(dashboard.id as string)"  
+            :dashboard-id="(dashboard.id as string)"
+            :dashboard-tasks="tasksStore.dashboardTasks(dashboard.id as string)"
           />
           <TheCreateTask
             :dashboard-id="(dashboard.id as string)"

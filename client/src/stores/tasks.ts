@@ -18,6 +18,17 @@ export const useTasks = defineStore("tasks", () => {
     tasks.list.push(payload);
   }
 
+  function dashboardTasks(id: string): Tasks[] {
+    let dashboardId = ref(id);
+    let dashboardTasks = computed(() => {
+      return tasks.list.filter((task: Tasks) => {
+        return task.dashboardId === dashboardId.value;
+      });
+    });
+
+    return dashboardTasks.value;
+  }
+
   async function createTask(payload: Tasks, dashboardId: string) {
     try {
       const res = await tasksInstance.post(`/create/${dashboardId}`, {
@@ -92,6 +103,7 @@ export const useTasks = defineStore("tasks", () => {
     setTasks,
     createTask,
     getAllTasks,
-    getDashboardsTasks
+    getDashboardsTasks,
+    dashboardTasks,
   };
 });

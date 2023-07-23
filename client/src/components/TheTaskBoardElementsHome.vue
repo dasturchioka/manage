@@ -10,18 +10,17 @@ import Times from "./icons/Times.vue";
 import { useStatus } from "@/composables/useStatus";
 import { usePriority } from "@/composables/usePriority";
 import { useSlicedLetter } from "@/composables/useSlicedLetter";
-import { useTasks } from "@/stores/tasks";
 import type { Tasks } from "@/interfaces/Tasks";
 
 const { convertStatus } = useStatus();
 const { convertPriority } = usePriority();
 const { sliceLetter } = useSlicedLetter();
-const tasksStore = useTasks();
 
 const props = defineProps<{
   page: "overview" | "dashboard";
   dashboardName: string;
   dashboardId: string;
+  dashboardTasks: Tasks[];
 }>();
 
 const elementRefs = ref([]);
@@ -48,23 +47,12 @@ const closeForm = (index: number) => {
   form.classList.add("hidden");
 };
 
-const tasks = ref([]);
-
-onMounted(() => {
-  const dashboardTasks = computed(() => {
-    return tasksStore.tasks.list.filter((task: Tasks) => {
-      return task.dashboardId === props.dashboardId;
-    });
-  });
-
-  console.log(dashboardTasks.value);
-});
 </script>
 
 <template>
-  <div v-if="tasks.length" class="elements space-y-4">
+  <div v-if="dashboardTasks.length" class="elements space-y-4">
     <div
-      v-for="(task, index) in tasks"
+      v-for="(task, index) in dashboardTasks"
       :key="task.id"
       ref="elementRefs"
       class="board-element bg-dark-secondary transition py-2 px-4 rounded"
