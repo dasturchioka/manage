@@ -79,7 +79,7 @@ const createTask = async (req, res) => {
         priority,
         status,
         subtasks,
-        dashboardId
+        dashboardId,
       },
     });
 
@@ -91,7 +91,30 @@ const createTask = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
-  
-}
+  try {
+    const { dashboardId, taskId } = req.params;
 
-module.exports = { getAllTasks, getDashboardTasks, createTask };
+    if (!dashboardId) {
+      return res.status(402).json({
+        status: "id must be here",
+        msg: "Please enter the dashboard's id",
+      });
+    }
+
+    const updateTask = await prisma.tasks.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        ...req.body,
+      },
+    });
+
+    return res.json({ status: "ok", msg: "Task updated", task: updateTask });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error, msg: error.message });
+  }
+};
+
+module.exports = { getAllTasks, getDashboardTasks, createTask, updateTask };
