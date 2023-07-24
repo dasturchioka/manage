@@ -5,7 +5,6 @@ import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
 import { useDashboard } from "./dashboard";
 
-
 export const useTasks = defineStore("tasks", () => {
   const toast = useToast();
   const dashboardStore = useDashboard();
@@ -197,6 +196,29 @@ export const useTasks = defineStore("tasks", () => {
     }
   }
 
+  async function deleteTask(taskId: string): Promise<void> {
+    try {
+      const res = await tasksInstance.delete(`/delete-task/${taskId}`);
+
+      if (!res) return;
+
+      if (res.data.tasks) {
+        await setTasks(res.data.tasks);
+        toast(res.data.msg);
+        return;
+      }
+
+      toast("Something went wrong in tasks store");
+      return;
+    } catch (error: any) {
+      if (error?.response) {
+        toast(error.response.data.msg);
+      } else {
+        toast(error.message);
+      }
+    }
+  }
+
   return {
     tasks,
     setTasks,
@@ -206,5 +228,6 @@ export const useTasks = defineStore("tasks", () => {
     dashboardTasks,
     updateTask,
     updateStatusOrPriority,
+    deleteTask,
   };
 });

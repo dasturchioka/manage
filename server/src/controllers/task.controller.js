@@ -176,7 +176,9 @@ const deleteTask = async (req, res) => {
 
     await prisma.tasks.delete({ where: { id: taskId } });
 
-    return res.json({ status: "ok", msg: "Task deleted" });
+    const tasks = await prisma.tasks.findMany({})
+
+    return res.json({ status: "ok", msg: "Task deleted", tasks });
   } catch (error) {
     return res.status(500).json({ error, msg: error.message });
   }

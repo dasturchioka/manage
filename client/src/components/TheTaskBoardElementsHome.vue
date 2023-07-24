@@ -175,7 +175,10 @@ watch(
         />
       </div>
       <div class="right flex items-center">
-        <AppIconButton>
+        <AppIconButton
+          type="button"
+          @click="tasksStore.deleteTask(dashboardTask.id as string)"
+        >
           <Trash />
         </AppIconButton>
       </div>

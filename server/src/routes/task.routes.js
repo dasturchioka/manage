@@ -7,6 +7,7 @@ const {
   createTask,
   updateTask,
   updateStatusOrPriority,
+  deleteTask,
 } = require("../controllers/task.controller");
 const {
   checkAccess,
@@ -41,6 +42,13 @@ router.put(
   checkAccess,
   checkSelfAccess,
   updateStatusOrPriority
+);
+
+router.delete(
+  "/user-id/:id/delete-task/:taskId",
+  checkAccess,
+  checkSelfAccess,
+  deleteTask
 );
 
 module.exports = router;
