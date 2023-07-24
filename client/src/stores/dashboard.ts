@@ -3,8 +3,7 @@ import { type Dashboard } from "@/interfaces/Dashboard";
 import { computed, reactive } from "vue";
 import { useToast } from "vue-toastification";
 import { dashboardInstance } from "@/http";
-import { useUser } from "./user";
-import { useTasks } from "./tasks";
+
 import { useRouter, useRoute } from "vue-router";
 import Cookies from "js-cookie";
 
@@ -12,8 +11,6 @@ export const useDashboard = defineStore("dashboard", () => {
   const router = useRouter();
   const route = useRoute();
   const toast = useToast();
-  const userStore = useUser();
-  const tasksStore = useTasks();
 
   const dashboards = reactive({
     list: [] as Dashboard[],
@@ -89,7 +86,7 @@ export const useDashboard = defineStore("dashboard", () => {
         await pushDashboard(data.dashboard);
         toast(data.msg);
         await getAllDashboards();
-        router.push(`/dashboard/${data.dashboard.id}`);
+        router.push(`/dashboard/${data.dashboard.id}/${data.dashboard.name}`);
 
         return;
       }
