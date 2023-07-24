@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const getAllTasks = async (req, res) => {
   try {
     const tasks = await prisma.tasks.findMany({
-      orderBy: { status: "", priority: "desc" },
+      orderBy: [{status: "asc"}, {priority: "desc"}],
     });
 
     if (!tasks) {
