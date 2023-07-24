@@ -18,12 +18,32 @@ export const useTasks = defineStore("tasks", () => {
     tasks.list.push(payload);
   }
 
-  async function changeOneTask(id: string, payload: Tasks) {
+  async function changeOneTask(id: string, payload: Tasks): Promise<void> {
     let foundObj = tasks.list.find((task: Tasks) => {
       return task.id === id;
     });
 
     foundObj = { ...payload };
+  }
+
+  async function setStatusOrPriority(
+    field: "status" | "priority",
+    value: number,
+    id: string
+  ): Promise<void> {
+    let foundObj = tasks.list.find((task: Tasks) => {
+      return task.id === id;
+    });
+
+    if (field === "priority" && foundObj?.priority) {
+      foundObj.priority = value;
+      return;
+    }
+
+    if (field === "status" && foundObj?.status) {
+      foundObj.status = value;
+      return;
+    }
   }
 
   function dashboardTasks(id: string): Tasks[] {
@@ -104,10 +124,10 @@ export const useTasks = defineStore("tasks", () => {
           await pushTasks(task);
         });
         return;
-      } else {
-        toast("Something went wrong in tasks store");
-        return;
       }
+
+      toast("Something went wrong in tasks store");
+      return;
     } catch (error: any) {
       console.log(error);
       if (error?.response) {
@@ -131,12 +151,43 @@ export const useTasks = defineStore("tasks", () => {
         toast(res.data.msg);
         console.log(tasks.list);
         return;
-      } else {
-        toast("Something went wrong in tasks store");
-        return;
       }
+
+      toast("Something went wrong in tasks store");
+      return;
     } catch (error: any) {
       console.log(error);
+      if (error?.response) {
+        toast(error.response.data.msg);
+      } else {
+        toast(error.message);
+      }
+    }
+  }
+
+  async function updateStatusOrPriority(
+    field: "status" | "priority",
+    value: number,
+    taskId: string
+  ): Promise<void> {
+    try {
+
+      const res = await tasksInstance.put(
+        `/update-status-priority/${field}/${taskId}`,
+        { field: value }
+      );
+
+      if (!res) return;
+
+      if (res.data.task) {
+        await setStatusOrPriority(field, value, taskId);
+
+        return;
+      }
+
+      toast("Something went wrong in tasks store");
+      return;
+    } catch (error: any) {
       if (error?.response) {
         toast(error.response.data.msg);
       } else {
@@ -152,6 +203,7 @@ export const useTasks = defineStore("tasks", () => {
     getAllTasks,
     getDashboardsTasks,
     dashboardTasks,
-    updateTask
+    updateTask,
+    updateStatusOrPriority,
   };
 });

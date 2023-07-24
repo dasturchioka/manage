@@ -6,6 +6,7 @@ const {
   getDashboardTasks,
   createTask,
   updateTask,
+  updateStatusOrPriority,
 } = require("../controllers/task.controller");
 const {
   checkAccess,
@@ -33,6 +34,13 @@ router.put(
   checkAccess,
   checkSelfAccess,
   updateTask
+);
+
+router.put(
+  "/user-id/:id/update-status-priority/:field/:taskId",
+  checkAccess,
+  checkSelfAccess,
+  updateStatusOrPriority
 );
 
 module.exports = router;

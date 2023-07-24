@@ -4,9 +4,7 @@ const prisma = new PrismaClient();
 const getAllTasks = async (req, res) => {
   try {
     const tasks = await prisma.tasks.findMany({
-      orderBy: {
-        dashboardId: "asc",
-      },
+      orderBy: { status: "", priority: "desc" },
     });
 
     if (!tasks) {
@@ -110,4 +108,51 @@ const updateTask = async (req, res) => {
   }
 };
 
-module.exports = { getAllTasks, getDashboardTasks, createTask, updateTask };
+const updateStatusOrPriority = async (req, res) => {
+  try {
+    const { field, taskId } = req.params;
+
+    const foundTask = await prisma.tasks.findUnique({ where: { id: taskId } });
+
+    if (!foundTask) {
+      return res.status(404).json({
+        status: "not found",
+        msg: "task on this id is not found",
+      });
+    }
+
+    if (field === "status") {
+      const updatedTask = await prisma.tasks.update({
+        where: { id: taskId },
+        data: { status: req.body.field },
+      });
+
+      return res.json({
+        status: "ok",
+        msg: "Status of the task was set",
+        task: updatedTask,
+      });
+    }
+
+    const updatedTask = await prisma.tasks.update({
+      where: { id: taskId },
+      data: { priority: req.body.field },
+    });
+
+    return res.json({
+      status: "ok",
+      msg: "Priority of the task was set",
+      task: updatedTask,
+    });
+  } catch (error) {
+    return res.status(500).json({ error, msg: error.message });
+  }
+};
+
+module.exports = {
+  getAllTasks,
+  getDashboardTasks,
+  createTask,
+  updateTask,
+  updateStatusOrPriority,
+};
