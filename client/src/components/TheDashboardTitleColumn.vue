@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { onUnmounted, ref, defineAsyncComponent } from "vue";
+import { onUnmounted, ref } from "vue";
 import EditIcon from "./icons/Edit.vue";
 import TickIcon from "./icons/Tick.vue";
 import TimesIcon from "./icons/Times.vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import { useDashboard } from "@/stores/dashboard";
 
-const TheTableSort = defineAsyncComponent(() => import("./TheTableSort.vue"));
 
 const props = defineProps<{
   title: string;
@@ -69,7 +68,6 @@ onUnmounted(() => {
         <AppIconButton v-show="!showForm" @click="openForm">
           <EditIcon />
         </AppIconButton>
-        <TheTableSort :status="true" v-show="!showForm" />
       </div>
     </div>
   </div>

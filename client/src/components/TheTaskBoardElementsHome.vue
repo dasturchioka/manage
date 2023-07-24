@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
@@ -26,6 +26,8 @@ const { convertPriority, recoverPriority } = usePriority();
 
 const showForm = ref(false);
 const expandTask = ref(false);
+const changeInTaskPayload = ref(false);
+const taskPayload = ref<Tasks>(props.dashboardTask);
 
 const handleForm = (): void => {
   showForm.value = !showForm.value;
@@ -35,16 +37,20 @@ const handleExpandTask = (): void => {
   expandTask.value = !expandTask.value;
 };
 
-const changeInTaskPayload = ref(false);
-
-let taskPayload = ref<Tasks>(props.dashboardTask);
-
 const updateTask = async (payload: Tasks): Promise<void> => {
   handleForm();
 
   if (!changeInTaskPayload.value) return;
 
   await tasksStore.updateTask(payload);
+};
+
+const addNewSubtask = (): void => {
+  taskPayload.value.subtasks.push({ task: "", done: false });
+};
+
+const deleteSubtask = (index: number): void => {
+  taskPayload.value.subtasks.splice(index, 1);
 };
 
 watch(
@@ -54,14 +60,6 @@ watch(
   },
   { deep: true }
 );
-
-const addNewSubtask = (): void => {
-  taskPayload.value.subtasks.push({ task: "", done: false });
-};
-
-const deleteSubtask = (index: number): void => {
-  taskPayload.value.subtasks.splice(index, 1);
-};
 </script>
 
 <template>

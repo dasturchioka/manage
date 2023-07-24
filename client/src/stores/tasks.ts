@@ -5,6 +5,7 @@ import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
 import { useDashboard } from "./dashboard";
 
+
 export const useTasks = defineStore("tasks", () => {
   const toast = useToast();
   const dashboardStore = useDashboard();
@@ -48,6 +49,7 @@ export const useTasks = defineStore("tasks", () => {
 
   function dashboardTasks(id: string): Tasks[] {
     let dashboardId = ref(id);
+
     let dashboardTasks = computed(() => {
       return tasks.list.filter((task: Tasks) => {
         return task.dashboardId === dashboardId.value;
@@ -171,7 +173,6 @@ export const useTasks = defineStore("tasks", () => {
     taskId: string
   ): Promise<void> {
     try {
-
       const res = await tasksInstance.put(
         `/update-status-priority/${field}/${taskId}`,
         { field: value }

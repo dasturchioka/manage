@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { useDashboard } from "@/stores/dashboard";
-import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
-import TheDashboardTitleColumn from "@/components/TheDashboardTitleColumn.vue";
-import AppIconButton from "@/components/UI/AppIconButton.vue";
-import TheCreateDashboard from "@/components/TheCreateDashboard.vue";
-import TheTaskBoardElementsHome from "@/components/TheTaskBoardElementsHome.vue";
-import TheCreateTask from "@/components/TheCreateTask.vue";
 import { ref } from "vue";
 import { useTasks } from "@/stores/tasks";
+import { useLoading } from "@/stores/loading";
+import { useComponentImport } from "@/composables/useComponentImport";
+import AppIconButton from "@/components/UI/AppIconButton.vue";
 
+const { getComponent } = useComponentImport();
+
+const TheHorizontalScroll = getComponent("TheHorizontalScroll");
+const TheDashboardTitleColumn = getComponent("TheDashboardTitleColumn");
+const TheCreateDashboard = getComponent("TheCreateDashboard");
+const TheCreateTask = getComponent("TheCreateTask");
+const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
+
+const loadingStore = useLoading();
 const dashboardStore = useDashboard();
 const tasksStore = useTasks();
 
@@ -61,7 +67,9 @@ const handleForm = () => {
       </template>
     </TheHorizontalScroll>
     <div
-      v-else
+      v-else-if="
+        !loadingStore.loading && !dashboardStore.dashboards.list.length
+      "
       class="not-found-component flex flex-col items-center justify-center h-screen"
     >
       <div class="img w-[200px]">
@@ -86,6 +94,10 @@ const handleForm = () => {
         </AppIconButton>
         <TheCreateDashboard v-show="showForm" @dashboard-created="handleForm" />
       </div>
+    </div>
+    <div v-else>
+
+      <h1 class="text-2xl font-bold m-5">Loading...</h1>
     </div>
   </main>
 </template>
