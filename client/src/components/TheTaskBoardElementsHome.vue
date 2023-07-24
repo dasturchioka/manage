@@ -27,11 +27,11 @@ const { convertPriority, recoverPriority } = usePriority();
 const showForm = ref(false);
 const expandTask = ref(false);
 
-const handleForm = () => {
+const handleForm = (): void => {
   showForm.value = !showForm.value;
 };
 
-const handleExpandTask = () => {
+const handleExpandTask = (): void => {
   expandTask.value = !expandTask.value;
 };
 
@@ -54,21 +54,13 @@ watch(
   },
   { deep: true }
 );
-const setStatusAndPriority = (
-  mode: "status" | "priority",
-  payload: string
-): void => {
-  if (mode === "priority") {
-    console.log(taskPayload.value);
-    taskPayload.value.priority = recoverPriority(payload);
-    return;
-  }
 
-  if (mode === "status") {
-    console.log(taskPayload.value);
-    taskPayload.value.status = recoverStatus(payload);
-    return;
-  }
+const addNewSubtask = (): void => {
+  taskPayload.value.subtasks.push({ task: "", done: false });
+};
+
+const deleteSubtask = (index: number): void => {
+  taskPayload.value.subtasks.splice(index, 1);
 };
 </script>
 
@@ -134,7 +126,7 @@ const setStatusAndPriority = (
           class="subtasks mt-4 space-y-2"
         >
           <div
-            v-for="subtask in dashboardTask.subtasks"
+            v-for="(subtask, index) in dashboardTask.subtasks"
             class="form-group flex items-center space-x-2"
           >
             <input
@@ -143,12 +135,13 @@ const setStatusAndPriority = (
               v-model.trim="subtask.task"
               class="outline-none bg-transparent px-3 py-1 w-full border border-gray-700 transition focus:border-white rounded"
             />
-            <AppIconButton type="button">
+            <AppIconButton @click="deleteSubtask(index)" type="button">
               <Trash />
             </AppIconButton>
           </div>
         </div>
         <AppIconButton
+          @click="addNewSubtask"
           type="button"
           class="text-gray w-full mt-2 flex items-center"
         >
