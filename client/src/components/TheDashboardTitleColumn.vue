@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { onUnmounted, ref } from "vue";
-import TheTableSort from "./TheTableSort.vue";
+import { onUnmounted, ref, defineAsyncComponent } from "vue";
 import EditIcon from "./icons/Edit.vue";
 import TickIcon from "./icons/Tick.vue";
 import TimesIcon from "./icons/Times.vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import { useDashboard } from "@/stores/dashboard";
+
+const TheTableSort = defineAsyncComponent(() => import("./TheTableSort.vue"));
+
 const props = defineProps<{
   title: string;
   id: string;
 }>();
 
 const dashboardStore = useDashboard();
-
-const currentDashboard = dashboardStore.getOneDashboard(props.id);
 
 const newName = ref<string>(props.title ? props.title : "");
 
@@ -25,8 +25,8 @@ const closeForm = () => {
 };
 
 const openForm = () => {
-  showForm.value = true
-}
+  showForm.value = true;
+};
 
 const editDashboard = async (name: string, id: string) => {
   await dashboardStore.editDashboard(name, id);
