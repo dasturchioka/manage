@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const getAllTasks = async (req, res) => {
   try {
     const tasks = await prisma.tasks.findMany({
-      orderBy: [{status: "asc"}, {priority: "desc"}],
+      orderBy: [{ status: "asc" }, { priority: "desc" }],
     });
 
     if (!tasks) {
@@ -92,6 +92,13 @@ const updateTask = async (req, res) => {
   try {
     const { taskId } = req.params;
 
+    if (!taskId) {
+      return res.status(402).json({
+        status: "id required",
+        msg: "task id must be filled",
+      });
+    }
+
     const updateTask = await prisma.tasks.update({
       where: {
         id: taskId,
@@ -111,6 +118,13 @@ const updateTask = async (req, res) => {
 const updateStatusOrPriority = async (req, res) => {
   try {
     const { field, taskId } = req.params;
+
+    if (!taskId) {
+      return res.status(402).json({
+        status: "id required",
+        msg: "task id must be filled",
+      });
+    }
 
     const foundTask = await prisma.tasks.findUnique({ where: { id: taskId } });
 
@@ -149,10 +163,30 @@ const updateStatusOrPriority = async (req, res) => {
   }
 };
 
+const deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+
+    if (!taskId) {
+      return res.status(402).json({
+        status: "id required",
+        msg: "task id must be filled",
+      });
+    }
+
+    await prisma.tasks.delete({ where: { id: taskId } });
+
+    return res.json({ status: "ok", msg: "Task deleted" });
+  } catch (error) {
+    return res.status(500).json({ error, msg: error.message });
+  }
+};
+
 module.exports = {
   getAllTasks,
   getDashboardTasks,
   createTask,
   updateTask,
   updateStatusOrPriority,
+  deleteTask
 };
