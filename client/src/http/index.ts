@@ -53,7 +53,7 @@ const interceptor = {
     const loading = useLoading();
     loading.setLoading(false);
     console.log(error);
-    toast("Error while requesting to the server", { type: "error" });
+    toast("Error while requesting to the server");
   },
 
   errorResponse: function (error: any) {
@@ -115,7 +115,7 @@ tasksInstance.interceptors.response.use(
       error.response.data.status !== "not found" &&
       !error.config.url.includes("/all/user-id")
     ) {
-      toast(error.response.data.msg, { type: "error" });
+      toast(error.response.data.msg);
     } else {
       return;
     }
