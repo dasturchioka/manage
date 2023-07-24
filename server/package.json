@@ -11,6 +11,9 @@
   },
   "keywords": [],
   "author": "",
+  "engines": {
+    "node": "^18.16.0"
+  },
   "license": "ISC",
   "dependencies": {
     "prisma": "^5.0.0",
