@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, onUpdated, ref } from "vue";
+import { ref } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
@@ -17,9 +17,14 @@ const { convertPriority, recoverPriority } = usePriority();
 const { sliceLetter } = useSlicedLetter();
 
 const showForm = ref(false);
+const expandTask = ref(false);
 
 const handleForm = () => {
   showForm.value = !showForm.value;
+};
+
+const handleExpandTask = () => {
+  expandTask.value = !expandTask.value;
 };
 
 const props = defineProps<{
@@ -58,27 +63,36 @@ const setStatusAndPriority = (
       {{ props.dashboardName }}
     </p>
     <div v-show="!showForm" class="title mt-2 flex flex-col">
-      <div class="task-info top flex">
+      <div class="task-info top flex items-center">
         <h1 class="task-name text-xl font-bold">{{ dashboardTask.name }}</h1>
         <AppIconButton
           @click="handleForm"
-          class="edit-icon transition opacity-0 flex items-center justify-center ml-2"
+          class="edit-icon transition flex items-center justify-center ml-2"
         >
           <Edit />
         </AppIconButton>
       </div>
-      <p class="description text-sm opacity-50">
-        {{ sliceLetter(43, dashboardTask.description) }}
-      </p>
-      <ul v-if="dashboardTask.subtasks.length" class="subtasks mt-4">
-        <p class="text-sm">Subtasks</p>
-        <li
-          class="text-sm opacity-50"
-          v-for="subtask in dashboardTask.subtasks"
-        >
-          - {{ subtask.task }}
-        </li>
-      </ul>
+      <div v-show="expandTask" class="expand-content">
+        <p class="description text-sm opacity-50">
+          {{ dashboardTask.description }}
+        </p>
+        <ul v-if="dashboardTask.subtasks.length" class="subtasks mt-4">
+          <p class="text-sm">Subtasks</p>
+          <li
+            class="text-sm bg-gray bg-opacity-5 rounded px-2 py-1 mt-2"
+            v-for="subtask in dashboardTask.subtasks"
+          >
+            - {{ subtask.task }}
+          </li>
+        </ul>
+      </div>
+      <button
+        @click="handleExpandTask"
+        class="toggle-btn mt-2 w-auto self-start px-2 text-sm opacity-60 border rounded"
+        :class="{ 'mt-5': expandTask }"
+      >
+        {{ expandTask ? "Collapse" : "Expand" }}
+      </button>
     </div>
     <form
       v-show="showForm"
@@ -116,6 +130,13 @@ const setStatusAndPriority = (
             </AppIconButton>
           </div>
         </div>
+        <AppIconButton
+          type="button"
+          class="text-gray w-full mt-2 flex items-center"
+        >
+          <p class="mr-2 text-lg">&plus;</p>
+          Add new subtask
+        </AppIconButton>
       </div>
       <div class="buttons flex items-center mt-2">
         <AppIconButton class="flex items-center text-sm px-4">
