@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import TheTableSort from "./TheTableSort.vue";
 
 defineProps<{ status: string }>();
 </script>
@@ -15,7 +14,6 @@ defineProps<{ status: string }>();
       </h3>
     </div>
     <div class="functions">
-      <TheTableSort :status="false" />
     </div>
   </div>
 </template>
