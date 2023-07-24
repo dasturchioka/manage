@@ -7,16 +7,16 @@ export enum CONSTANTS {
 }
 
 export enum TASK_STATUS {
-  TODO = "todo",
-  INPROGRESS = "in progress",
-  COMPLETED = "completed",
-  FAILED = "failed",
+  TODO = "todo", // 0
+  INPROGRESS = "in progress", // 1
+  COMPLETED = "completed", // 2
+  FAILED = "failed", // 3
 }
 
 export enum PRIORITIES {
-  LOW = 'low',
-  NORMAL = 'normal',
-  HIGH = 'high',
-  URGENT = 'urgent'
+  LOW = 'low', // 0
+  NORMAL = 'normal', // 1
+  HIGH = 'high', // 2
+  URGENT = 'urgent' // 3
 }
 
