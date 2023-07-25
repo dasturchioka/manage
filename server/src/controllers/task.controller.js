@@ -52,9 +52,8 @@ const getDashboardTasks = async (req, res) => {
 
 const createTask = async (req, res) => {
   try {
-    const { dashboardId } = req.params;
+    const { dashboardId, id: userId } = req.params;
     const { name, description, priority, status, subtasks } = req.body;
-    console.log(req.body);
 
     if (!dashboardId) {
       return res.status(402).json({
@@ -78,6 +77,7 @@ const createTask = async (req, res) => {
         status,
         subtasks,
         dashboardId,
+        userId,
       },
     });
 
@@ -176,7 +176,7 @@ const deleteTask = async (req, res) => {
 
     await prisma.tasks.delete({ where: { id: taskId } });
 
-    const tasks = await prisma.tasks.findMany({})
+    const tasks = await prisma.tasks.findMany({});
 
     return res.json({ status: "ok", msg: "Task deleted", tasks });
   } catch (error) {
@@ -190,5 +190,5 @@ module.exports = {
   createTask,
   updateTask,
   updateStatusOrPriority,
-  deleteTask
+  deleteTask,
 };

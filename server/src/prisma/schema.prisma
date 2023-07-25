@@ -32,8 +32,8 @@ model Tasks {
   description String
   status      Int
   subtasks    Json[]
-  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   priority    Int
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   dashboardId String
   User        User?     @relation(fields: [userId], references: [id])
   userId      String?
