@@ -23,6 +23,7 @@ model User {
   username   String      @unique
   password   String
   dashboards Dashboard[]
+  tasks      Tasks[]
 }
 
 model Tasks {
@@ -34,4 +35,6 @@ model Tasks {
   dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
   priority    Int
   dashboardId String
+  User        User?     @relation(fields: [userId], references: [id])
+  userId      String?
 }
