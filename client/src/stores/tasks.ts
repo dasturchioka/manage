@@ -63,6 +63,7 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string
   ): Promise<void> {
     try {
+      await pushTasks(payload)
       const res = await tasksInstance.post(`/create/${dashboardId}`, {
         ...payload,
       });
@@ -150,7 +151,6 @@ export const useTasks = defineStore("tasks", () => {
       if (res.data.task) {
         await changeOneTask(payload.id as string, res.data.task);
         toast(res.data.msg);
-        console.log(tasks.list);
         return;
       }
 

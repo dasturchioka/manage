@@ -14,10 +14,13 @@
   "engines": {
     "node": "^18.16.0"
   },
+  "devDependencies": {
+    "prisma": "^5.0.0"
+  },
   "license": "ISC",
   "dependencies": {
-    "prisma": "^5.0.0",
     "@prisma/client": "^5.0.0",
+    "prisma": "^5.0.0",
     "bcrypt": "^5.1.0",
     "concurrently": "^8.2.0",
     "cors": "^2.8.5",

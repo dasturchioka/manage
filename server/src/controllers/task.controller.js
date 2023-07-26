@@ -77,7 +77,6 @@ const createTask = async (req, res) => {
         status,
         subtasks,
         dashboardId,
-        userId,
       },
     });
 
