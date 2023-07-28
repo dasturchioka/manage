@@ -20,13 +20,22 @@ export const useTasks = defineStore("tasks", () => {
   }
 
   const currentDashboardTasks = computed(() => {
-    console.log("current dashboards");
-
     return dashboardTasks.value[dashboardId.value];
   });
 
-  function createNewDashboardTasks(id: string, payload: Tasks) {
+  function dashboardTasksForOverview(id: string) {
+    let dashboardId = ref(id);
 
+    const taskList = computed(() => {
+      return tasks.list.filter((item: Tasks) => {
+        return item.dashboardId === dashboardId.value;
+      });
+    });    
+
+    return taskList.value;
+  }
+
+  function createNewDashboardTasks(id: string, payload: Tasks) {
     const foundArray = dashboardTasks.value[id];
     if (foundArray) {
       console.log("ss");
@@ -229,5 +238,7 @@ export const useTasks = defineStore("tasks", () => {
     dashboardTasks,
     currentDashboardTasks,
     changeDashboardId,
+    dashboardId,
+    dashboardTasksForOverview,
   };
 });

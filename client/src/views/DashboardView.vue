@@ -20,8 +20,7 @@ const tasksStore = useTasks();
 watch(
   () => route.params.id,
   () => {
-    
-    tasksStore.changeDashboardId(route.params.id as string);
+    tasksStore.dashboardId = route.params.id as string;
   },
   { deep: true, immediate: true }
 );
@@ -44,11 +43,11 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
           <TheStatusTitleColumn :status="status" />
 
           <div
-            v-if="tasksStore.currentDashboardTasks"
+            v-if="tasksStore.dashboardTasks[route.params.id as string]"
             class="elements space-y-4"
           >
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.currentDashboardTasks"
+              v-for="(task, index) in tasksStore.dashboardTasks[route.params.id as string]"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
