@@ -17,14 +17,13 @@ const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 const route = useRoute();
 const tasksStore = useTasks();
 
-tasksStore.changeDashboardId(route.params.id as string);
-
 watch(
   () => route.params.id,
   () => {
+    
     tasksStore.changeDashboardId(route.params.id as string);
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
@@ -43,7 +42,7 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheStatusTitleColumn :status="status" />
-         
+
           <div
             v-if="tasksStore.currentDashboardTasks"
             class="elements space-y-4"

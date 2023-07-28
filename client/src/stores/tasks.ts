@@ -20,19 +20,23 @@ export const useTasks = defineStore("tasks", () => {
   }
 
   const currentDashboardTasks = computed(() => {
+    console.log("current dashboards");
+
     return dashboardTasks.value[dashboardId.value];
   });
 
   function createNewDashboardTasks(id: string, payload: Tasks) {
+
     const foundArray = dashboardTasks.value[id];
     if (foundArray) {
+      console.log("ss");
       dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
+      return;
     } else {
       dashboardTasks.value[id] = [];
       dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
+      return;
     }
-
-    return;
   }
 
   async function setTasks(payload: Tasks[]): Promise<void> {
