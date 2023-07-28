@@ -135,8 +135,6 @@ export const useDashboard = defineStore("dashboard", () => {
 
   async function editDashboard(name: string, id: string) {
     try {
-      console.log(name, id);
-
       const currentDashboard = getOneDashboard(id);
 
       if (!name.length) {

@@ -38,7 +38,6 @@ export const useTasks = defineStore("tasks", () => {
   function createNewDashboardTasks(id: string, payload: Tasks) {
     const foundArray = dashboardTasks.value[id];
     if (foundArray) {
-      console.log("ss");
       dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
       return;
     } else {
