@@ -44,7 +44,7 @@ const handleForm = () => {
           ></TheDashboardTitleColumn>
           <!-- RECURSIVE CALLS/MUTATIONS issue solved -->
           <div
-            v-if="tasksStore.dashboardTasks(dashboard.id as string, -1).length"
+            v-if="tasksStore.currentDashboardTasks"
             class="elements space-y-4"
           >
             <TheTaskBoardElementsHome
@@ -96,7 +96,6 @@ const handleForm = () => {
       </div>
     </div>
     <div v-else>
-
       <h1 class="text-2xl font-bold m-5">Loading...</h1>
     </div>
   </main>

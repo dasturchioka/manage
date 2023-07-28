@@ -18,9 +18,8 @@ const props = defineProps<{
   dashboardId: string;
   dashboardTask: Tasks;
   index: number;
+  status: number;
 }>();
-
-const emit = defineEmits(["statusChanged", "priorityChanged"]);
 
 const tasksStore = useTasks();
 const { convertStatus, recoverStatus } = useStatus();
@@ -73,7 +72,10 @@ watch(
 </script>
 
 <template>
-  <div class="board-element bg-dark-secondary transition py-2 px-4 rounded">
+  <div
+    v-if="dashboardTask.status === props.status"
+    class="board-element bg-dark-secondary transition py-2 px-4 rounded"
+  >
     <p
       class="dashboard-name mt-2 first-letter:uppercase opacity-30 text-[12px]"
     >

@@ -4,15 +4,47 @@ import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
 
+interface DashboardTasks {
+  [propName: string]: Tasks[];
+}
+
 export const useTasks = defineStore("tasks", () => {
   const toast = useToast();
+
   const tasks = reactive({ list: [] as Tasks[] });
+  const dashboardTasks = ref<DashboardTasks>({});
+  const dashboardId = ref<string>("");
+
+  function changeDashboardId(id: string) {
+    dashboardId.value = id;
+  }
+
+  const currentDashboardTasks = computed(() => {
+    return dashboardTasks.value[dashboardId.value];
+  });
+
+  function createNewDashboardTasks(id: string, payload: Tasks) {
+    const foundArray = dashboardTasks.value[id];
+    if (foundArray) {
+      dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
+    } else {
+      dashboardTasks.value[id] = [];
+      dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
+    }
+
+    return;
+  }
 
   async function setTasks(payload: Tasks[]): Promise<void> {
+    payload.forEach((item: Tasks) => {
+      createNewDashboardTasks(item.dashboardId as string, item);
+    });
+
     tasks.list = payload;
   }
 
   async function pushTasks(payload: Tasks): Promise<void> {
+    createNewDashboardTasks(payload.dashboardId as string, payload);
     tasks.list.push(payload);
   }
 
@@ -44,26 +76,6 @@ export const useTasks = defineStore("tasks", () => {
 
       return;
     }
-  }
-
-  function dashboardTasks(id: string, status: number): Tasks[] {
-    let dashboardId = ref(id);
-    let dashboardStatus = ref(status);
-
-    let dashboardTasks = computed(() => {
-      return tasks.list.filter((task: Tasks) => {
-        if (dashboardStatus.value >= 0) {
-          return (
-            task.dashboardId === dashboardId.value &&
-            task.status === dashboardStatus.value
-          );
-        } else {
-          return task.dashboardId === dashboardId.value;
-        }
-      });
-    });
-
-    return dashboardTasks.value;
   }
 
   async function createTask(
@@ -206,9 +218,12 @@ export const useTasks = defineStore("tasks", () => {
     setTasks,
     createTask,
     getAllTasks,
-    dashboardTasks,
     updateTask,
     updateStatusOrPriority,
     deleteTask,
+    createNewDashboardTasks,
+    dashboardTasks,
+    currentDashboardTasks,
+    changeDashboardId,
   };
 });
