@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import AppIconButton from "./UI/AppIconButton.vue";
 import ThePriority from "./ThePriority.vue";
 import TheStatus from "./TheStatus.vue";
@@ -19,6 +19,8 @@ const props = defineProps<{
   dashboardTask: Tasks;
   index: number;
 }>();
+
+const emit = defineEmits(["statusChanged", "priorityChanged"]);
 
 const tasksStore = useTasks();
 const { convertStatus, recoverStatus } = useStatus();
@@ -51,6 +53,14 @@ const addNewSubtask = (): void => {
 
 const deleteSubtask = (index: number): void => {
   taskPayload.value.subtasks.splice(index, 1);
+};
+
+const updateStatusOrPriority = async (
+  field: "status" | "priority",
+  value: number,
+  taskId: string
+) => {
+  await tasksStore.updateStatusOrPriority(field, value, taskId);
 };
 
 watch(
@@ -164,12 +174,12 @@ watch(
     <div class="bottom flex items-center justify-between mt-3">
       <div class="left flex items-center space-x-2">
         <TheStatus
-          @status-selected="(e) => tasksStore.updateStatusOrPriority('status', recoverStatus(e), dashboardTask.id as string)"
+          @status-selected="(e) => updateStatusOrPriority('status', recoverStatus(e), dashboardTask.id as string)"
           :status-name="convertStatus(dashboardTask.status)"
           variant="full"
         />
         <ThePriority
-          @priority-selected="(e) => tasksStore.updateStatusOrPriority('priority', recoverPriority(e), dashboardTask.id as string)"
+          @priority-selected="(e) => updateStatusOrPriority('priority', recoverPriority(e), dashboardTask.id as string)"
           :priority-name="convertPriority(dashboardTask.priority)"
           variant="full"
         />

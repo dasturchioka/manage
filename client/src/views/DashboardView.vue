@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
-import { useDashboard } from "@/stores/dashboard";
-import TheHorizontalScroll from "@/components/TheHorizontalScroll.vue";
-import TheStatusTitleColumn from "@/components/TheStatusTitleColumn.vue";
-import TheCreateTask from "@/components/TheCreateTask.vue";
+import { useTasks } from "@/stores/tasks";
+import { useComponentImport } from "@/composables/useComponentImport";
+import { useStatus } from "@/composables/useStatus";
+
+const { recoverStatus } = useStatus();
+const { getComponent } = useComponentImport();
+
+const TheHorizontalScroll = getComponent("TheHorizontalScroll");
+const TheStatusTitleColumn = getComponent("TheStatusTitleColumn");
+const TheCreateTask = getComponent("TheCreateTask");
+const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 
 const route = useRoute();
-const dashboardStore = useDashboard();
+const tasksStore = useTasks();
 
 const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
 </script>
@@ -31,6 +38,20 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
             :show-status="false"
             :status="status"
           />
+          <div
+            v-if="tasksStore.dashboardTasks(route.params.id as string, recoverStatus(status)).length"
+            class="elements space-y-4"
+          >
+            <TheTaskBoardElementsHome
+              v-for="(task, index) in tasksStore.dashboardTasks(route.params.id as string, recoverStatus(status))"
+              :key="index"
+              :index="index"
+              :dashboard-id="(task.dashboardId as string)"
+              :dashboard-name="(route.params.name as string)"
+              :dashboard-task="task"
+              page="overview"
+            />
+          </div>
         </div>
       </template>
     </TheHorizontalScroll>

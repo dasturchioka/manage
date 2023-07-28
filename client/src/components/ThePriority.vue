@@ -60,7 +60,7 @@ defineProps<{
         ref="outsideClickTarget"
         v-if="showPriority"
         class="priority-list flex text-[12px] items-center z-[99999999999] flex-col bg-dark min-w-[120px] rounded absolute border border-gray-700"
-        :class="listPosition ? listPosition : `top-7 left-[30px]`"
+        :class="listPosition ? listPosition : `top-7 left-[20px]`"
       >
         <button
           type="button"

@@ -3,11 +3,9 @@ import { computed, reactive, ref } from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
-import { useDashboard } from "./dashboard";
 
 export const useTasks = defineStore("tasks", () => {
   const toast = useToast();
-  const dashboardStore = useDashboard();
   const tasks = reactive({ list: [] as Tasks[] });
 
   async function setTasks(payload: Tasks[]): Promise<void> {
@@ -37,21 +35,31 @@ export const useTasks = defineStore("tasks", () => {
 
     if (field === "priority" && foundObj?.priority) {
       foundObj.priority = value;
+
       return;
     }
 
     if (field === "status" && foundObj?.status) {
       foundObj.status = value;
+
       return;
     }
   }
 
-  function dashboardTasks(id: string): Tasks[] {
+  function dashboardTasks(id: string, status: number): Tasks[] {
     let dashboardId = ref(id);
+    let dashboardStatus = ref(status);
 
     let dashboardTasks = computed(() => {
       return tasks.list.filter((task: Tasks) => {
-        return task.dashboardId === dashboardId.value;
+        if (dashboardStatus.value >= 0) {
+          return (
+            task.dashboardId === dashboardId.value &&
+            task.status === dashboardStatus.value
+          );
+        } else {
+          return task.dashboardId === dashboardId.value;
+        }
       });
     });
 
@@ -63,7 +71,7 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string
   ): Promise<void> {
     try {
-      await pushTasks(payload)
+      await pushTasks(payload);
       const res = await tasksInstance.post(`/create/${dashboardId}`, {
         ...payload,
       });
@@ -97,38 +105,11 @@ export const useTasks = defineStore("tasks", () => {
       if (res.data.tasks) {
         await setTasks(res.data.tasks);
 
-        console.log(tasks.list);
-
         return;
       }
 
       toast("Something went wrong in tasks store");
 
-      return;
-    } catch (error: any) {
-      console.log(error);
-      if (error?.response) {
-        toast(error.response.data.msg);
-      } else {
-        toast(error.message);
-      }
-    }
-  }
-
-  async function getDashboardsTasks(dashboardId: string): Promise<void> {
-    try {
-      const res = await tasksInstance.get(`/dashboard-tasks/${dashboardId}`);
-
-      if (!res) return;
-
-      if (res.data.tasks) {
-        res.data.tasks.forEach(async (task: Tasks) => {
-          await pushTasks(task);
-        });
-        return;
-      }
-
-      toast("Something went wrong in tasks store");
       return;
     } catch (error: any) {
       console.log(error);
@@ -142,6 +123,8 @@ export const useTasks = defineStore("tasks", () => {
 
   async function updateTask(payload: Tasks): Promise<void> {
     try {
+      await changeOneTask(payload.id as string, payload);
+
       const res = await tasksInstance.put(`/update/${payload.id}`, {
         ...payload,
       });
@@ -149,7 +132,6 @@ export const useTasks = defineStore("tasks", () => {
       if (!res) return;
 
       if (res.data.task) {
-        await changeOneTask(payload.id as string, res.data.task);
         toast(res.data.msg);
         return;
       }
@@ -224,7 +206,6 @@ export const useTasks = defineStore("tasks", () => {
     setTasks,
     createTask,
     getAllTasks,
-    getDashboardsTasks,
     dashboardTasks,
     updateTask,
     updateStatusOrPriority,

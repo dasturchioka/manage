@@ -3,7 +3,9 @@ const prisma = new PrismaClient();
 
 const getAllTasks = async (req, res) => {
   try {
+    const { id } = req.params;
     const tasks = await prisma.tasks.findMany({
+      where: { dashboard: { userId: id } },
       orderBy: [{ status: "asc" }, { priority: "desc" }],
     });
 
