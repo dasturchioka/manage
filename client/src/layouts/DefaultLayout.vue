@@ -33,7 +33,7 @@ onMounted(async () => {
   ];
 
   try {
-    await Promise.all(promises);
+    await Promise.allSettled(promises);
   } catch (error) {
     console.error(error);
     // Handle or display any error message as needed

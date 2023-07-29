@@ -43,11 +43,11 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
           <TheStatusTitleColumn :status="status" />
 
           <div
-            v-if="tasksStore.dashboardTasks[route.params.id as string]"
+            v-if="tasksStore.currentDashboardTasks"
             class="elements space-y-4"
           >
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.dashboardTasks[route.params.id as string]"
+              v-for="(task, index) in tasksStore.currentDashboardTasks"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"

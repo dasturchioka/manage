@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
@@ -16,6 +16,10 @@ export const useTasks = defineStore("tasks", () => {
 
   function changeDashboardId(id: string) {
     dashboardId.value = id;
+  }
+
+  async function setDashboardTasks(payload: DashboardTasks) {
+    dashboardTasks.value = payload;
   }
 
   const currentDashboardTasks = computed(() => {
@@ -77,16 +81,11 @@ export const useTasks = defineStore("tasks", () => {
         ...payload,
       });
 
-      if (!res) return;
-
-      if (res.data.task) {
+      if (res?.data?.task) {
         await getAllTasks();
-
+        toast("Something went wrong in tasks store");
         return;
       }
-
-      toast("Something went wrong in tasks store");
-      return;
     } catch (error: any) {
       console.log(error);
       if (error?.response) {
@@ -99,19 +98,13 @@ export const useTasks = defineStore("tasks", () => {
 
   async function getAllTasks(): Promise<void> {
     try {
-      const res = await tasksInstance.get(`/all`);
+      const res = await tasksInstance.get("/all");
 
-      if (!res) return;
-
-      if (res.data) {
-        dashboardTasks.value = res.data.tasks;
-
-        return;
+      if (res?.data?.tasks) {
+        await setDashboardTasks(res.data.tasks);
+      } else {
+        toast("Something went wrong in tasks store");
       }
-
-      toast("Something went wrong in tasks store");
-
-      return;
     } catch (error: any) {
       console.log(error);
       if (error?.response) {
