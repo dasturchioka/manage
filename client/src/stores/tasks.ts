@@ -11,7 +11,6 @@ interface DashboardTasks {
 export const useTasks = defineStore("tasks", () => {
   const toast = useToast();
 
-  const tasks = reactive({ list: [] as Tasks[] });
   const dashboardTasks = ref<DashboardTasks>({});
   const dashboardId = ref<string>("");
 
@@ -23,68 +22,46 @@ export const useTasks = defineStore("tasks", () => {
     return dashboardTasks.value[dashboardId.value];
   });
 
-  function dashboardTasksForOverview(id: string) {
-    let dashboardId = ref(id);
-
-    const taskList = computed(() => {
-      return tasks.list.filter((item: Tasks) => {
-        return item.dashboardId === dashboardId.value;
-      });
-    });    
-
-    return taskList.value;
-  }
-
-  function createNewDashboardTasks(id: string, payload: Tasks) {
-    const foundArray = dashboardTasks.value[id];
-    if (foundArray) {
-      dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
-      return;
+  async function createNewDashboardTask(dashboardId: string, payload: Tasks) {
+    if (dashboardTasks.value[dashboardId]) {
+      dashboardTasks.value[dashboardId].push(payload);
     } else {
-      dashboardTasks.value[id] = [];
-      dashboardTasks.value[id] = [...dashboardTasks.value[id], payload];
-      return;
+      dashboardTasks.value[dashboardId] = [];
+      dashboardTasks.value[dashboardId].push(payload);
     }
   }
-
-  async function setTasks(payload: Tasks[]): Promise<void> {
-    payload.forEach((item: Tasks) => {
-      createNewDashboardTasks(item.dashboardId as string, item);
+  async function changeOneTask(
+    id: string,
+    payload: Tasks,
+    dashboardId: string
+  ): Promise<void> {
+    let foundArray = dashboardTasks.value[dashboardId];
+    let foundTask = foundArray.find((item: Tasks) => {
+      item.id === id;
     });
 
-    tasks.list = payload;
-  }
-
-  async function pushTasks(payload: Tasks): Promise<void> {
-    createNewDashboardTasks(payload.dashboardId as string, payload);
-    tasks.list.push(payload);
-  }
-
-  async function changeOneTask(id: string, payload: Tasks): Promise<void> {
-    let foundObj = tasks.list.find((task: Tasks) => {
-      return task.id === id;
-    });
-
-    foundObj = { ...payload };
+    foundTask = { ...payload };
   }
 
   async function setStatusOrPriority(
     field: "status" | "priority",
     value: number,
-    id: string
+    id: string,
+    dashboardId: string
   ): Promise<void> {
-    let foundObj = tasks.list.find((task: Tasks) => {
-      return task.id === id;
+    let foundArray = dashboardTasks.value[dashboardId];
+    let foundTask = foundArray.find((item: Tasks) => {
+      item.id === id;
     });
 
-    if (field === "priority" && foundObj?.priority) {
-      foundObj.priority = value;
+    if (field === "priority" && foundTask?.priority) {
+      foundTask.priority = value;
 
       return;
     }
 
-    if (field === "status" && foundObj?.status) {
-      foundObj.status = value;
+    if (field === "status" && foundTask?.status) {
+      foundTask.status = value;
 
       return;
     }
@@ -95,7 +72,7 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string
   ): Promise<void> {
     try {
-      await pushTasks(payload);
+      await createNewDashboardTask(dashboardId, payload);
       const res = await tasksInstance.post(`/create/${dashboardId}`, {
         ...payload,
       });
@@ -126,8 +103,8 @@ export const useTasks = defineStore("tasks", () => {
 
       if (!res) return;
 
-      if (res.data.tasks) {
-        await setTasks(res.data.tasks);
+      if (res.data) {
+        dashboardTasks.value = res.data.tasks;
 
         return;
       }
@@ -147,7 +124,11 @@ export const useTasks = defineStore("tasks", () => {
 
   async function updateTask(payload: Tasks): Promise<void> {
     try {
-      await changeOneTask(payload.id as string, payload);
+      await changeOneTask(
+        payload.id as string,
+        payload,
+        payload.dashboardId as string
+      );
 
       const res = await tasksInstance.put(`/update/${payload.id}`, {
         ...payload,
@@ -186,8 +167,12 @@ export const useTasks = defineStore("tasks", () => {
       if (!res) return;
 
       if (res.data.task) {
-        await setStatusOrPriority(field, value, taskId);
-
+        await setStatusOrPriority(
+          field,
+          value,
+          taskId,
+          res.data.task.dashboardId
+        );
         return;
       }
 
@@ -209,7 +194,12 @@ export const useTasks = defineStore("tasks", () => {
       if (!res) return;
 
       if (res.data.tasks) {
-        await setTasks(res.data.tasks);
+        const tasks = res.data.tasks;
+
+        tasks.forEach(async (item: Tasks) => {
+          // await createNewDashboardTasks(item.dashboardId as string, item);
+        });
+
         toast(res.data.msg);
         return;
       }
@@ -226,18 +216,14 @@ export const useTasks = defineStore("tasks", () => {
   }
 
   return {
-    tasks,
-    setTasks,
     createTask,
     getAllTasks,
     updateTask,
     updateStatusOrPriority,
     deleteTask,
-    createNewDashboardTasks,
     dashboardTasks,
     currentDashboardTasks,
     changeDashboardId,
     dashboardId,
-    dashboardTasksForOverview,
   };
 });

@@ -26,11 +26,18 @@ const closeSidebar = () => {
 };
 
 onMounted(async () => {
-  Promise.all([
+  const promises = [
     userStore.getUser(),
     dashboardStore.getAllDashboards(),
     tasksStore.getAllTasks(),
-  ]);
+  ];
+
+  try {
+    await Promise.all(promises);
+  } catch (error) {
+    console.error(error);
+    // Handle or display any error message as needed
+  }
 });
 </script>
 

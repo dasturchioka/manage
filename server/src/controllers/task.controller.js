@@ -1,6 +1,22 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+const modifyTasks = (tasks) => {
+  const updatedTasks = {};
+
+  tasks.forEach((item) => {
+    let dashboardId = item.dashboardId;
+
+    if (updatedTasks[dashboardId]) {
+      updatedTasks[dashboardId].push(item);
+    } else {
+      updatedTasks[dashboardId] = [item];
+    }
+  });
+
+  return updatedTasks;
+};
+
 const getAllTasks = async (req, res) => {
   try {
     const { id } = req.params;
@@ -16,7 +32,9 @@ const getAllTasks = async (req, res) => {
       });
     }
 
-    return res.json({ tasks, status: "ok" });
+    const updatedTasks = modifyTasks(tasks)
+
+    return res.json({ tasks: updatedTasks, status: "ok" });
   } catch (error) {
     return res.status(500).json({ error, msg: error.message });
   }
