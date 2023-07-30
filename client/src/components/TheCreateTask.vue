@@ -54,14 +54,14 @@ const prioritySelected = (priority: string): void => {
 };
 
 const submitForm = async (): Promise<void> => {
+  showForm.value = false;
+  await tasksStore.createTask(task, props.dashboardId);
+
   task.name = "";
   task.description = "";
   task.priority = 0;
   task.status = 0;
   task.subtasks = [];
-
-  showForm.value = false;
-  await tasksStore.createTask(task, props.dashboardId);
 };
 </script>
 

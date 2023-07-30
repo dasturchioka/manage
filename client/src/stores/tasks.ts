@@ -27,6 +27,8 @@ export const useTasks = defineStore("tasks", () => {
   });
 
   async function createNewDashboardTask(dashboardId: string, payload: Tasks) {
+    console.log(payload);
+
     if (dashboardTasks.value[dashboardId]) {
       dashboardTasks.value[dashboardId].push(payload);
     } else {
@@ -83,8 +85,8 @@ export const useTasks = defineStore("tasks", () => {
 
       if (res?.data?.task) {
         await getAllTasks();
+      } else {
         toast("Something went wrong in tasks store");
-        return;
       }
     } catch (error: any) {
       console.log(error);

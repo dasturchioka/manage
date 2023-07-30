@@ -36,7 +36,6 @@ onMounted(async () => {
     await Promise.allSettled(promises);
   } catch (error) {
     console.error(error);
-    // Handle or display any error message as needed
   }
 });
 </script>

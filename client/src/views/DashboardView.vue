@@ -19,8 +19,8 @@ const tasksStore = useTasks();
 
 watch(
   () => route.params.id,
-  () => {
-    tasksStore.dashboardId = route.params.id as string;
+  (newVal, oldVal) => {
+    tasksStore.changeDashboardId(newVal as string);
   },
   { deep: true, immediate: true }
 );
