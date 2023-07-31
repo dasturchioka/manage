@@ -32,7 +32,7 @@ const getAllTasks = async (req, res) => {
       });
     }
 
-    const updatedTasks = modifyTasks(tasks)
+    const updatedTasks = modifyTasks(tasks);
 
     return res.json({ tasks: updatedTasks, status: "ok" });
   } catch (error) {
@@ -55,6 +55,7 @@ const getDashboardTasks = async (req, res) => {
       where: {
         dashboardId,
       },
+      orderBy: [{ status: "asc" }, { priority: "desc" }],
     });
 
     if (!tasks.length) {

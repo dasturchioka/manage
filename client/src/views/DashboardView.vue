@@ -46,7 +46,10 @@ async function getDashboardTasks(dashboardId: string): Promise<void> {
 watch(
   () => route.params.id,
   async (newVal, oldVal) => {
-    await getDashboardTasks(newVal as string);
+    if (newVal) {
+      await getDashboardTasks(newVal as string);
+      return;
+    }
   },
   { deep: true, immediate: true }
 );
@@ -62,15 +65,10 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
       <template #titles></template>
       <template #content>
         <div
-          v-for="(status, index) in tasksStatus"
-          :key="index"
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
-          <TheStatusTitleColumn :status="status" />
-          <div
-            v-if="tasks"
-            class="elements space-y-4"
-          >
+          <TheStatusTitleColumn :status="`todo`" />
+          <div v-if="tasks" class="elements space-y-4">
             <TheTaskBoardElementsHome
               v-for="(task, index) in tasks"
               :key="index"
@@ -78,15 +76,15 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
               :dashboard-id="(task.dashboardId as string)"
               :dashboard-name="(route.params.name as string)"
               :dashboard-task="task"
-              :status="recoverStatus(status)"
-              page="overview"
+              :status="recoverStatus(`todo`)"
+              page="dashboard"
             />
           </div>
           <TheCreateTask
             :dashboard-id="(route.params.id as string)"
             :priority="PRIORITIES.NORMAL"
             :show-status="false"
-            :status="status"
+            :status="`todo`"
           />
         </div>
       </template>
