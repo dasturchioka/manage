@@ -4,7 +4,10 @@ import { useRoute } from "vue-router";
 import { useTasks } from "@/stores/tasks";
 import { useComponentImport } from "@/composables/useComponentImport";
 import { useStatus } from "@/composables/useStatus";
-import { computed, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
+import { type Tasks } from "@/interfaces/Tasks";
+import { tasksInstance } from "@/http";
+import { useToast } from "vue-toastification";
 
 const { recoverStatus } = useStatus();
 const { getComponent } = useComponentImport();
@@ -16,11 +19,34 @@ const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 
 const route = useRoute();
 const tasksStore = useTasks();
+const toast = useToast();
+
+const tasks = ref<Tasks[]>();
+
+async function getDashboardTasks(dashboardId: string): Promise<void> {
+  try {
+    const res = await tasksInstance.get(`/dashboard-tasks/${dashboardId}`);
+
+    if (res.data.tasks) {
+      tasks.value = res.data.tasks;
+    } else {
+      toast(`Can't load dashboard tasks`);
+      return;
+    }
+  } catch (error: any) {
+    console.log(error);
+    if (error?.response) {
+      toast(error.response.data.msg);
+    } else {
+      toast(error.message);
+    }
+  }
+}
 
 watch(
   () => route.params.id,
-  (newVal, oldVal) => {
-    tasksStore.changeDashboardId(newVal as string);
+  async (newVal, oldVal) => {
+    await getDashboardTasks(newVal as string);
   },
   { deep: true, immediate: true }
 );
@@ -41,13 +67,12 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheStatusTitleColumn :status="status" />
-
           <div
-            v-if="tasksStore.currentDashboardTasks"
+            v-if="tasks"
             class="elements space-y-4"
           >
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.currentDashboardTasks"
+              v-for="(task, index) in tasks"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
