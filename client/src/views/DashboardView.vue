@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
-import { useTasks } from "@/stores/tasks";
 import { useComponentImport } from "@/composables/useComponentImport";
 import { useStatus } from "@/composables/useStatus";
 import { ref, watch } from "vue";
@@ -18,7 +17,6 @@ const TheCreateTask = getComponent("TheCreateTask");
 const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 
 const route = useRoute();
-const tasksStore = useTasks();
 const toast = useToast();
 
 const tasks = ref<Tasks[]>();
@@ -53,8 +51,6 @@ watch(
   },
   { deep: true, immediate: true }
 );
-
-const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
 </script>
 
 <template>
@@ -67,7 +63,7 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
         <div
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
-          <TheStatusTitleColumn :status="`todo`" />
+          <TheStatusTitleColumn :status="TASK_STATUS.TODO" />
           <div v-if="tasks" class="elements space-y-4">
             <TheTaskBoardElementsHome
               v-for="(task, index) in tasks"
@@ -76,7 +72,7 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
               :dashboard-id="(task.dashboardId as string)"
               :dashboard-name="(route.params.name as string)"
               :dashboard-task="task"
-              :status="recoverStatus(`todo`)"
+              :status="recoverStatus(TASK_STATUS.TODO)"
               page="dashboard"
             />
           </div>
@@ -85,6 +81,75 @@ const tasksStatus: TASK_STATUS[] = Object.values(TASK_STATUS);
             :priority="PRIORITIES.NORMAL"
             :show-status="false"
             :status="`todo`"
+          />
+        </div>
+        <div
+          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
+        >
+          <TheStatusTitleColumn :status="TASK_STATUS.INPROGRESS" />
+          <div v-if="tasks" class="elements space-y-4">
+            <TheTaskBoardElementsHome
+              v-for="(task, index) in tasks"
+              :key="index"
+              :index="index"
+              :dashboard-id="(task.dashboardId as string)"
+              :dashboard-name="(route.params.name as string)"
+              :dashboard-task="task"
+              :status="recoverStatus(TASK_STATUS.INPROGRESS)"
+              page="dashboard"
+            />
+          </div>
+          <TheCreateTask
+            :dashboard-id="(route.params.id as string)"
+            :priority="PRIORITIES.NORMAL"
+            :show-status="false"
+            :status="TASK_STATUS.INPROGRESS"
+          />
+        </div>
+        <div
+          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
+        >
+          <TheStatusTitleColumn :status="TASK_STATUS.FAILED" />
+          <div v-if="tasks" class="elements space-y-4">
+            <TheTaskBoardElementsHome
+              v-for="(task, index) in tasks"
+              :key="index"
+              :index="index"
+              :dashboard-id="(task.dashboardId as string)"
+              :dashboard-name="(route.params.name as string)"
+              :dashboard-task="task"
+              :status="recoverStatus(TASK_STATUS.FAILED)"
+              page="dashboard"
+            />
+          </div>
+          <TheCreateTask
+            :dashboard-id="(route.params.id as string)"
+            :priority="PRIORITIES.NORMAL"
+            :show-status="false"
+            :status="TASK_STATUS.FAILED"
+          />
+        </div>
+        <div
+          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
+        >
+          <TheStatusTitleColumn :status="TASK_STATUS.COMPLETED" />
+          <div v-if="tasks" class="elements space-y-4">
+            <TheTaskBoardElementsHome
+              v-for="(task, index) in tasks"
+              :key="index"
+              :index="index"
+              :dashboard-id="(task.dashboardId as string)"
+              :dashboard-name="(route.params.name as string)"
+              :dashboard-task="task"
+              :status="recoverStatus(TASK_STATUS.COMPLETED)"
+              page="dashboard"
+            />
+          </div>
+          <TheCreateTask
+            :dashboard-id="(route.params.id as string)"
+            :priority="PRIORITIES.NORMAL"
+            :show-status="false"
+            :status="TASK_STATUS.COMPLETED"
           />
         </div>
       </template>

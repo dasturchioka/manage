@@ -21,6 +21,8 @@ const props = defineProps<{
   status: number;
 }>();
 
+const emit = defineEmits(["statusChanged", "priorityChanged"]);
+
 const tasksStore = useTasks();
 const { convertStatus, recoverStatus } = useStatus();
 const { convertPriority, recoverPriority } = usePriority();
@@ -60,6 +62,11 @@ const updateStatusOrPriority = async (
   taskId: string
 ) => {
   await tasksStore.updateStatusOrPriority(field, value, taskId);
+  if (field === "status") {
+    emit("statusChanged", { taskId, value });
+  } else {
+    emit("priorityChanged", { taskId, value });
+  }
 };
 
 watch(
