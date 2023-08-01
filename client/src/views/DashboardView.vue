@@ -3,7 +3,7 @@ import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useComponentImport } from "@/composables/useComponentImport";
 import { useStatus } from "@/composables/useStatus";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
@@ -27,6 +27,7 @@ async function getDashboardTasks(dashboardId: string): Promise<void> {
 
     if (res.data.tasks) {
       tasks.value = res.data.tasks;
+      return;
     } else {
       toast(`Can't load dashboard tasks`);
       return;
@@ -44,10 +45,9 @@ async function getDashboardTasks(dashboardId: string): Promise<void> {
 watch(
   () => route.params.id,
   async (newVal, oldVal) => {
-    if (newVal) {
+    if (newVal && newVal !== oldVal) {
       await getDashboardTasks(newVal as string);
-      return;
-    }
+    }    
   },
   { deep: true, immediate: true }
 );
