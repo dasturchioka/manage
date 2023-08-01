@@ -3,7 +3,7 @@ import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useComponentImport } from "@/composables/useComponentImport";
 import { useStatus } from "@/composables/useStatus";
-import { onMounted, ref, watch } from "vue";
+import { onBeforeMount, onBeforeUpdate, onUpdated, ref } from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
@@ -19,7 +19,7 @@ const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 const route = useRoute();
 const toast = useToast();
 
-const tasks = ref<Tasks[]>();
+const tasks = ref<Tasks[]>([]);
 
 async function getDashboardTasks(dashboardId: string): Promise<void> {
   try {
@@ -42,15 +42,17 @@ async function getDashboardTasks(dashboardId: string): Promise<void> {
   }
 }
 
-watch(
-  () => route.params.id,
-  async (newVal, oldVal) => {
-    if (newVal && newVal !== oldVal) {
-      await getDashboardTasks(newVal as string);
-    }
-  },
-  { deep: true, immediate: true }
-);
+onBeforeMount(async () => {
+  await getDashboardTasks(route.params.id as string);
+});
+
+onUpdated(async () => {
+  await getDashboardTasks(route.params.id as string);
+});
+
+onBeforeUpdate(() => {
+  tasks.value = [];
+});
 </script>
 
 <template>
