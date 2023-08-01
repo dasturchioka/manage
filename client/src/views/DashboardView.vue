@@ -47,7 +47,7 @@ watch(
   async (newVal, oldVal) => {
     if (newVal && newVal !== oldVal) {
       await getDashboardTasks(newVal as string);
-    }    
+    }
   },
   { deep: true, immediate: true }
 );
