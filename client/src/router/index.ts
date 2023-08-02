@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Cookie from "js-cookie";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,13 +25,13 @@ const router = createRouter({
         {
           name: "default-settings",
           path: "settings",
-          component: () => import("../views/SettingsView.vue")
+          component: () => import("../views/SettingsView.vue"),
         },
         {
           name: "default-notifications",
           path: "notifications",
-          component: () => import("../views/NotificationsView.vue")
-        }
+          component: () => import("../views/NotificationsView.vue"),
+        },
       ],
       beforeEnter(to, from, next) {
         if (Cookie.get("token")) {

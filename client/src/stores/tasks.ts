@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
@@ -13,6 +13,11 @@ export const useTasks = defineStore("tasks", () => {
 
   const dashboardTasks = ref<DashboardTasks>({});
   const dashboardId = ref<string>("");
+  const currentDashboardTasks = ref<Tasks[]>();
+
+  async function setCurrentDashboardTasks(payload: Tasks[]) {
+    currentDashboardTasks.value = payload;
+  }
 
   function changeDashboardId(id: string) {
     dashboardId.value = id;
@@ -21,10 +26,6 @@ export const useTasks = defineStore("tasks", () => {
   async function setDashboardTasks(payload: DashboardTasks) {
     dashboardTasks.value = payload;
   }
-
-  const currentDashboardTasks = computed(() => {
-    return dashboardTasks.value[dashboardId.value];
-  });
 
   async function createNewDashboardTask(dashboardId: string, payload: Tasks) {
     console.log(payload);
@@ -220,5 +221,6 @@ export const useTasks = defineStore("tasks", () => {
     currentDashboardTasks,
     changeDashboardId,
     dashboardId,
+    setCurrentDashboardTasks,
   };
 });

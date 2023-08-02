@@ -3,10 +3,11 @@ import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useComponentImport } from "@/composables/useComponentImport";
 import { useStatus } from "@/composables/useStatus";
-import { onBeforeMount, onBeforeUpdate, onUpdated, ref } from "vue";
+import { onBeforeMount, onBeforeUpdate, onUpdated, ref, watch } from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
+import { useTasks } from "@/stores/tasks";
 
 const { recoverStatus } = useStatus();
 const { getComponent } = useComponentImport();
@@ -18,22 +19,22 @@ const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 
 const route = useRoute();
 const toast = useToast();
+const tasksStore = useTasks();
 
 const tasks = ref<Tasks[]>([]);
 
-async function getDashboardTasks(dashboardId: string): Promise<void> {
+async function getDashboardTasks() {
   try {
-    const res = await tasksInstance.get(`/dashboard-tasks/${dashboardId}`);
+    const res = await tasksInstance.get(`/dashboard-tasks/${route.params.id}`);
 
-    if (res.data.tasks) {
-      tasks.value = res.data.tasks;
-      return;
-    } else {
-      toast(`Can't load dashboard tasks`);
-      return;
+    const data = await res.data;
+
+    if (data) {
+      await tasksStore.setCurrentDashboardTasks(data.tasks);
     }
+
+    return;
   } catch (error: any) {
-    console.log(error);
     if (error?.response) {
       toast(error.response.data.msg);
     } else {
@@ -42,17 +43,6 @@ async function getDashboardTasks(dashboardId: string): Promise<void> {
   }
 }
 
-onBeforeMount(async () => {
-  await getDashboardTasks(route.params.id as string);
-});
-
-onUpdated(async () => {
-  await getDashboardTasks(route.params.id as string);
-});
-
-onBeforeUpdate(() => {
-  tasks.value = [];
-});
 </script>
 
 <template>
@@ -68,7 +58,7 @@ onBeforeUpdate(() => {
           <TheStatusTitleColumn :status="TASK_STATUS.TODO" />
           <div v-if="tasks" class="elements space-y-4">
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasks"
+              v-for="(task, index) in tasksStore.currentDashboardTasks"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
@@ -91,7 +81,7 @@ onBeforeUpdate(() => {
           <TheStatusTitleColumn :status="TASK_STATUS.INPROGRESS" />
           <div v-if="tasks" class="elements space-y-4">
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasks"
+              v-for="(task, index) in tasksStore.currentDashboardTasks"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
@@ -114,7 +104,7 @@ onBeforeUpdate(() => {
           <TheStatusTitleColumn :status="TASK_STATUS.FAILED" />
           <div v-if="tasks" class="elements space-y-4">
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasks"
+              v-for="(task, index) in tasksStore.currentDashboardTasks"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
@@ -137,7 +127,7 @@ onBeforeUpdate(() => {
           <TheStatusTitleColumn :status="TASK_STATUS.COMPLETED" />
           <div v-if="tasks" class="elements space-y-4">
             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasks"
+              v-for="(task, index) in tasksStore.currentDashboardTasks"
               :key="index"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
@@ -154,7 +144,7 @@ onBeforeUpdate(() => {
             :status="TASK_STATUS.COMPLETED"
           />
         </div>
-      </template>
+      </template> 
     </TheHorizontalScroll>
   </main>
 </template>
