@@ -13,7 +13,7 @@ export const useTasks = defineStore("tasks", () => {
 
   const dashboardTasks = ref<DashboardTasks>({});
   const dashboardId = ref<string>("");
-  const currentDashboardTasks = ref<Tasks[]>();
+  const currentDashboardTasks = ref<Tasks[]>([]);
 
   async function setCurrentDashboardTasks(payload: Tasks[]) {
     currentDashboardTasks.value = payload;
@@ -71,6 +71,28 @@ export const useTasks = defineStore("tasks", () => {
       foundTask.status = value;
 
       return;
+    }
+  }
+
+  async function getDashboardTasks(dashboardId: string) {
+    try {
+      const res = await tasksInstance.get(
+        `/dashboard-tasks/${dashboardId}`
+      );
+
+      if (res.data) {
+        await setCurrentDashboardTasks(res.data.tasks);
+        return;
+      }
+
+      toast("Can't load dashboard tasks");
+      return;
+    } catch (error: any) {
+      if (error?.response) {
+        toast(error.response.data.msg);
+      } else {
+        toast(error.message);
+      }
     }
   }
 
@@ -222,5 +244,6 @@ export const useTasks = defineStore("tasks", () => {
     changeDashboardId,
     dashboardId,
     setCurrentDashboardTasks,
+    getDashboardTasks,
   };
 });

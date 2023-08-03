@@ -76,6 +76,9 @@ watch(
   },
   { deep: true }
 );
+
+console.log(`props status `, props.status);
+console.log(`task status `, props.dashboardTask.status);
 </script>
 
 <template>
@@ -203,6 +206,7 @@ watch(
       </div>
     </div>
   </div>
+  <div v-else></div>
 </template>
 
 <style scoped>

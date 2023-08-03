@@ -65,6 +65,49 @@ const getDashboardTasks = async (req, res) => {
       });
     }
 
+    const modifiedTasks = {
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+    };
+
+    tasks.forEach((task) => {
+      modifiedTasks[task.status].push(task);
+    });
+
+    return res.json({ tasks, status: "ok", modifiedTasks });
+  } catch (error) {
+    return res.status(500).json({ error, msg: error.message });
+  }
+};
+
+const getDashboardTasksByStatus = async (req, res) => {
+  try {
+    const { dashboardId, status } = req.params;
+
+    if (!dashboardId) {
+      return res.status(402).json({
+        status: "id must be here",
+        msg: "Please enter the dashboard's id",
+      });
+    }
+
+    const tasks = await prisma.tasks.findMany({
+      where: {
+        dashboardId,
+        status: +status,
+      },
+      orderBy: [{ priority: "desc" }],
+    });
+
+    if (!tasks.length) {
+      return res.json({
+        status: "not found",
+        msg: "There are no tasks in this dashboard yet.", 
+      });
+    }
+
     return res.json({ tasks, status: "ok" });
   } catch (error) {
     return res.status(500).json({ error, msg: error.message });
@@ -211,4 +254,5 @@ module.exports = {
   updateTask,
   updateStatusOrPriority,
   deleteTask,
+  getDashboardTasksByStatus,
 };

@@ -3,7 +3,14 @@ import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useComponentImport } from "@/composables/useComponentImport";
 import { useStatus } from "@/composables/useStatus";
-import { onBeforeMount, onBeforeUpdate, onUpdated, ref, watch } from "vue";
+import {
+  onBeforeMount,
+  onBeforeUpdate,
+  onMounted,
+  onUpdated,
+  ref,
+  watch,
+} from "vue";
 import { type Tasks } from "@/interfaces/Tasks";
 import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
@@ -21,28 +28,11 @@ const route = useRoute();
 const toast = useToast();
 const tasksStore = useTasks();
 
-const tasks = ref<Tasks[]>([]);
+onMounted(async () => {
+  tasksStore.getDashboardTasks(route.params.id as string);
+});
 
-async function getDashboardTasks() {
-  try {
-    const res = await tasksInstance.get(`/dashboard-tasks/${route.params.id}`);
-
-    const data = await res.data;
-
-    if (data) {
-      await tasksStore.setCurrentDashboardTasks(data.tasks);
-    }
-
-    return;
-  } catch (error: any) {
-    if (error?.response) {
-      toast(error.response.data.msg);
-    } else {
-      toast(error.message);
-    }
-  }
-}
-
+const taskStatuses = Object.keys(TASK_STATUS);
 </script>
 
 <template>
@@ -53,18 +43,19 @@ async function getDashboardTasks() {
       <template #titles></template>
       <template #content>
         <div
+          v-for="(status, index) in taskStatuses"
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
-          <TheStatusTitleColumn :status="TASK_STATUS.TODO" />
-          <div v-if="tasks" class="elements space-y-4">
-            <TheTaskBoardElementsHome
+          <TheStatusTitleColumn :status="status" />
+          <div class="elements space-y-4">   
+             <TheTaskBoardElementsHome
               v-for="(task, index) in tasksStore.currentDashboardTasks"
-              :key="index"
+              :key="task.id"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
               :dashboard-name="(route.params.name as string)"
               :dashboard-task="task"
-              :status="recoverStatus(TASK_STATUS.TODO)"
+              :status="recoverStatus(status)"
               page="dashboard"
             />
           </div>
@@ -72,79 +63,10 @@ async function getDashboardTasks() {
             :dashboard-id="(route.params.id as string)"
             :priority="PRIORITIES.NORMAL"
             :show-status="false"
-            :status="`todo`"
+            :status="status"
           />
         </div>
-        <div
-          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
-        >
-          <TheStatusTitleColumn :status="TASK_STATUS.INPROGRESS" />
-          <div v-if="tasks" class="elements space-y-4">
-            <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.currentDashboardTasks"
-              :key="index"
-              :index="index"
-              :dashboard-id="(task.dashboardId as string)"
-              :dashboard-name="(route.params.name as string)"
-              :dashboard-task="task"
-              :status="recoverStatus(TASK_STATUS.INPROGRESS)"
-              page="dashboard"
-            />
-          </div>
-          <TheCreateTask
-            :dashboard-id="(route.params.id as string)"
-            :priority="PRIORITIES.NORMAL"
-            :show-status="false"
-            :status="TASK_STATUS.INPROGRESS"
-          />
-        </div>
-        <div
-          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
-        >
-          <TheStatusTitleColumn :status="TASK_STATUS.FAILED" />
-          <div v-if="tasks" class="elements space-y-4">
-            <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.currentDashboardTasks"
-              :key="index"
-              :index="index"
-              :dashboard-id="(task.dashboardId as string)"
-              :dashboard-name="(route.params.name as string)"
-              :dashboard-task="task"
-              :status="recoverStatus(TASK_STATUS.FAILED)"
-              page="dashboard"
-            />
-          </div>
-          <TheCreateTask
-            :dashboard-id="(route.params.id as string)"
-            :priority="PRIORITIES.NORMAL"
-            :show-status="false"
-            :status="TASK_STATUS.FAILED"
-          />
-        </div>
-        <div
-          class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
-        >
-          <TheStatusTitleColumn :status="TASK_STATUS.COMPLETED" />
-          <div v-if="tasks" class="elements space-y-4">
-            <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.currentDashboardTasks"
-              :key="index"
-              :index="index"
-              :dashboard-id="(task.dashboardId as string)"
-              :dashboard-name="(route.params.name as string)"
-              :dashboard-task="task"
-              :status="recoverStatus(TASK_STATUS.COMPLETED)"
-              page="dashboard"
-            />
-          </div>
-          <TheCreateTask
-            :dashboard-id="(route.params.id as string)"
-            :priority="PRIORITIES.NORMAL"
-            :show-status="false"
-            :status="TASK_STATUS.COMPLETED"
-          />
-        </div>
-      </template> 
+      </template>
     </TheHorizontalScroll>
   </main>
 </template>

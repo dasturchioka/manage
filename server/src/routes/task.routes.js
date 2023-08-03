@@ -8,6 +8,7 @@ const {
   updateTask,
   updateStatusOrPriority,
   deleteTask,
+  getDashboardTasksByStatus,
 } = require("../controllers/task.controller");
 const {
   checkAccess,
@@ -21,6 +22,13 @@ router.get(
   checkAccess,
   checkSelfAccess,
   getDashboardTasks
+);
+
+router.get(
+  "/user-id/:id/dashboard-tasks/:dashboardId/:status",
+  checkAccess,
+  checkSelfAccess,
+  getDashboardTasksByStatus
 );
 
 router.post(
