@@ -60,8 +60,8 @@ const handleForm = () => {
           </div>
           <TheCreateTask
             :dashboard-id="(dashboard.id as string)"
-            priority="normal"
-            status="todo"
+            :priority="1"
+            :status="0"
             :show-status="true"
           />
         </div>

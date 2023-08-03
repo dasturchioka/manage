@@ -18,7 +18,7 @@ const props = defineProps<{
   dashboardId: string;
   dashboardTask: Tasks;
   index: number;
-  status: number;
+  status: string | number;
 }>();
 
 const emit = defineEmits(["statusChanged", "priorityChanged"]);
@@ -77,13 +77,11 @@ watch(
   { deep: true }
 );
 
-console.log(`props status `, props.status);
-console.log(`task status `, props.dashboardTask.status);
 </script>
 
 <template>
   <div
-    v-if="dashboardTask.status === props.status"
+    v-if="dashboardTask.status === status"
     class="board-element bg-dark-secondary transition py-2 px-4 rounded"
   >
     <p

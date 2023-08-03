@@ -1,20 +1,22 @@
 <script setup lang="ts">
+import { useStatus } from "@/composables/useStatus";
 
-defineProps<{ status: string }>();
+defineProps<{ status: number }>();
+
+const { convertStatus } = useStatus();
 </script>
 
 <template>
   <div
-    :class="status"
+    :class="convertStatus(status)"
     class="status-title bg-dark-secondary transition py-2 px-4 rounded border-t-2 flex items-center justify-between"
   >
     <div class="titles">
       <h3 class="title uppercase">
-        {{ status }}
+        {{ convertStatus(status) }}
       </h3>
     </div>
-    <div class="functions">
-    </div>
+    <div class="functions"></div>
   </div>
 </template>
 

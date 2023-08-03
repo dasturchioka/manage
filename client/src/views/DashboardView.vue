@@ -16,7 +16,7 @@ import { tasksInstance } from "@/http";
 import { useToast } from "vue-toastification";
 import { useTasks } from "@/stores/tasks";
 
-const { recoverStatus } = useStatus();
+const { recoverStatus, convertStatus } = useStatus();
 const { getComponent } = useComponentImport();
 
 const TheHorizontalScroll = getComponent("TheHorizontalScroll");
@@ -28,11 +28,17 @@ const route = useRoute();
 const toast = useToast();
 const tasksStore = useTasks();
 
-onMounted(async () => {
-  tasksStore.getDashboardTasks(route.params.id as string);
-});
+watch(
+  () => route.params.id,
+  async (newVal, oldVal) => {
+    if (newVal) {
+      await tasksStore.getDashboardTasks(newVal as string);
+    }
+  },
+  { deep: true, immediate: true }
+);
 
-const taskStatuses = Object.keys(TASK_STATUS);
+const tasksStatusesInt = [0, 1, 2, 3];
 </script>
 
 <template>
@@ -43,25 +49,27 @@ const taskStatuses = Object.keys(TASK_STATUS);
       <template #titles></template>
       <template #content>
         <div
-          v-for="(status, index) in taskStatuses"
+          v-for="(status, index) in tasksStatusesInt"
           class="card h-[90vh] flex-shrink-0 w-72 overflow-y-scroll custom-scroll space-y-3 pb-5"
         >
           <TheStatusTitleColumn :status="status" />
-          <div class="elements space-y-4">   
-             <TheTaskBoardElementsHome
-              v-for="(task, index) in tasksStore.currentDashboardTasks"
+          <div
+            v-for="(task, index) in tasksStore.currentDashboardTasks"
+            class="elements space-y-4"
+          >
+            <TheTaskBoardElementsHome
               :key="task.id"
               :index="index"
               :dashboard-id="(task.dashboardId as string)"
               :dashboard-name="(route.params.name as string)"
               :dashboard-task="task"
-              :status="recoverStatus(status)"
+              :status="status"
               page="dashboard"
             />
           </div>
           <TheCreateTask
             :dashboard-id="(route.params.id as string)"
-            :priority="PRIORITIES.NORMAL"
+            :priority="1"
             :show-status="false"
             :status="status"
           />

@@ -29,7 +29,9 @@ export const useStatus = () => {
   };
 
   const recoverStatus = (status: string): number => {
+    
     if (status === TASK_STATUS.TODO) {
+      console.log(status);
       codeStatus.value = 0;
       return codeStatus.value;
     }

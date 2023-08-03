@@ -11,8 +11,8 @@ import { usePriority } from "@/composables/usePriority";
 import AppButton from "./UI/AppButton.vue";
 
 const props = defineProps<{
-  priority: string | "normal";
-  status: string | "todo";
+  priority: number | 1;
+  status: number | 0;
   showStatus: boolean;
   dashboardId: string;
 }>();
@@ -40,8 +40,8 @@ const removeSubTask = (index: number): void => {
 const task = reactive<Tasks>({
   name: "",
   description: "",
-  priority: props.priority ? recoverPriority(props.priority) : 2,
-  status: props.status ? recoverStatus(props.status) : 0,
+  priority: props.priority ? props.priority : 1,
+  status: props.status ? props.status : 0,
   subtasks,
 });
 
