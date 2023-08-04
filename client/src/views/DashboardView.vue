@@ -1,22 +1,9 @@
 <script setup lang="ts">
-import { PRIORITIES, TASK_STATUS } from "@/constants";
 import { useRoute } from "vue-router";
 import { useComponentImport } from "@/composables/useComponentImport";
-import { useStatus } from "@/composables/useStatus";
-import {
-  onBeforeMount,
-  onBeforeUpdate,
-  onMounted,
-  onUpdated,
-  ref,
-  watch,
-} from "vue";
-import { type Tasks } from "@/interfaces/Tasks";
-import { tasksInstance } from "@/http";
-import { useToast } from "vue-toastification";
+import { watch } from "vue";
 import { useTasks } from "@/stores/tasks";
 
-const { recoverStatus, convertStatus } = useStatus();
 const { getComponent } = useComponentImport();
 
 const TheHorizontalScroll = getComponent("TheHorizontalScroll");
@@ -25,7 +12,6 @@ const TheCreateTask = getComponent("TheCreateTask");
 const TheTaskBoardElementsHome = getComponent("TheTaskBoardElementsHome");
 
 const route = useRoute();
-const toast = useToast();
 const tasksStore = useTasks();
 
 watch(

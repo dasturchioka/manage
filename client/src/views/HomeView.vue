@@ -51,7 +51,7 @@ const handleForm = () => {
               v-for="(task, index) in tasksStore.dashboardTasks[dashboard.id as string]"
               :key="index"
               :index="index"
-              :dashboard-id="(task.dashboardId as string)"
+              :dashboard-id="(dashboard.id as string)"
               :dashboard-name="(dashboard.name as string)"
               :dashboard-task="task"
               :status="task.status"

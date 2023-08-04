@@ -104,7 +104,7 @@ const getDashboardTasksByStatus = async (req, res) => {
     if (!tasks.length) {
       return res.json({
         status: "not found",
-        msg: "There are no tasks in this dashboard yet.", 
+        msg: "There are no tasks in this dashboard yet.",
       });
     }
 
@@ -241,7 +241,11 @@ const deleteTask = async (req, res) => {
 
     const tasks = await prisma.tasks.findMany({});
 
-    return res.json({ status: "ok", msg: "Task deleted", tasks });
+    return res.json({
+      status: "ok",
+      msg: "Task deleted",
+      tasks: modifyTasks(tasks),
+    });
   } catch (error) {
     return res.status(500).json({ error, msg: error.message });
   }
