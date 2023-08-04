@@ -12,19 +12,10 @@ export const useTasks = defineStore("tasks", () => {
   const toast = useToast();
 
   const dashboardTasks = ref<DashboardTasks>({});
-  const dashboardId = ref<string>("");
   const currentDashboardTasks = ref<Tasks[]>([]);
 
   async function setCurrentDashboardTasks(payload: Tasks[]) {
-    console.log(payload);
-
     currentDashboardTasks.value = payload;
-
-    console.log(currentDashboardTasks.value);
-  }
-
-  function changeDashboardId(id: string) {
-    dashboardId.value = id;
   }
 
   async function setDashboardTasks(payload: DashboardTasks) {
@@ -266,8 +257,6 @@ export const useTasks = defineStore("tasks", () => {
     deleteTask,
     dashboardTasks,
     currentDashboardTasks,
-    changeDashboardId,
-    dashboardId,
     setCurrentDashboardTasks,
     getDashboardTasks,
   };
