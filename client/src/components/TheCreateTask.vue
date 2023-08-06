@@ -54,8 +54,11 @@ const prioritySelected = (priority: string): void => {
 };
 
 const submitForm = async (): Promise<void> => {
-  showForm.value = false;
   await tasksStore.createTask(task, props.dashboardId);
+  await tasksStore.createNewCurrentDashboardTask(props.dashboardId, task)
+  showForm.value = false;
+
+  console.log(props);
 
   task.name = "";
   task.description = "";

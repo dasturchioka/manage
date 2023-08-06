@@ -14,20 +14,34 @@ export const useTasks = defineStore("tasks", () => {
   const dashboardTasks = ref<DashboardTasks>({});
   const currentDashboardTasks = ref<Tasks[]>([]);
 
-  async function setCurrentDashboardTasks(payload: Tasks[]) {
+  async function setCurrentDashboardTasks(payload: Tasks[]): Promise<void> {
     currentDashboardTasks.value = payload;
   }
 
-  async function setDashboardTasks(payload: DashboardTasks) {
+  async function setDashboardTasks(payload: DashboardTasks): Promise<void> {
     dashboardTasks.value = payload;
   }
 
-  async function createNewDashboardTask(dashboardId: string, payload: Tasks) {
+  async function createNewDashboardTask(
+    dashboardId: string,
+    payload: Tasks
+  ): Promise<void> {
     if (!dashboardTasks.value[dashboardId]) {
       dashboardTasks.value[dashboardId] = [];
     }
 
     dashboardTasks.value[dashboardId].push(payload);
+  }
+
+  async function createNewCurrentDashboardTask(
+    dashboardId: string,
+    payload: Tasks
+  ): Promise<void> {
+    if (dashboardId === payload.dashboardId) {
+      currentDashboardTasks.value.push(payload);
+    }
+
+    return
   }
 
   async function deleteTaskFromStore(
@@ -259,5 +273,6 @@ export const useTasks = defineStore("tasks", () => {
     currentDashboardTasks,
     setCurrentDashboardTasks,
     getDashboardTasks,
+    createNewCurrentDashboardTask,
   };
 });
