@@ -37,11 +37,8 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string,
     payload: Tasks
   ): Promise<void> {
-    if (dashboardId === payload.dashboardId) {
-      currentDashboardTasks.value.push(payload);
-    }
-
-    return
+    currentDashboardTasks.value.push({...payload, dashboardId});
+    console.log(currentDashboardTasks.value);
   }
 
   async function deleteTaskFromStore(

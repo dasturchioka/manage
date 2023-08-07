@@ -53,18 +53,20 @@ const prioritySelected = (priority: string): void => {
   task.priority = recoverPriority(priority);
 };
 
-const submitForm = async (): Promise<void> => {
-  await tasksStore.createTask(task, props.dashboardId);
-  await tasksStore.createNewCurrentDashboardTask(props.dashboardId, task)
-  showForm.value = false;
-
-  console.log(props);
-
+const cleanUpTask = async (): Promise<void> => {
   task.name = "";
   task.description = "";
   task.priority = 0;
   task.status = 0;
   task.subtasks = [];
+};
+
+const submitForm = async (): Promise<void> => {
+  await tasksStore.createNewCurrentDashboardTask(props.dashboardId, task);
+  await tasksStore.createTask(task, props.dashboardId);
+  // await cleanUpTask(); 
+
+  showForm.value = false;
 };
 </script>
 
