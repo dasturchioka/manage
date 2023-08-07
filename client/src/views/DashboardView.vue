@@ -50,6 +50,8 @@ const tasksStatusesInt = [0, 1, 2, 3];
               :dashboard-name="(route.params.name as string)"
               :dashboard-task="task"
               :status="status"
+              @status-changed="(e: any) => console.log(e)"
+              @priority-changed="(e: any) => console.log(e)"
               page="dashboard"
             />
           </div>

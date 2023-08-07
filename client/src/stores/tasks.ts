@@ -37,7 +37,7 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string,
     payload: Tasks
   ): Promise<void> {
-    currentDashboardTasks.value.push({...payload, dashboardId});
+    currentDashboardTasks.value.push({ ...payload, dashboardId });
     console.log(currentDashboardTasks.value);
   }
 
@@ -45,7 +45,6 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string,
     taskId: string
   ): Promise<void> {
-    console.log(dashboardId);
 
     const indexInDashboardTasks = dashboardTasks.value[dashboardId].findIndex(
       (task: Tasks) => task.id === taskId
@@ -77,6 +76,21 @@ export const useTasks = defineStore("tasks", () => {
     foundTask = { ...payload };
   }
 
+  async function sortByPriority(
+    taskId: string,
+    dashboardId: string,
+    value: number
+  ) {
+    dashboardTasks.value[dashboardId].sort((a, b) => a.priority - b.priority);
+  }
+
+  async function sortByStatus(
+    taskId: string,
+    dashboardId: string,
+    value: number
+  ) {
+    dashboardTasks.value[dashboardId].sort((a, b) => a.status + b.status);
+  }
   async function setStatusOrPriority(
     field: "status" | "priority",
     value: number,
@@ -271,5 +285,7 @@ export const useTasks = defineStore("tasks", () => {
     setCurrentDashboardTasks,
     getDashboardTasks,
     createNewCurrentDashboardTask,
+    sortByPriority,
+    sortByStatus,
   };
 });

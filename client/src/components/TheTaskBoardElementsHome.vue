@@ -63,9 +63,9 @@ const updateStatusOrPriority = async (
 ) => {
   await tasksStore.updateStatusOrPriority(field, value, taskId);
   if (field === "status") {
-    emit("statusChanged", { taskId, value });
+    emit("statusChanged", { taskId, value, dashboardId: props.dashboardId });
   } else {
-    emit("priorityChanged", { taskId, value });
+    emit("priorityChanged", { taskId, value, dashboardId: props.dashboardId });
   }
 };
 
@@ -76,7 +76,6 @@ watch(
   },
   { deep: true }
 );
-
 </script>
 
 <template>
@@ -197,7 +196,9 @@ watch(
       <div class="right flex items-center">
         <AppIconButton
           type="button"
-          @click="tasksStore.deleteTask(dashboardTask.id as string, dashboardId)"
+          @click="
+            tasksStore.deleteTask(dashboardTask.id as string, dashboardId)
+          "
         >
           <Trash />
         </AppIconButton>
