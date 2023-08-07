@@ -55,6 +55,8 @@ const handleForm = () => {
               :dashboard-name="(dashboard.name as string)"
               :dashboard-task="task"
               :status="task.status"
+              @status-changed="(e: any) => tasksStore.sortByStatus(e.taskId, e.dashboardId, e.value)"
+              @priority-changed="(e: any) => console.log(e)"
               page="overview"
             />
           </div>

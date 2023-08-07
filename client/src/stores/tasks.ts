@@ -45,7 +45,6 @@ export const useTasks = defineStore("tasks", () => {
     dashboardId: string,
     taskId: string
   ): Promise<void> {
-
     const indexInDashboardTasks = dashboardTasks.value[dashboardId].findIndex(
       (task: Tasks) => task.id === taskId
     );
@@ -90,6 +89,7 @@ export const useTasks = defineStore("tasks", () => {
     value: number
   ) {
     dashboardTasks.value[dashboardId].sort((a, b) => a.status + b.status);
+    console.log(dashboardTasks.value[dashboardId]);
   }
   async function setStatusOrPriority(
     field: "status" | "priority",
