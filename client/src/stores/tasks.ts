@@ -75,21 +75,22 @@ export const useTasks = defineStore("tasks", () => {
     foundTask = { ...payload };
   }
 
-  async function sortByPriority(
-    taskId: string,
-    dashboardId: string,
-    value: number
-  ) {
-    dashboardTasks.value[dashboardId].sort((a, b) => a.priority - b.priority);
+  async function sortByPriority(dashboardId: string) {
+    dashboardTasks.value[dashboardId].sort((a, b) => a.priority + b.priority);
+    if (currentDashboardTasks.value[0]) {
+      if (currentDashboardTasks.value[0].dashboardId === dashboardId) {
+        currentDashboardTasks.value.sort((a, b) => a.priority + b.priority);
+      }
+    }
   }
 
-  async function sortByStatus(
-    taskId: string,
-    dashboardId: string,
-    value: number
-  ) {
-    dashboardTasks.value[dashboardId].sort((a, b) => a.status + b.status);
-    console.log(dashboardTasks.value[dashboardId]);
+  async function sortByStatus(dashboardId: string) {
+    dashboardTasks.value[dashboardId].sort((a, b) => a.status - b.status);
+    if (currentDashboardTasks.value[0]) {
+      if (currentDashboardTasks.value[0].dashboardId === dashboardId) {
+        currentDashboardTasks.value.sort((a, b) => a.status - b.status);
+      }
+    }
   }
   async function setStatusOrPriority(
     field: "status" | "priority",
